@@ -1,0 +1,13 @@
+node_modules/
+.env
+output/
+docs/rough/
+docs/shots/
+docs/vo/*.wav
+docs/变大泡泡-粗剪.mp4
+docs/变大泡泡-45s.mp4
+docs/变大泡泡-45s-无配音.mp4
+docs/变大泡泡-45s-纯净版.mp4
+docs/变大泡泡-45s-带字幕无声.mp4
+.playwright-cli/
+public/app.html.bak

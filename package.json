@@ -1,0 +1,24 @@
+{
+  "name": "bianda-paopao",
+  "version": "0.1.0",
+  "private": true,
+  "description": "变大泡泡 · 伪装成办公软件的跨公司匿名职场社区",
+  "type": "commonjs",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "ws": "^8.18.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@pdf-lib/fontkit": "^1.1.1",
+    "pdf-lib": "^1.17.1",
+    "pptxgenjs": "^4.0.1"
+  }
+}
