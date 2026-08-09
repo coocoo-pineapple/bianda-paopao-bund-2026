@@ -1,0 +1,21 @@
+# Workers Static Assets 响应头
+# HTML/JS 改完刷新就生效，图片和视频交给边缘长缓存。
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/*.html
+  Cache-Control: no-cache
+
+/*.js
+  Cache-Control: no-cache
+
+/assets/*
+  Cache-Control: public, max-age=604800
+
+/pitch/*
+  Cache-Control: public, max-age=604800
+
+/media/*
+  Cache-Control: public, max-age=604800

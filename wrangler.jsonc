@@ -1,0 +1,32 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bianda-paopao",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-01",
+
+  // public/ 整个上传到边缘；请求先匹配静态资源，没命中才进 Worker。
+  // 所以 /app.html /os.js /assets/** 都不消耗 Worker 调用次数。
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  },
+
+  // AI 熔断计数的唯一归属地，见 src/ai-gate.js
+  "durable_objects": {
+    "bindings": [{ "name": "AI_GATE", "class_name": "AiGate" }]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["AiGate"] }
+  ],
+
+  // 非机密配置放这里；AI_API_KEY 是 secret，用 `wrangler secret put AI_API_KEY` 单独设。
+  "vars": {
+    "AI_STYLE": "openai",
+    "AI_BASE_URL": "https://dashscope.aliyuncs.com/compatible-mode",
+    "AI_MODEL": "qwen3.8-max",
+    "AI_DAILY_LIMIT": 300,
+    "AI_PER_HOUR": 20
+  },
+
+  "observability": { "enabled": true }
+}

@@ -40,7 +40,12 @@ PORT=3000
 
 ## 部署建议
 
-完整版本需要长期运行的 Node 服务，推荐香港轻量服务器 + PM2 + Caddy；`dist/` 内的单机版可作为无网络备用演示。部署时把 `AI_API_KEY` 配到服务器环境变量，3000 端口不直接对外开放，只开放 80/443。
+两条路，代码同一份，按场景挑：
+
+- **香港轻量服务器 + PM2 + Caddy**（`docs/DEPLOY.md`）：跑 `server/index.js`，评委在大陆现场访问最稳。部署时把 `AI_API_KEY` 配到服务器环境变量，3000 端口不直接对外开放，只开放 80/443。
+- **Cloudflare Workers**（`docs/DEPLOY-CLOUDFLARE.md`）：跑 `src/index.js`，`npm run cf:deploy` 一条命令，免费额度内 0 元、不用运维，适合要一个随时能开的公开链接。
+
+`dist/` 内的单机版可作为无网络备用演示。
 
 ## 工具说明
 
