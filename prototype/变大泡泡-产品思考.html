@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>变大泡泡 · 产品思考</title>
+<style>
+:root{
+  --bg:#F4F4F2; --paper:#FFFFFF; --brand:#2F4858; --blue:#2B579A;
+  --rule:#E4E2DF; --rule-2:#D2CFCB; --ink:#1F1F1F; --ink-2:#4E4E4E; --ink-3:#8A8A8A;
+  --warn:#C0503F; --good:#3E8F82;
+  --ui:"Microsoft YaHei","Segoe UI",-apple-system,sans-serif;
+  --serif:"Songti SC",SimSun,"Noto Serif SC",Georgia,serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;line-height:1.85;
+  -webkit-font-smoothing:antialiased}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ---------- 布局 ---------- */
+.wrap{max-width:1140px;margin:0 auto;padding:0 24px;display:flex;gap:46px;align-items:flex-start}
+.main{flex:1;min-width:0;max-width:790px}
+.toc{width:186px;flex:none;position:sticky;top:34px;padding-top:8px;font-size:12.5px;line-height:1.5}
+.toc .tt{color:var(--ink-3);letter-spacing:2px;font-size:11px;padding-bottom:9px;margin-bottom:10px;border-bottom:1px solid var(--rule)}
+.toc a{display:block;color:var(--ink-2);padding:6px 0 6px 11px;border-left:2px solid transparent}
+.toc a:hover{color:var(--brand);border-left-color:var(--rule-2);text-decoration:none}
+.toc a.on{color:var(--brand);border-left-color:var(--brand);font-weight:600}
+.toc a i{font-style:normal;color:var(--ink-3);margin-right:6px;font-size:11px}
+
+/* ---------- 页头 ---------- */
+header{padding:60px 0 34px}
+.logo{display:flex;align-items:center;gap:13px;margin-bottom:26px}
+.logo svg{width:46px;height:31px;color:var(--brand);flex:none}
+.logo .n{font-size:22px;font-weight:700;color:var(--brand);letter-spacing:2px}
+.logo .s{font-family:var(--serif);font-size:13px;color:var(--ink-3);border-left:1px solid var(--rule-2);padding-left:13px;margin-left:2px}
+h1{font-size:31px;font-weight:700;letter-spacing:1px;color:var(--ink);line-height:1.35}
+.sub{color:var(--ink-3);font-size:12.5px;margin-top:14px;letter-spacing:.5px}
+.sub b{font-weight:400;color:var(--ink-2)}
+
+/* ---------- 一句话 ---------- */
+.hero{background:var(--paper);border:1px solid var(--rule);border-left:3px solid var(--brand);
+  padding:26px 30px;margin:6px 0 52px}
+.hero .lb{font-size:11px;color:var(--ink-3);letter-spacing:3px;margin-bottom:12px}
+.hero p{font-family:var(--serif);font-size:19px;line-height:1.9;color:var(--ink)}
+.hero .tail{font-size:14px;color:var(--brand);margin-top:14px;font-weight:600;font-family:var(--ui)}
+
+/* ---------- 章节 ---------- */
+section{margin-bottom:62px;scroll-margin-top:26px}
+h2{font-size:21px;font-weight:700;color:var(--brand);letter-spacing:1px;padding-bottom:13px;
+  border-bottom:1px solid var(--rule-2);margin-bottom:8px;display:flex;align-items:baseline;gap:12px}
+h2 em{font-style:normal;font-size:12px;color:var(--ink-3);letter-spacing:2px;font-weight:400}
+.lead{color:var(--ink-2);font-size:13.5px;margin:16px 0 30px}
+
+/* ---------- 想法条目 ---------- */
+.item{background:var(--paper);border:1px solid var(--rule);padding:24px 28px 26px;margin-bottom:16px}
+.item .hd{display:flex;align-items:baseline;gap:13px;margin-bottom:16px}
+.item .no{font-size:12px;color:var(--ink-3);font-weight:600;letter-spacing:1px;flex:none;
+  border:1px solid var(--rule);border-radius:2px;padding:2px 7px;line-height:1.5}
+.item h3{font-size:17px;font-weight:700;color:var(--ink);letter-spacing:.5px}
+.quote{font-family:var(--serif);font-size:14.5px;color:var(--ink-2);background:#FAFAF8;
+  border-left:2px solid var(--rule-2);padding:11px 16px;margin-bottom:17px;line-height:1.8}
+.quote::before{content:'你说的';display:block;font-family:var(--ui);font-size:10.5px;color:var(--ink-3);letter-spacing:2px;margin-bottom:5px}
+.item p{font-family:var(--serif);font-size:15px;line-height:1.95;color:var(--ink);margin-bottom:13px}
+.item p:last-child{margin-bottom:0}
+strong{font-weight:700;color:var(--ink)}
+.item ol,.item ul{margin:0 0 13px 20px;font-family:var(--serif);font-size:15px;line-height:1.9}
+.item li{margin-bottom:8px}
+.aside{border:1px dashed var(--rule-2);background:#FCFCFA;padding:13px 16px;font-size:13px;
+  color:var(--ink-2);font-family:var(--serif);line-height:1.85;margin-top:4px}
+.aside b{font-family:var(--ui);font-size:11px;letter-spacing:2px;color:var(--ink-3);display:block;margin-bottom:5px;font-weight:400}
+
+/* ---------- 表格 ---------- */
+table{width:100%;border-collapse:collapse;margin:6px 0 15px;font-size:13.5px;font-family:var(--ui)}
+th,td{border:1px solid var(--rule);padding:10px 13px;text-align:left;vertical-align:top;line-height:1.7}
+th{background:#FAFAF8;font-weight:600;color:var(--ink-2);font-size:12.5px;letter-spacing:.5px}
+td b{color:var(--ink)}
+tr.key td{background:#FBFCFD}
+
+/* ---------- 内嵌泡泡演示 ---------- */
+.demo{border:1px solid var(--rule);margin:20px 0 15px;background:linear-gradient(180deg,#FCFDFE,#EFF3F6)}
+.demo .bar{display:flex;align-items:center;gap:10px;padding:8px 13px;border-bottom:1px solid var(--rule);background:var(--paper)}
+.demo .bar span{font-size:11.5px;color:var(--ink-3);letter-spacing:1px}
+.demo .bar .r{margin-left:auto;font-size:11.5px;color:var(--brand)}
+.demo .bar .r b{font-weight:600}
+.stage{position:relative;height:214px;overflow:hidden}
+.stage .wl{position:absolute;left:0;right:0;top:26px;border-top:1px dashed #CBD8E0;pointer-events:none}
+.stage .wl i{position:absolute;left:9px;top:-16px;font-style:normal;font-size:10px;color:#9DB0BC;letter-spacing:2px}
+.bub{position:absolute;left:0;top:0;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  text-align:center;cursor:pointer;user-select:none;will-change:transform;border:1px solid rgba(0,0,0,.07);
+  font-size:11.5px;color:#25333B;line-height:1.35;transition:box-shadow .15s}
+.bub .tx{padding:0 12%;pointer-events:none;overflow:hidden}
+.bub:hover{box-shadow:0 0 0 3px rgba(43,87,154,.14)}
+.bub.pop{animation:pop .18s ease-out}
+@keyframes pop{0%{filter:brightness(1)}40%{filter:brightness(1.3)}100%{filter:brightness(1)}}
+.bub.tense::after{content:'';position:absolute;inset:-5px;border-radius:50%;pointer-events:none;
+  border:1.5px solid rgba(192,80,63,.6);animation:tense 1s ease-in-out infinite}
+@keyframes tense{0%,100%{opacity:.22;transform:scale(1)}50%{opacity:.95;transform:scale(1.06)}}
+.rip{position:absolute;border-radius:50%;border:1.5px solid rgba(43,87,154,.5);pointer-events:none;animation:rp .55s ease-out forwards}
+@keyframes rp{to{transform:scale(2.1);opacity:0}}
+.cap{font-size:12px;color:var(--ink-3);font-family:var(--ui);line-height:1.75;margin-top:-6px}
+
+/* ---------- 咬合图 ---------- */
+.flow{background:var(--paper);border:1px solid var(--rule);padding:26px 28px;margin-bottom:22px}
+.frow{display:flex;gap:16px;align-items:stretch;margin-bottom:8px}
+.fkey{width:104px;flex:none;font-size:13px;font-weight:700;color:var(--brand);border-right:2px solid var(--rule-2);
+  padding:12px 14px 12px 0;text-align:right;letter-spacing:.5px;display:flex;align-items:center;justify-content:flex-end}
+.fkey em{font-style:normal;display:block;font-size:11px;color:var(--ink-3);font-weight:400;letter-spacing:1px;margin-top:3px}
+.fbody{flex:1;display:flex;flex-direction:column;gap:7px;padding:7px 0}
+.fbox{border:1px solid var(--rule);padding:8px 13px;font-size:13px;color:var(--ink-2);background:#FCFCFA}
+.fbox b{color:var(--ink);font-weight:600}
+.fbox i{font-style:normal;color:var(--ink-3);font-size:11.5px;margin-left:7px}
+.farr{text-align:center;color:var(--ink-3);font-size:12px;padding:7px 0;letter-spacing:2px}
+.farr b{font-weight:400;color:var(--ink-2);font-size:12px}
+
+/* ---------- 三分区 ---------- */
+.zones{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.zone{background:var(--paper);border:1px solid var(--rule);padding:19px 21px}
+.zone.a{border-top:2px solid #D2764A}
+.zone.b{border-top:2px solid var(--brand)}
+.zone.c{border-top:2px solid var(--blue)}
+.zone .zt{font-size:14.5px;font-weight:700;color:var(--ink);letter-spacing:.5px}
+.zone .ze{font-size:11px;color:var(--ink-3);letter-spacing:2px;margin:3px 0 11px}
+.zone .zq{font-size:12px;color:var(--ink-2);line-height:1.7;padding-bottom:11px;margin-bottom:9px;border-bottom:1px solid var(--rule)}
+.zone .zq b{color:var(--brand)}
+.zone ul{list-style:none;font-size:12.5px;line-height:1.65}
+.zone li{padding:5px 0;color:var(--ink-2);border-bottom:1px dotted var(--rule)}
+.zone li:last-child{border:none}
+.zone li i{font-style:normal;color:var(--ink-3);font-size:11px;margin-left:5px}
+
+/* ---------- 今日最大泡 ---------- */
+.big{background:var(--paper);border:1px solid var(--rule);padding:28px 30px;margin:6px 0 16px;
+  display:flex;gap:28px;align-items:center}
+.big .orb{flex:none;width:126px;height:126px;border-radius:50%;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;border:1px solid rgba(0,0,0,.07);
+  background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.9),rgba(201,150,46,.2) 62%,rgba(201,150,46,.34))}
+.big .orb b{font-size:12.5px;color:#25333B;font-weight:600;letter-spacing:1px}
+.big .orb i{font-style:normal;font-size:10.5px;color:rgba(40,60,72,.55);margin-top:4px}
+.big .bt{flex:1}
+.big .bt h4{font-size:15px;font-weight:700;color:var(--brand);margin-bottom:9px}
+.big .bt p{font-family:var(--serif);font-size:14.5px;line-height:1.95;margin-bottom:9px}
+.big .bt p:last-child{margin-bottom:0}
+
+
+/* ---------- 通用要点块 ---------- */
+.pt{background:var(--paper);border:1px solid var(--rule);padding:19px 24px;margin-bottom:13px;
+  font-family:var(--serif);font-size:14.5px;line-height:1.95;color:var(--ink)}
+.pt .h{font-family:var(--ui);font-size:13.5px;font-weight:700;color:var(--brand);margin-bottom:8px;letter-spacing:.5px}
+
+/* ---------- 风险 ---------- */
+.risk{background:var(--paper);border:1px solid var(--rule);border-left:3px solid var(--warn);
+  padding:22px 26px;margin-bottom:15px}
+.risk .h{display:flex;align-items:baseline;gap:11px;margin-bottom:13px}
+.risk .tag{font-size:10.5px;color:#fff;background:var(--warn);padding:2px 8px;letter-spacing:1px;flex:none}
+.risk h3{font-size:16px;font-weight:700;color:var(--ink)}
+.risk p{font-family:var(--serif);font-size:14.5px;line-height:1.95;margin-bottom:11px}
+.risk p:last-child{margin-bottom:0}
+.risk .no-fix{background:#FDF6F4;border:1px solid #EED9D3;padding:11px 15px;font-size:13.5px;color:var(--warn);font-family:var(--ui);line-height:1.8}
+
+/* ---------- 双栏 ---------- */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.col{background:var(--paper);border:1px solid var(--rule);padding:20px 24px}
+.col.yes{border-top:2px solid var(--good)}
+.col.no{border-top:2px solid var(--warn)}
+.col .ch{font-size:13px;font-weight:700;margin-bottom:13px;letter-spacing:.5px}
+.col.yes .ch{color:var(--good)}
+.col.no .ch{color:var(--warn)}
+.col ul{list-style:none;font-family:var(--serif);font-size:14.5px;line-height:1.8}
+.col li{padding:7px 0 7px 17px;position:relative;border-bottom:1px dotted var(--rule)}
+.col li:last-child{border:none}
+.col li::before{content:'';position:absolute;left:0;top:15px;width:6px;height:1px;background:var(--rule-2)}
+
+/* ---------- 步骤 ---------- */
+.step{display:flex;gap:17px;background:var(--paper);border:1px solid var(--rule);padding:20px 24px;margin-bottom:12px}
+.step .sn{flex:none;width:26px;height:26px;border:1px solid var(--brand);color:var(--brand);
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;border-radius:50%}
+.step .sb{flex:1;font-family:var(--serif);font-size:14.5px;line-height:1.95}
+.step .sb ul{margin:9px 0 0 18px}
+.step .sb li{margin-bottom:5px}
+
+/* ---------- 结语 ---------- */
+.closing{background:var(--brand);color:#fff;padding:34px 38px;margin:58px 0 20px}
+.closing .cl{font-size:11px;letter-spacing:3px;opacity:.6;margin-bottom:16px}
+.closing p{font-family:var(--serif);font-size:16.5px;line-height:2.05;margin-bottom:15px;opacity:.94}
+.closing p:last-child{margin-bottom:0}
+.closing b{color:#fff;font-weight:700;border-bottom:1px solid rgba(255,255,255,.45);padding-bottom:1px}
+
+footer{border-top:1px solid var(--rule-2);padding:22px 0 60px;font-size:11.5px;color:var(--ink-3);line-height:1.9}
+footer b{font-weight:400;color:var(--ink-2)}
+
+@media(max-width:1000px){.toc{display:none}.wrap{padding:0 20px}.two{grid-template-columns:1fr}}
+@media print{
+  body{background:#fff}.toc{display:none}.wrap{max-width:100%}
+  section,.item,.risk,.pt,.flow,.step{break-inside:avoid}
+  .demo{display:none}.closing{background:#fff;color:var(--ink);border:2px solid var(--brand)}
+  .closing b{color:var(--ink);border-color:var(--ink)}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<nav class="toc">
+  <div class="tt">目录</div>
+  <a href="#s0" class="on"><i>—</i>一句话</a>
+  <a href="#s1"><i>一</i>想法逐条拆解</a>
+  <a href="#s2"><i>二</i>三个分区</a>
+  <a href="#s3"><i>三</i>筛选与最大泡</a>
+  <a href="#s4"><i>四</i>机制怎么咬合</a>
+  <a href="#s5"><i>五</i>钱从哪来</a>
+  <a href="#s6"><i>六</i>四个最大风险</a>
+  <a href="#s7"><i>七</i>能证明什么</a>
+  <a href="#s8"><i>八</i>最小验证</a>
+</nav>
+
+<div class="main">
+
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 42 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 17C10 9 24 8 30 16C24 24 10 25 5 17Z"/>
+      <path d="M30 16L38 10V23L30 16Z"/>
+      <circle cx="12" cy="15" r="1.1" fill="currentColor" stroke="none"/>
+      <path d="M17 20C19 21.5 24 21.5 26 20"/>
+      <circle cx="12" cy="7" r="2.6"/><circle cx="19" cy="3.4" r="1.6"/>
+    </svg>
+    <div class="n">变大泡泡</div>
+    <div class="s">专业摸鱼社区 · 子非鱼，安知鱼之乐</div>
+  </div>
+  <h1>产品思考</h1>
+  <div class="sub">2026-08-06　配套：<b>变大泡泡-原型.html</b>　<b>变大泡泡-Codex填充工单.md</b></div>
+</header>
+
+<section id="s0">
+  <div class="hero">
+    <div class="lb">一 句 话</div>
+    <p>一个伪装成 Word 述职报告的<strong>跨公司匿名</strong>职场社区。每条八卦是一个泡泡，你点一下就是吹一口气，泡泡变大、浮得更高、活得更久；没人吹的会慢慢凉掉沉底。</p>
+    <div class="tail">摸鱼是入口，干货是留存，联机是回来的理由。</div>
+  </div>
+</section>
+
+<!-- ================= 一 ================= -->
+<section id="s1">
+  <h2>一、原始想法逐条拆解 <em>YOUR IDEAS</em></h2>
+  <div class="lead">按你提出的顺序记，附上我判断它为什么成立、以及它真正解决了什么。不是复述，是拆解。</div>
+
+  <div class="item">
+    <div class="hd"><span class="no">01</span><h3>八卦 = 泡泡，点一下让它变大</h3></div>
+    <div class="quote">如果你对这个八卦很欣赏的话，就可以点一下，让它变大。泡泡变大就能更长时间的浮在其他泡泡上。</div>
+    <p><strong>这是全产品最值钱的一句话，其余都是它的衍生。</strong></p>
+    <p>它的强度在于：把「点赞」这个已经被磨到没有知觉的动作，换了一套物理表达。</p>
+
+    <table>
+      <tr><th style="width:88px"></th><th>传统点赞</th><th>吹泡泡</th></tr>
+      <tr><td><b>反馈形式</b></td><td>数字 +1（抽象）</td><td>体积变大（具身）</td></tr>
+      <tr><td><b>反馈给谁</b></td><td>给作者（社交礼节）</td><td>给内容（延长它的命）</td></tr>
+      <tr class="key"><td><b>时间性</b></td><td>永久累积，点不点无所谓</td><td><b>会衰减。你今天不点，它明天就沉了</b></td></tr>
+      <tr><td><b>心理动机</b></td><td>我认可你</td><td>我不想让这条消失</td></tr>
+    </table>
+
+    <p>关键在最后一行。<strong>衰减机制让「点」这个动作第一次有了时间价值。</strong>没有衰减，点赞就是社交礼节；有了衰减，点赞变成续命——你不是在给作者面子，你是在救一条你觉得该被看见的内容。</p>
+    <p>这正是电子菠萝 DNA 第 2 条：<strong>重构动机，而不是强迫用户</strong>。同一个动作，从"给面子"改成"救内容"，用户从被迫变成想要。</p>
+
+    <div class="demo">
+      <div class="bar"><span>点它们试试 —— 点一下 = 吹一口气</span><span class="r">已吹 <b id="bl">0</b> 口气</span></div>
+      <div class="stage" id="stage"><div class="wl"><i>水面 · 热榜</i></div></div>
+    </div>
+    <p class="cap">这不是截图。三个泡泡在真的浮沉，大的浮得更高。连点同一个直到它涨破，会炸成两个衍生话题。</p>
+
+    <div class="aside"><b>顺带</b>这也是为什么「泡泡」这个隐喻选对了。泡泡天然自带三个属性——会浮、会大、会破。三个属性正好对应热榜、点赞、生命周期，一个隐喻覆盖了三套机制，不用额外教育用户。换成"火苗""气球""种子"都做不到这么紧。</div>
+  </div>
+
+  <div class="item">
+    <div class="hd"><span class="no">02</span><h3>每天不限次数</h3></div>
+    <div class="quote">每个人每天有不限次的点泡泡数量。</div>
+    <p>常规产品限制点赞是为了防刷、保证信号纯度。你选择不限次，逻辑是对的：<strong>热度在这里不是投票结果，是集体注气量。</strong>一个人狂点一百次和一百个人各点一次，在物理上都是"这个泡泡被灌了一百口气"——它就是该变大。</p>
+    <p>代价是易被刷。但有两个天然对冲：<strong>衰减</strong>（刷上去的也会掉下来，刷是有持续成本的）、<strong>戳破</strong>（社区自净）。</p>
+    <p>我认为这个代价可以接受，且<strong>不要为了防刷去加限制</strong>——加了限制，"不限次"这个爽感就没了，而爽感是这个产品唯一的入口。</p>
+  </div>
+
+  <div class="item">
+    <div class="hd"><span class="no">03</span><h3>伪装成述职报告 / 桌面</h3></div>
+    <div class="quote">伪装成桌面也可以的。</div>
+    <p><strong>这不是彩蛋，这是第一功能。</strong></p>
+    <p>摸鱼社区最大的真实痛点不是没内容，是<strong>不敢在工位上看</strong>。所有摸鱼类产品都死在这一点上：内容再好，你不敢开。</p>
+    <p>Word 述职报告外壳解决的是"被扫一眼"，桌面态解决的是"领导站到身后"。这两个是不同的威胁模型，所以要两态都做——这也是为什么你补的这一句很关键。</p>
+    <p>副作用是它自带传播力：<strong>这是全产品最容易被截图发出去的一屏。</strong>DNA 第 6 条说"所有页面都可能被截图传播"，这一屏就是那个截图。</p>
+  </div>
+
+  <div class="item">
+    <div class="hd"><span class="no">04</span><h3>机器人水域</h3></div>
+    <div class="quote">增加一片机器人（codex、workbuddy 小龙虾等等的区域）。</div>
+    <p>机器人的常规用法是"陪用户聊"。这里更有价值的用法是<strong>给冷启动的空社区提供可看的戏</strong>——一个新社区最难看的时刻是没人说话，而机器人之间可以永远有话说。</p>
+  </div>
+
+  <div class="item">
+    <div class="hd"><span class="no">05</span><h3>机器人虚构身份互相「诈骗」</h3></div>
+    <div class="quote">机器人可以自己立一个人设，虚构一个身份，去诈骗别的机器人。</div>
+    <p><strong>这是整轮对话里最独特的点子，我认为它的价值被低估了。</strong>它同时解决三件事：</p>
+    <ol>
+      <li><strong>观众门槛远低于对话者门槛。</strong>传统 AI 社区要用户主动开口提问，绝大多数人不会。机器人互相演戏，用户只需要看——参与成本从"要想一个问题"降到"零"。这是一个真洞察。</li>
+      <li><strong>它顺带是反诈教育。</strong>剧本里的话术如果用职场里真实存在的那几种（假猎头开一个远超市场价的数字、假内推收内推费、假投资、假背调套信息），揭底时逐句标破绽——用户笑完，也真学到了。<strong>这一条把一个玩具变成了有正当性的功能。</strong></li>
+      <li><strong>它是庄周梦蝶的产品化。</strong>「不知周之梦为胡蝶与，胡蝶之梦为周与」——不知道谁是谁，正是这个玩法的哲学出处。品牌和玩法长在一起，不是贴皮。</li>
+    </ol>
+    <p>所以我在工单里把它命名为<strong>梦蝶局</strong>，并且要求揭底必须标破绽——如果只是好玩，它撑不起一个模块；加上反诈，它就有了被分享的理由。</p>
+  </div>
+
+  <div class="item">
+    <div class="hd"><span class="no">06</span><h3>职场博主可以整理自己的机器人</h3></div>
+    <div class="quote">一些职场博主可以整理自己的机器人帮人答疑解惑，传授经验的不一定是人，也可能是机器人。</div>
+    <p><strong>这是全产品最强的商业点，也是最能解释"为什么博主愿意来"的一条。</strong></p>
+    <p>知识付费的根本矛盾是：<strong>博主的时间不可规模化。</strong>一对一咨询单价高但天花板低，写文章能规模化但赚不到咨询的钱。蒸馏成机器人以后，一次投入长期收租——这是唯一能让博主主动搬家过来的理由。</p>
+    <p>更重要的是：<strong>这个形态你已经在自己身上验证过了。</strong>「电子菠萝」就是你的电子分身，<code>boluo.md</code> 里那套「DNA + 框架库 + 固定动作流程」的结构，本身就是一个博主机器人的完整模板。<strong>从自己真实用着的东西长出来的产品，是最值钱的那种。</strong></p>
+    <p>所以工坊的四段式我写死了，不许改形状：</p>
+    <table>
+      <tr><th style="width:132px">段</th><th>作用</th></tr>
+      <tr class="key"><td><b>人格 DNA</b></td><td>只能从博主本人蒸馏。<b>这是机器学不来的部分，也是护城河所在</b></td></tr>
+      <tr><td><b>框架库</b></td><td>补提问者的短板</td></tr>
+      <tr><td><b>固定动作流程</b></td><td>写死，防止套壳自由发挥</td></tr>
+      <tr><td><b>禁区</b></td><td>划边界，控风险</td></tr>
+    </table>
+    <p>没有这四段，博主机器人就退化成"套壳 GPT + 一段人设 prompt"，一周就被复制。有了这四段，<strong>博主的判断力被结构化地留在了产品里</strong>——这才是 DNA 第 3 条说的"数据沉淀是刻意设计的护城河，不是副产品"。</p>
+  </div>
+
+  <div class="item">
+    <div class="hd"><span class="no">07</span><h3>Excel 拼豆</h3></div>
+    <div class="quote">excel 拼豆，在线匹配搭子或者自己拼都行，组团拼也行。</div>
+    <p>Excel 像素画本身就是真实存在的摸鱼行为，不需要教育。它在产品里的位置是<strong>低强度长时长内容</strong>——泡泡是高强度短时长（点几分钟就腻），拼豆是可以挂着慢慢填的。两者节奏互补。</p>
+    <p>「匹配搭子 / 组团」是这里的关键：<strong>它是全产品唯一一个需要真人协作的功能。</strong>其余所有玩法都是单人的。有一个协作点，社区才有关系沉淀，否则用户和用户之间永远是陌生人。</p>
+  </div>
+
+  <div class="item">
+    <div class="hd"><span class="no">08</span><h3>捡手机文学、爽文背单词</h3></div>
+    <div class="quote">上面也放上一些奇怪的东西，比如捡手机文学、爽文背单词等等。</div>
+    <p>「奇怪」是对的，不用往正常里改。这两个的共同点是<strong>荒诞本身就是功能</strong>：</p>
+    <ul>
+      <li>捡手机文学的快感是窥视 + 逐条拼出真相，<strong>节奏就是内容</strong>（所以工单里要求必须逐条点开，不许一次给完）</li>
+      <li>爽文背单词的荒诞让人记得住——正经例句记不住，「他冷笑一声：<b>redundant</b>？」记得住</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="hd"><span class="no">09</span><h3>也要有真正的学习区</h3></div>
+    <div class="quote">也有真正的学习区域。</div>
+    <p><strong>这一句是产品的立身之本，也是我在工单里态度最硬的一处。</strong></p>
+    <p>纯摸鱼社区留不住人：内容消耗快、无沉淀、用户三个月后不知道自己获得了什么。纯学习社区没人来：门槛高、无乐趣、打开需要决心。摸鱼是入口，真东西是留存。<strong>但真东西必须真。</strong></p>
+    <p>所以我给真学习区定了三条死规矩：</p>
+    <ol>
+      <li><strong>不做泡泡化、不做热度排序、不做点赞。</strong>摸鱼区越吵，这里越静，对比就是态度。</li>
+      <li><strong>长文不许写成鸡汤和方法论清单。</strong>要有具体场景、具体对话、具体数字，敢承认哪些做法没用。</li>
+      <li>顶部题词「无用之用，方为大用」。</li>
+    </ol>
+    <p>第 2 条是最关键的。这一区是全产品唯一严肃的地方——<strong>写崩了，整个产品的可信度就没了</strong>，用户会认定这里就是个乐子站，那所有留存设计都白做。这也是 DNA 第 4 条：反虚假便利，敢于承认不完美，诚实反而是信任来源。</p>
+  </div>
+
+  <div class="item">
+    <div class="hd"><span class="no">10</span><h3>庄周内核 + 鱼 logo</h3></div>
+    <div class="quote">我们是做专业的摸鱼社区，logo 可以是庄周那种，但是里面却又有真诚的经验分享。</div>
+    <p><strong>「专业的摸鱼社区」这个说法里，"专业"两个字是全部的重量。</strong>它把羞耻感转成了身份认同。用户不是"在偷懒"，是"在专业地摸鱼"。这需要一个文化背书，庄周正好是最合适的那个：</p>
+    <table>
+      <tr><th style="width:180px">出处</th><th>用在哪</th></tr>
+      <tr><td><b>子非鱼，安知鱼之乐</b><br><span style="color:var(--ink-3);font-size:12px">濠梁之辩</span></td><td>摸鱼社区的祖师爷背书，而且原文里真的有鱼</td></tr>
+      <tr><td><b>无用之用，方为大用</b></td><td>真诚经验分享区的立足点</td></tr>
+      <tr><td><b>庄周梦蝶</b></td><td>泡泡即梦，也是机器人互骗的出处</td></tr>
+    </table>
+    <p>命名体系全部从这里长出来：<strong>濠上</strong>（广场）/ <strong>化蝶</strong>（机器人）/ <strong>梦蝶局</strong>（身份局）/ <strong>南华</strong>（资讯与经验）/ <strong>守藏</strong>（运营后台）。</p>
+    <p>Logo 用鱼，单线水墨，不闭合的圆。<strong>克制到底：整页是安静的办公文档，泡泡是唯一会动的东西。</strong>对比即张力。</p>
+  </div>
+
+  <div class="item">
+    <div class="hd"><span class="no">11</span><h3>是行业八卦，不是公司八卦</h3></div>
+    <div class="quote">而且还有一个，应该是行业八卦。而且也有真的工作资讯分享。</div>
+    <p><strong>这个区分我原来没做，它比看上去重要。</strong>「八卦」是一个太粗的词，拆开之后是两种完全不同的东西：</p>
+    <table>
+      <tr><th style="width:126px"></th><th>公司 / 个人八卦</th><th>行业八卦</th></tr>
+      <tr><td><b>内容</b></td><td>谁跟谁、谁被骂了、谁要走</td><td>哪个厂在裁、哪个赛道在招、哪家给到什么价</td></tr>
+      <tr><td><b>消耗</b></td><td>看完就没了</td><td>可以存起来，明年还有用</td></tr>
+      <tr><td><b>风险</b></td><td>诽谤、泄密，真实法律风险</td><td>低</td></tr>
+      <tr class="key"><td><b>本质</b></td><td>纯休闲</td><td><b>披着八卦皮的情报</b></td></tr>
+    </table>
+    <p><strong>为什么这个区分值钱：用户是为八卦来的，但拿走的是情报。</strong>这是从摸鱼过渡到干货最顺滑的一条路——<strong>不需要用户切换心态</strong>。他以为自己在看热闹，其实已经在收集信息了。所有"先娱乐后教育"的产品都卡在切换心态这一步，行业八卦不用切。</p>
+    <p>产品上有一个直接推论：<strong>行业类泡泡要被特殊对待。</strong>它是唯一一类「凉了之后不该沉底，而该进资讯库沉淀下来」的泡泡。别的八卦沉了就沉了，行业八卦要能被检索、能被引用。</p>
+    <div class="aside"><b>这也回答了「真的工作资讯分享」放在哪</b>资讯和行业八卦是同一条流的两端——用户随手发的行业八卦，经过筛选和沉淀，就变成了资讯库。<strong>资讯不用全靠抓取，用户自己就是信源。</strong>抓取只负责冷启动，长期供给应该来自广场。</div>
+  </div>
+
+  <div class="item">
+    <div class="hd"><span class="no">12</span><h3>泡泡可筛选，但首页只有一个今日最大泡</h3></div>
+    <div class="quote">泡泡也是可以根据行业、类型等等筛选的，只是主页有一个今日最大泡。</div>
+    <p>这补上了我漏掉的一个真问题：<strong>泡泡广场是个物理空间，物理空间没法翻页、没法搜索。</strong>内容一多，水面就糊了。筛选是必需的，不是锦上添花。</p>
+    <p>但筛选的做法有讲究——<strong>筛选也必须是物理的，不能是下拉框刷新列表。</strong>选中一个行业，不属于它的泡泡淡出下沉，属于的浮上来，整个水面重组一次。做成列表刷新，这个产品的气质当场就断了。</p>
+    <p>建议的三个维度，外加一个我认为该补的：</p>
+    <table>
+      <tr><th style="width:104px">维度</th><th>取值</th></tr>
+      <tr><td><b>行业</b></td><td>互联网 / 金融 / 制造 / 教育 / 医药 / 体制内 / 快消 …</td></tr>
+      <tr><td><b>类型</b></td><td>薪资 / 裁员 / 领导 / 同事 / 行业 / 乐子</td></tr>
+      <tr><td><b>来源</b></td><td>用户 / 机器人 / 情报 / 招聘 / 品牌</td></tr>
+      <tr class="key"><td><b>关我什么事</b></td><td><b>我司 / 我这行 / 全站</b> —— 职场用户最想看的永远是「跟我有关的」，这一维比前三个都高频</td></tr>
+    </table>
+
+    <div class="big">
+      <div class="orb"><b>今日最大泡</b><i>全站唯一</i></div>
+      <div class="bt">
+        <h4>这一条我认为是全产品第二重要的机制设计</h4>
+        <p><strong>它是唯一的全局排序。</strong>其余所有地方都靠物理浮沉和筛选，只有这一个位置代表「全站第一」。稀缺才有价值——一天只有一个，发的人有奔头，看的人有共识。</p>
+        <p><strong>它同时是内容的日历。</strong>「8 月 6 日的最大泡是什么」，一年下来就是一部职场编年史。这是天然长出来的沉淀物，可以做年终盘点，也可以做成新人的补课列表。运营上它是最好的抓手：上墙、进名人堂、给作者一个当日标识。</p>
+      </div>
+    </div>
+    <div class="aside"><b>但要标一个取舍</b>一天一个最大泡意味着<strong>赢家通吃</strong>。如果长期被同一类内容（大概率是裁员和薪资）霸占，广场会单一化。对冲办法是「分行业各出一个」，但那就稀释了稀缺性。<strong>我倾向先做全站唯一一个，跑一个月看数据再决定，不要提前设计。</strong></div>
+  </div>
+
+  <div class="item">
+    <div class="hd"><span class="no">13</span><h3>机器人水域 = 信息聚合站，把机器人放进去玩，然后收菜</h3></div>
+    <div class="quote">机器人水域就是可以让这个站也成为信息的聚合站，可以把机器人放里面玩然后收菜（跟人一样的互动）。</div>
+    <p>它是什么：你有一个自己的机器人，把它放进水域。它<strong>像人一样</strong>在社区里活动——逛、发泡泡、吹别人的泡泡、跟别的机器人搭话、被卷进梦蝶局。你下班或者第二天回来，<strong>收菜</strong>：把它这段时间带回来的东西收走。</p>
+    <p><strong>这一条比它听起来重要——它一次补上了我前面标出的三个洞。</strong></p>
+    <table>
+      <tr><th style="width:210px">我之前标的问题</th><th>这一条怎么补</th></tr>
+      <tr class="key"><td><b>联机层最薄</b><br><span style="color:var(--ink-3);font-size:12px">只有拼豆组团和戳破</span></td><td>机器人「跟人一样的互动」<b>天然是联机的</b>。它替你在社区里产生关系，而不是替你消费内容</td></tr>
+      <tr><td><b>冷启动一片空水</b></td><td>每个用户都有一个 24 小时在线的分身，社区永远不空。<b>而且不是平台雇机器人演戏，是用户自己的机器人在替他上班</b>——互动是真的，热度也是真的</td></tr>
+      <tr><td><b>吹大 → 爆泡 → 然后呢</b><br><span style="color:var(--ink-3);font-size:12px">没有明天再来的理由</span></td><td>收菜是异步的、有时间差的——你<b>必须明天再来</b>。这是最经典也最有效的一类留存设计</td></tr>
+    </table>
+    <p><strong>收菜和泡泡衰减是同构的。</strong>泡泡会凉，菜会熟，都是「时间」在驱动用户回来。产品里两个核心机制共用同一套时间直觉，这是好事——用户只需要理解一次。</p>
+    <p><strong>「信息聚合站」这个定位是升级，不是补充。</strong>我上一节写的是「抓取只负责冷启动，长期供给来自广场」。这一条更进一步：<strong>每个用户的机器人就是一个采集器。</strong>平台不用自己养抓取团队，用户机器人就是分布式信源。抓什么由用户自己设（我这行、我关注的几家公司、我想跳的赛道），收回来的自然就是他想要的——<strong>聚合的精度问题被用户自己解决了。</strong></p>
+    <p>于是机器人水域从一个板块变成了枢纽，同时挂三个身份：</p>
+    <table>
+      <tr><th style="width:230px">身份</th><th>属于哪个分区</th></tr>
+      <tr><td>梦蝶局看戏</td><td>休闲</td></tr>
+      <tr><td>博主机器人答疑</td><td>干货 + 收入线三</td></tr>
+      <tr class="key"><td><b>用户机器人采集与收菜</b></td><td><b>联机 + 信息聚合</b> —— 新增，而且正好是最薄那层的解药</td></tr>
+    </table>
+    <p>商业上有个很自然的付费点：机器人的<strong>采集范围、频率、能同时去几个水域</strong>分级。它和收入线三不冲突——博主机器人是「卖别人的经验」，用户机器人是「替自己干活」，掏的是两个钱包。</p>
+
+    <div class="aside"><b>但有两条必须标死</b>
+    <strong>一、收的必须是「菜」，不能是「分」。</strong>收菜类机制天花板很低，开心农场三个月就腻。它能拉留存但拉不了长期——除非收回来的是真有用的东西（真的行业情报、真的招聘异动、真的薪资数据）。<strong>一旦退化成虚拟积分和成就徽章，就是空转，用户很快看穿。</strong><br><br>
+    <strong>二、机器人吹的气不能和人吹的气等价。</strong>如果水面上大部分热度是机器人刷出来的，「今日最大泡」就失去了共识意义——它代表的应该是「全站第一」，不是「机器人第一」。建议机器人吹气<strong>只算预热，不计入最大泡评选，或者权重明显打折</strong>。<strong>这条不做，整个热度体系会从根上崩掉</strong>，而热度体系是这个产品的地基。这是这一条想法里唯一的真雷区，其余都是顺的。</div>
+  </div>
+
+  <div class="item">
+    <div class="hd"><span class="no">14</span><h3>跨公司 + 匿名，这是前提不是属性</h3></div>
+    <div class="quote">而且这个不是一个公司的，是多个公司的，以匿名身份。</div>
+    <p><strong>这一条定的是地基。前面好几条能不能成立，都压在它上面。</strong></p>
+    <p>先看反面。<strong>单公司的匿名墙有一套固定的死法</strong>，四步走完就没了：</p>
+    <ol>
+      <li>人数太少，<strong>匿名等于半实名</strong>——发三条，大家就猜出是谁了</li>
+      <li>内容天花板低，翻来覆去只有本公司那点事</li>
+      <li>管理层一定会介入，最后变成一个受控的意见箱</li>
+      <li>最致命的：<strong>它没有情报价值</strong>。你本来就知道自己公司的事</li>
+    </ol>
+    <p><strong>跨公司之后，前面第 11 条才真正立得住。</strong>行业八卦之所以是情报，因为情报的价值全部来自<strong>你不知道的那部分</strong>——隔壁厂给多少、哪个赛道在悄悄裁、哪家的年终泡汤了。<strong>单公司社区里没有情报，只有牢骚。</strong>跨公司社区里，八卦才等于信息。</p>
+    <p><strong>跨公司也是匿名能安全的前提。</strong>匿名社区有一条硬规律：<strong>匿名的安全性是人群规模的函数。</strong>五千人的站里说「我们组要裁了」没事，五十人的站里说同一句话等于举手。所以"跨公司"和"匿名"这两件事必须一起给，缺一个另一个就是假的。</p>
+
+    <div class="pt" style="margin:18px 0 15px"><div class="h">推论一：可以说公司，不该说人名</div>
+      跨公司放大了一件事——<strong>造谣的成本更低、传播更远，而平台是唯一被追责的那方。</strong>「某某公司要倒了」是可能造成实际损害的。<br><br>
+      所以红线该定在这里：<strong>行业级、公司级的信息允许，指名道姓的个人八卦压制。</strong>而这条红线正好和第 11 条的分类重合——<strong>「行业八卦优先」不只是内容偏好，它同时是风控策略。</strong>一个机制解两件事，这种重合值得抓住。</div>
+
+    <div class="pt"><div class="h">推论二：花名要带粗粒度标签</div>
+      跨公司之后，马甲花名不能只是「三楼那个总加班的」，得能判断可信度。建议加一档粗标签：<strong>「互联网 · P7」「金融 · 三年」</strong>——<strong>够用来判断信息可不可信，不够用来定位到人。</strong><br><br>
+      这是匿名社区里最难拿捏的一档，但必须做：完全无标识，信息没法判真假；标识太细，匿名当场就破了。</div>
+
+    <div class="pt"><div class="h">推论三：筛选里的「我司」档要设人数门槛</div>
+      上一条我建议加「我司 / 我这行 / 全站」这一维。跨公司之后要补一句：<strong>如果站内我司只有三个人，点开「我司」就等于互相暴露。</strong>这一档必须设人数门槛，不够 N 人不开放。这种细节必须在设计阶段想到，上线后再补就晚了。</div>
+
+    <div class="aside"><b>一个必须说的坏消息</b>跨公司匿名职场社区<strong>不是一条空赛道</strong>——脉脉匿名区、Blind、各类职场 Bar 都在这儿。<strong>所以"跨公司 + 匿名"是入场券，不是差异点。</strong><br><br>
+    变大泡泡的差异只能来自三处：<strong>吹泡泡的物理爽感、伪装成 Word 的敢看性、机器人放养收菜的信息聚合。</strong>这三个是别人没有的。定位的时候别把入场券当卖点讲，讲了会被一句"那不就是 Blind"打回来。</div>
+  </div>
+</section>
+
+<!-- ================= 二 ================= -->
+<section id="s2">
+  <h2>二、三个分区，不是两个 <em>THREE ZONES</em></h2>
+  <div class="lead">我原来写的是两层：摸鱼是入口，干货是留存。你补的第三层是「联机」——这一层才是社区之所以是社区的原因。</div>
+
+  <div class="zones">
+    <div class="zone a">
+      <div class="zt">休闲区</div>
+      <div class="ze">摸 鱼 专 属</div>
+      <div class="zq">一个人也能玩，<b>随时能停</b>。它负责「来」。</div>
+      <ul>
+        <li>泡泡广场<i>公司 / 个人八卦</i></li>
+        <li>捡手机文学</li>
+        <li>爽文背单词<i>单机模式</i></li>
+        <li>电子拼豆<i>自己拼</i></li>
+        <li>梦蝶局<i>看戏</i></li>
+      </ul>
+    </div>
+    <div class="zone b">
+      <div class="zt">干货区</div>
+      <div class="ze">真 本 事</div>
+      <div class="zq">一个人认真看，<b>看完有东西带走</b>。它负责「留」。</div>
+      <ul>
+        <li>真学习区<i>经验长文</i></li>
+        <li>工作资讯<i>抓取 + 用户投稿</i></li>
+        <li>行业情报<i>由行业八卦沉淀</i></li>
+        <li>博主机器人<i>付费问答</i></li>
+      </ul>
+    </div>
+    <div class="zone c">
+      <div class="zt">联机区</div>
+      <div class="ze">社 区 属 性</div>
+      <div class="zq"><b>必须有别人才成立</b>。它负责「回来」。</div>
+      <ul>
+        <li>机器人放养 / 收菜<i>替你在社区里活动</i></li>
+        <li>拼豆组团 / 匹配搭子</li>
+        <li>背单词对战 / 战队榜</li>
+        <li>梦蝶局开盘押注</li>
+        <li>一起戳破<i>要 5 个人</i></li>
+        <li>一起吹大同一个泡泡</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pt"><div class="h">为什么第三层最关键</div>
+    前两层都可替代。休闲有短视频，干货有小红书、脉脉、即刻。<strong>只有「联机」是别处没有的，而且只有联机才制造关系，关系才是留存。</strong>没有联机层，这个产品就是一个内容站——用户和用户之间永远是陌生人，走了就是走了。</div>
+
+  <div class="pt"><div class="h">一个可以立刻用的检验方法</div>
+    对每个功能问一句：<strong>「如果全站只有我一个人，这个功能还成立吗？」</strong>还成立的是休闲或干货，不成立的才是联机。一个健康的社区，第三类应该占到三分之一。<br><br>
+    现在数一遍：真正做到必须有别人的，原本只有<strong>拼豆组团</strong>和<strong>戳破</strong>两个。<strong>机器人放养收菜是补上这一层最有效的一招</strong>——它让每个用户在离线时也在社区里产生关系。除此之外，联机层仍然偏薄，<strong>这是当前最大的结构缺口</strong>，比"内容不够多"严重得多。</div>
+
+  <p class="lead" style="margin:26px 0 12px">每个功能的联机形态，按这个思路补：</p>
+  <table>
+    <tr><th style="width:150px">功能</th><th style="width:130px">单机形态</th><th>联机形态</th></tr>
+    <tr class="key"><td><b>泡泡广场</b></td><td>自己点</td><td><b>本来就是联机的</b>——「一起吹大一个泡泡」是天然的异步协作。这是它一直被低估的隐藏优势</td></tr>
+    <tr><td><b>电子拼豆</b></td><td>自己拼一张</td><td>匹配搭子 / 组团拼一张大图 / 战队作品墙</td></tr>
+    <tr><td><b>爽文背单词</b></td><td>自己刷</td><td>对战抢答 / 战队日榜 / 互相出题</td></tr>
+    <tr><td><b>梦蝶局</b></td><td>看剧本</td><td>开盘押注 / 赛后一起复盘破绽</td></tr>
+    <tr><td><b>戳破</b></td><td>—</td><td>天生联机：一个人戳不破，要 5 个</td></tr>
+    <tr class="key"><td><b>机器人水域</b></td><td>看戏</td><td><b>放养 + 收菜</b>：你的机器人像人一样在社区里活动，替你采集、替你互动，你隔天回来收</td></tr>
+    <tr><td><b>真学习区</b></td><td>自己读</td><td><b>故意不联机</b> —— 这一区的价值就在安静</td></tr>
+  </table>
+  <div class="pt">最后一行是重点：<strong>不是所有东西都该联机。</strong>真学习区故意不联机、不排名、不点赞，这是态度的一部分，不是没做完。</div>
+</section>
+
+<!-- ================= 三 ================= -->
+<section id="s3">
+  <h2>三、内容怎么被找到 <em>FIND</em></h2>
+  <div class="lead">广场是物理空间，它有一个别的产品没有的麻烦：没法翻页、没法搜索、内容一多就糊。所以「怎么找到」这件事必须单独设计，且必须用物理的方式解。</div>
+
+  <div class="pt"><div class="h">两个动作分工明确，不要混</div>
+    <strong>筛选是收窄，最大泡是收敛。</strong>筛选让你找到「跟我有关的那片水」，最大泡给你「今天全站的唯一共识」。一个服务个体，一个服务集体。首页只放最大泡、把筛选留在广场里，这个分工是对的。</div>
+
+  <div class="pt"><div class="h">筛选之外还缺一个：沉底之后去哪</div>
+    行业八卦凉掉之后不该只是沉进沉积层，应该<strong>转入资讯库</strong>，带上行业标签变成可检索的条目。这样广场是「流」，资讯库是「存」，用户随手发的八卦最后变成了产品资产。<strong>这是全产品唯一一条内容能自动升值的路径</strong>，别浪费。</div>
+</section>
+
+<!-- ================= 四 ================= -->
+<section id="s4">
+  <h2>四、机制怎么咬合 <em>HOW IT FITS</em></h2>
+  <div class="lead">单看每个功能都像点子堆砌。它们真正咬合的地方在这里。</div>
+
+  <div class="flow">
+    <div class="frow">
+      <div class="fkey">休闲<em>来</em></div>
+      <div class="fbody">
+        <div class="fbox"><b>泡泡广场 · 公司与个人八卦</b><i>高强度短时长 · 点几分钟就爽完</i></div>
+        <div class="fbox"><b>捡手机文学 / 爽文背单词 / 单人拼豆</b><i>荒诞内容池 · 随时能停</i></div>
+      </div>
+    </div>
+    <div class="farr">↓ <b>行业八卦是这道坎上的桥：披着八卦皮的情报，用户不用切换心态</b></div>
+    <div class="frow">
+      <div class="fkey">干货<em>留</em></div>
+      <div class="fbody">
+        <div class="fbox"><b>真学习区</b><i>安静 · 无热度 · 可沉淀</i></div>
+        <div class="fbox"><b>工作资讯 / 行业情报库</b><i>由行业八卦沉淀而来，用户自己就是信源</i></div>
+        <div class="fbox"><b>博主机器人</b><i>付费 · 可规模化 · 护城河</i></div>
+      </div>
+    </div>
+    <div class="farr">↓ <b>但看内容留不住人，得有关系</b></div>
+    <div class="frow">
+      <div class="fkey">联机<em>回来</em></div>
+      <div class="fbody">
+        <div class="fbox"><b>机器人放养 + 收菜</b><i>离线时替你活动与采集，隔天回来收 —— 补最薄那层最有效的一招</i></div>
+        <div class="fbox"><b>拼豆组团 / 背单词对战 / 梦蝶局开盘</b><i>必须有别人才成立</i></div>
+        <div class="fbox"><b>一起吹大、一起戳破</b><i>广场本身就是异步协作</i></div>
+      </div>
+    </div>
+    <div class="farr">↓</div>
+    <div class="frow">
+      <div class="fkey">治理与供给<em>底座</em></div>
+      <div class="fbody">
+        <div class="fbox"><b>戳破</b><i>把审核成本变成玩法</i></div>
+        <div class="fbox"><b>机器人 + 梦蝶局</b><i>冷启动不空场</i></div>
+        <div class="fbox"><b>守藏后台</b><i>每个控件挂一条收入或留存</i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pt"><div class="h">其一，衰减同时是三个机制的解</div>
+    它让点赞有时间价值（动机）、让刷量有持续成本（防刷）、让老内容自动退场腾出水面（内容新鲜度）。一个机制解三个问题，说明它选对了。</div>
+  <div class="pt"><div class="h">其二，戳破的方向是反的，所以它成立</div>
+    举报删帖是对抗性的、指向平台（"平台你管管"）；一起戳破是协作性的、指向内容（"我们一起把这个假的弄掉"）。<strong>把审核成本变成社区玩法</strong>——需要 5 个人才戳得破，既防了误伤，也让治理这件事本身有了参与感。</div>
+  <div class="pt"><div class="h">其三，沉底不删是刻意的</div>
+    凉掉的泡泡沉进沉积层，可以捞起来复活。老内容不是垃圾，是矿。这一条直接对应 DNA 第 3 条，数据沉淀要刻意设计。</div>
+</section>
+
+<!-- ================= 五 ================= -->
+<section id="s5">
+  <h2>五、钱从哪来 <em>REVENUE</em></h2>
+  <div class="lead">不先堆功能再想变现，反过来（DNA 第 5 条）。三条线，每条都在守藏后台有对应控件。</div>
+
+  <table>
+    <tr><th style="width:130px">收入线</th><th style="width:190px">形态</th><th>为什么成立</th><th style="width:96px">天花板</th></tr>
+    <tr>
+      <td><b>一 · 品牌泡泡</b></td>
+      <td>商业内容做成泡泡，可被真实点大</td>
+      <td><b>广告效果是可验证的</b>——被吹大说明用户真买账，不是曝光量注水</td>
+      <td>低，但现金流快</td>
+    </tr>
+    <tr>
+      <td><b>二 · 招聘泡泡</b></td>
+      <td>企业投放职位，用户吹大</td>
+      <td>招聘是职场社区最自然的变现，且用户不反感</td>
+      <td>中</td>
+    </tr>
+    <tr class="key">
+      <td><b style="color:var(--brand)">三 · 博主机器人</b></td>
+      <td>免费 3 问 → 深度咨询付费 → 社区抽成 30%</td>
+      <td><b>唯一能规模化、且有护城河的一条。</b>博主一次蒸馏长期收租</td>
+      <td><b>高</b></td>
+    </tr>
+  </table>
+
+  <div class="pt"><strong>收入线三是真正该押的那条。</strong>一、二是所有社区都能做的，三是只有这个产品结构能做的——因为它需要「博主人格结构化沉淀」这套东西，而这套东西正好是你已经在电子菠萝上验证过的。</div>
+  <div class="pt"><div class="h">可能的第四条：机器人能力分级</div>
+    用户机器人的<strong>采集范围、频率、能同时去几个水域</strong>天然可以分级付费。它和收入线三不冲突——博主机器人卖的是「别人的经验」，用户机器人卖的是「替自己干活」，掏的是两个钱包。<br><br>
+    但它比前三条更早期，<strong>先别写进商业模型</strong>：收菜这套机制本身还没被验证过留存，现在就给它挂上收费，等于在没验证的地基上盖楼。</div>
+</section>
+
+<!-- ================= 六 ================= -->
+<section id="s6">
+  <h2>六、四个最大的风险 <em>RISKS</em></h2>
+  <div class="lead">按 boluo.md 的元原则：先证伪自己，该拦就拦。下面是我认为最可能让这个产品死掉的地方。</div>
+
+  <div class="risk">
+    <div class="h"><span class="tag">风险一</span><h3>功能太多，每个都浅，最后哪个都不上瘾</h3></div>
+    <p>现在有六个板块。<strong>一个新产品能立住，靠的是一件事做到极致，不是六件事都能演示。</strong></p>
+    <p>我的判断：<strong>核心只有一个，就是吹泡泡。</strong>其余五个都是围绕它的叙事。如果吹泡泡本身不上瘾，Codex 把六个板块填得再满也救不回来——那时候该改的是泡泡机制，不是内容量。</p>
+    <p><strong>建议：先自己连点十分钟。</strong>如果十分钟后你还想点，这个产品成立；如果三分钟就腻，先别往下加功能。</p>
+    <p>顺带说一个现在就能看到的天花板：<strong>吹大 → 爆泡 → 然后呢？</strong>爆泡是当前唯一的落点，爆完就结束了。要延长爽感链条，可能需要"爆泡之后的东西"（衍生话题接力、名人堂的长期意义、爆泡者留名之类）。这一点现在还没有答案，<strong>不建议现在猜，建议等真人玩过再定。</strong></p>
+    <div class="no-fix">补一条结构性的：按休闲 / 干货 / <b>联机</b> 三分之后，原本必须有别人才成立的功能只有拼豆组团和戳破两个。<b>机器人放养收菜是补这一层最有效的一招</b>，但它自己也还没被验证过。<b>联机层依然是最薄的一层，比"内容不够多"严重得多</b>——内容浅可以慢慢填，没有关系沉淀的社区是留不住人的。</div>
+  </div>
+
+  <div class="risk">
+    <div class="h"><span class="tag">风险二</span><h3>匿名 + 八卦，极易劣化成情绪垃圾场</h3></div>
+    <p>这是所有匿名职场社区的共同死法。劣化路径是固定的：真八卦 → 情绪宣泄 → 人身攻击 → 造谣 → 平台被投诉、被约谈。</p>
+    <p><strong>跨公司把这件事往两个方向同时拉。</strong>好的一面：大家不认识对方公司的人，人身攻击没有观众，行业级信息的占比会自然更高。坏的一面：<strong>造谣的成本更低、传播更远，而平台是唯一被追责的那方</strong>——「某某公司要倒了」是可能造成实际损害的。</p>
+    <p>现有的对冲：衰减（烂内容自然沉）、戳破（社区自净）、马甲花名带粗粒度标签（匿名但有连续性）、以及把重心从公司八卦挪向行业八卦。红线定在<strong>「可以说公司，不该说人名」</strong>——它和行业八卦优先是同一条策略。</p>
+    <div class="no-fix">但这些都不够。造谣、诽谤、泄露商业秘密是真实的法律风险，不是产品机制能兜住的。真做的话必须有真人审核和明确的内容红线。<b>这一条我没有好办法，只能标出来，不能假装解决了。</b></div>
+  </div>
+
+  <div class="risk">
+    <div class="h"><span class="tag">风险三</span><h3>冷启动时，一片空水是最难看的</h3></div>
+    <p>泡泡广场在没内容的时候，视觉上就是一个空水池——比空的信息流还难看，因为空信息流至少不占地方，空水池是明晃晃的一大块。</p>
+    <p>现有对冲：种子泡泡定时释放、机器人排班、梦蝶局（机器人自己有戏唱）、资讯抓取投放。工单里都要求做了。</p>
+    <p><strong>但真正的解不是这些，是"第一批 200 个真人从哪来"。</strong>这个问题产品设计答不了，得靠运营。标出来，别让 demo 的热闹掩盖了它。</p>
+  </div>
+
+  <div class="risk">
+    <div class="h"><span class="tag">风险四</span><h3>定位撞车：跨公司匿名不是空赛道</h3></div>
+    <p>定位一确认成「跨公司 + 匿名」，就必须面对一件事：<strong>这条赛道上已经有脉脉匿名区、Blind、各类职场 Bar。</strong></p>
+    <p>所以要非常清楚：<strong>「跨公司 + 匿名」是入场券，不是差异点。</strong>对外讲的时候如果把它当卖点，会被一句「那不就是 Blind」直接打回来。</p>
+    <p>真正的差异只有三处，而且都还没被验证过：</p>
+    <ol>
+      <li><strong>吹泡泡的物理爽感</strong> —— 别人是信息流，这里是水面</li>
+      <li><strong>伪装成 Word 的敢看性</strong> —— 别人做不了，因为他们是 App</li>
+      <li><strong>机器人放养收菜的信息聚合</strong> —— 别人没有这个形态</li>
+    </ol>
+    <div class="no-fix">这三条里，第 2 条其实最硬——<b>它是一个 App 形态的竞品结构上做不到的事。</b>Blind 和脉脉是手机应用，手机应用没法伪装成你电脑上的 Word。如果要找一个楔子先扎进去，我会从这里扎，而不是从"我们的社区氛围更好"。</div>
+  </div>
+</section>
+
+<!-- ================= 七 ================= -->
+<section id="s7">
+  <h2>七、这版 demo 能证明什么 <em>WHAT IT PROVES</em></h2>
+  <div class="two">
+    <div class="col yes">
+      <div class="ch">能证明的</div>
+      <ul>
+        <li>泡泡物理成立，吹气手感可调（直径 52 → 176 全程铺开，每口气看得见）</li>
+        <li><b>筛选可以是物理的</b>——选中「我这行」，不属于的当场淡出下沉，命中的浮到水面线。这是全 demo 唯一一处「用物理替代列表刷新」的实证，也是最容易被做回下拉框的地方</li>
+        <li><b>花名粗标签这一档拿捏得住</b>——「互联网 · P7」挂在泡泡和最大泡卡片上，够判断可信度，不够定位到人</li>
+        <li><b>广场的流能自动变成资讯库的存</b>——行业类泡泡凉了不进沉积层，转成带行业标签的可检索条目，还能捞回广场</li>
+        <li><b>机器人吹的气和人吹的气能在代码层分开</b>，今日最大泡只认人气。这条不做，热度体系会从根上崩掉</li>
+        <li>Word / 桌面双伪装在视觉上可信，够拿去给人看</li>
+        <li>整套机制能自洽地串起来，能一次讲清楚</li>
+      </ul>
+    </div>
+    <div class="col no">
+      <div class="ch">不能证明的</div>
+      <ul>
+        <li>有没有人愿意来</li>
+        <li>来了愿不愿意回来</li>
+        <li>愿不愿意为博主机器人付钱</li>
+        <li><b>收菜这套异步留存到底成不成立</b>——它在 demo 里跑得通，但「隔天回来收」只有真人用一周才知道</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="closing">
+    <div class="cl">来 自 电 子 菠 萝 的 元 判 断</div>
+    <p>你对质感有高标准，但反复打磨表达的确定性快感，会悄悄替代面对「这东西到底有没有人愿意用」的不确定性。</p>
+    <p>这份文档和这个 demo 都还只是<b>方案</b>。方案再美都不是验证，用户会不会回来才是。</p>
+    <p>所以下一步最该做的不是让 Codex 把六个板块填满，而是——<b>把现在这个只有泡泡广场能玩的版本，先丢给 10 个真的在上班的人，看他们点几下就关掉。</b></p>
+  </div>
+</section>
+
+<!-- ================= 八 ================= -->
+<section id="s8">
+  <h2>八、最小成本的验证做法 <em>NEXT</em></h2>
+
+  <div class="step"><div class="sn">1</div><div class="sb">
+    <strong>现在的 HTML 直接发给 10 个上班的朋友</strong>，什么都不解释，只说"点点看"。观察两件事：
+    <ul>
+      <li>他们<strong>自己有没有发现</strong>点一下会变大 —— 发现不了 = 引导有问题</li>
+      <li>点到第几下停手 —— 少于 10 下 = 机制不够爽，得改物理，不是加功能</li>
+    </ul>
+  </div></div>
+
+  <div class="step"><div class="sn">2</div><div class="sb">
+    问一个问题就够：<strong>「你会不会想知道明天这里有什么新的？」</strong>这一个问题测的是留存意愿，比问"好不好玩"有效得多。
+  </div></div>
+
+  <div class="step"><div class="sn">3</div><div class="sb">
+    如果第 1、2 步过了，再让 Codex 按工单填六个板块。<strong>没过就别填</strong>，先改泡泡。
+  </div></div>
+</section>
+
+<footer>
+  变大泡泡 · 产品思考　2026-08-06<br>
+  配套文件：<b>变大泡泡-原型.html</b>（可交互原型）　<b>变大泡泡-Codex填充工单.md</b>（七项填充任务）<br>
+  本页所有结论均为方案阶段判断，未经真实用户验证。页内泡泡演示为本地脚本，无网络请求。
+</footer>
+
+</div><!-- /main -->
+</div><!-- /wrap -->
+
+<script>
+(function(){
+  const stage = document.getElementById('stage');
+  const blowsEl = document.getElementById('bl');
+  if(!stage) return;
+
+  const R_MIN = 18, R_MAX = 62, BURST = 34;
+  const rOf = h => R_MIN + (R_MAX - R_MIN) * Math.pow(Math.max(h,0)/BURST, 0.6);
+  const COLORS = { salary:[201,150,46], peer:[62,143,130], boss:[122,106,166], fun:[210,118,74] };
+
+  let W = stage.clientWidth, H = stage.clientHeight, blows = 0, bubbles = [];
+
+  function mk(text, type, heat){
+    const b = { text, type, heat, r:rOf(heat), vx:(Math.random()-.5)*8, vy:0, dead:false };
+    b.x = 40 + Math.random()*(W-80);
+    b.y = H - 30 - Math.random()*40;
+    const el = document.createElement('div');
+    el.className = 'bub';
+    const c = COLORS[type] || COLORS.fun;
+    el.style.background = `radial-gradient(circle at 32% 28%, rgba(255,255,255,.85), rgba(${c[0]},${c[1]},${c[2]},.20) 62%, rgba(${c[0]},${c[1]},${c[2]},.32))`;
+    el.addEventListener('click', e => { e.preventDefault(); blow(b); });
+    const tx = document.createElement('span'); tx.className = 'tx';
+    el.appendChild(tx); b.tx = tx;
+    b.el = el; stage.appendChild(el); bubbles.push(b);
+    draw(b); return b;
+  }
+
+  function draw(b){
+    const d = b.r*2;
+    b.el.style.width = d+'px'; b.el.style.height = d+'px';
+    b.el.style.fontSize = (b.r > 40 ? 12 : b.r > 28 ? 11 : 10)+'px';
+    b.tx.textContent = b.r > 30 ? b.text : (b.text.length>4 ? b.text.slice(0,4)+'…' : b.text);
+    b.el.style.transform = `translate3d(${b.x-b.r}px,${b.y-b.r}px,0)`;
+    b.el.classList.toggle('tense', b.heat > BURST*0.8);
+  }
+
+  function ripple(b){
+    const r = document.createElement('div');
+    r.className = 'rip';
+    r.style.cssText = `left:${b.x-b.r}px;top:${b.y-b.r}px;width:${b.r*2}px;height:${b.r*2}px`;
+    stage.appendChild(r); setTimeout(()=>r.remove(), 560);
+  }
+
+  function blow(b){
+    if (b.dead) return;
+    b.heat += 1; blows++; blowsEl.textContent = blows;
+    b.r = rOf(b.heat); b.vy -= 1.1;
+    b.el.classList.remove('pop'); void b.el.offsetWidth; b.el.classList.add('pop');
+    ripple(b); draw(b);
+    if (b.heat >= BURST) burst(b);
+  }
+
+  function burst(b){
+    b.dead = true;
+    for (let i=0;i<3;i++){
+      const r2 = document.createElement('div');
+      r2.className = 'rip';
+      r2.style.cssText = `left:${b.x-b.r}px;top:${b.y-b.r}px;width:${b.r*2}px;height:${b.r*2}px;animation-delay:${i*70}ms`;
+      stage.appendChild(r2); setTimeout(()=>r2.remove(), 700+i*70);
+    }
+    b.el.remove();
+    bubbles = bubbles.filter(x => x !== b);
+    const kids = ['爆了 · 衍生话题','爆了 · 进名人堂'];
+    setTimeout(()=>{ kids.forEach(t => mk(t, 'fun', 4)); }, 240);
+  }
+
+  let last = performance.now();
+  function step(now){
+    const dt = Math.min((now-last)/16.67, 3); last = now;
+    W = stage.clientWidth; H = stage.clientHeight;
+    for (const b of bubbles){
+      if (b.dead) continue;
+      b.vy += (0.9 - 2.2*(b.r/R_MAX)) * dt;
+      if (b.hover){ b.vx *= 0.72; b.vy *= 0.72; }
+      else b.vx += (Math.random()-.5) * 1.2 * dt;
+      b.vx *= 0.985; b.vy *= 0.985;
+      b.x += b.vx*dt*0.5; b.y += b.vy*dt*0.5;
+      if (b.x < b.r){ b.x = b.r; b.vx = Math.abs(b.vx)*.5 }
+      if (b.x > W-b.r){ b.x = W-b.r; b.vx = -Math.abs(b.vx)*.5 }
+      if (b.y < b.r+26){ b.y = b.r+26; b.vy = Math.abs(b.vy)*.35 }
+      if (b.y > H-b.r){ b.y = H-b.r; b.vy = -Math.abs(b.vy)*.35 }
+    }
+    for (let i=0;i<bubbles.length;i++) for (let j=i+1;j<bubbles.length;j++){
+      const a = bubbles[i], b = bubbles[j];
+      if (a.dead || b.dead) continue;
+      const dx = b.x-a.x, dy = b.y-a.y, d = Math.hypot(dx,dy) || .01, min = a.r+b.r;
+      if (d < min){
+        const p = (min-d)/d*0.5, ox = dx*p, oy = dy*p;
+        a.x -= ox; a.y -= oy; b.x += ox; b.y += oy;
+      }
+    }
+    for (const b of bubbles) if (!b.dead) draw(b);
+    requestAnimationFrame(step);
+  }
+
+  stage.addEventListener('mouseover', e => { const b = find(e.target); if(b) b.hover = true; });
+  stage.addEventListener('mouseout',  e => { const b = find(e.target); if(b) b.hover = false; });
+  function find(el){ return bubbles.find(b => b.el === el); }
+
+  mk('隔壁组集体涨薪了', 'salary', 14);
+  mk('新来的总监开会只说黑话', 'boss', 7);
+  mk('打印机旁边的八卦', 'peer', 3);
+  requestAnimationFrame(step);
+
+  // 目录高亮
+  const links = [...document.querySelectorAll('.toc a')];
+  const secs = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  const io = new IntersectionObserver(es => {
+    es.forEach(en => {
+      if (!en.isIntersecting) return;
+      links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#'+en.target.id));
+    });
+  }, { rootMargin:'-15% 0px -70% 0px' });
+  secs.forEach(s => io.observe(s));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2026年度第三季度工作述职报告.docx - Word</title>
+<link rel="icon" href="data:,">
+<style>
+:root{
+  --word-bg:#F3F3F3; --paper:#FFFFFF; --word-blue:#2B579A; --ribbon:#F9F9F9;
+  --rule:#E1DFDD; --rule-2:#D0CECC; --ink:#1F1F1F; --ink-2:#5A5A5A; --ink-3:#8A8A8A;
+  --brand:#2F4858;
+  --ui:"Microsoft YaHei","Segoe UI",-apple-system,sans-serif;
+  --serif:SimSun,"Songti SC","Noto Serif SC",serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:var(--ui);font-size:13px;color:var(--ink);background:var(--word-bg);overflow:hidden}
+button{font-family:inherit;font-size:inherit;cursor:pointer}
+
+/* ---------- Word 外壳 ---------- */
+.titlebar{height:32px;background:var(--word-blue);color:#fff;display:flex;align-items:center;justify-content:center;position:relative;font-size:12px}
+.titlebar .win{position:absolute;right:0;top:0;height:32px;display:flex}
+.titlebar .win span{width:44px;display:flex;align-items:center;justify-content:center;font-size:12px}
+.titlebar .win span:last-child:hover{background:#c42b1c}
+.titlebar .win span:hover{background:rgba(255,255,255,.15)}
+.qat{position:absolute;left:10px;top:0;height:32px;display:flex;align-items:center;gap:12px;font-size:12px;opacity:.85}
+
+.tabs{display:flex;align-items:flex-end;background:var(--ribbon);border-bottom:1px solid var(--rule);padding-left:8px;height:30px}
+.tabs .t{padding:6px 14px;font-size:12.5px;color:var(--ink-2);border:1px solid transparent;border-bottom:none;cursor:pointer;position:relative;top:1px}
+.tabs .t:hover{background:#F0F0F0}
+.tabs .t.on{background:#fff;border-color:var(--rule);color:var(--word-blue);font-weight:600}
+
+.ribbon{background:#fff;border-bottom:1px solid var(--rule);padding:7px 14px;display:flex;align-items:center;gap:8px;min-height:46px;flex-wrap:wrap}
+.rgrp{display:flex;align-items:center;gap:5px;padding-right:12px;border-right:1px solid var(--rule);height:32px}
+.rgrp:last-child{border-right:none}
+.rbtn{background:#fff;border:1px solid var(--rule);border-radius:3px;padding:5px 10px;color:var(--ink-2);font-size:12px}
+.rbtn:hover{background:#F0F6FC;border-color:#B7CDE8;color:var(--word-blue)}
+.rbtn.pri{background:var(--word-blue);border-color:var(--word-blue);color:#fff}
+.rbtn.pri:hover{background:#1E3F73;color:#fff}
+.rlab{font-size:11.5px;color:var(--ink-3);letter-spacing:.5px}
+.ribbon input[type=range]{width:110px;vertical-align:middle}
+
+.ruler{height:20px;background:#fff;border-bottom:1px solid var(--rule);position:relative;overflow:hidden}
+.ruler .rin{position:absolute;left:50%;transform:translateX(-50%);width:1020px;height:20px;
+  background:repeating-linear-gradient(90deg,transparent 0 8px,var(--rule-2) 8px 9px);opacity:.55}
+
+.docwrap{position:absolute;top:129px;bottom:24px;left:0;right:0;overflow:auto;padding:18px 0 40px}
+.paper{width:1020px;margin:0 auto;background:var(--paper);box-shadow:0 0 0 1px var(--rule),0 2px 10px rgba(0,0,0,.07);min-height:660px;padding:26px 34px 34px}
+
+.statusbar{position:absolute;left:0;right:0;bottom:0;height:24px;background:var(--word-blue);color:#fff;
+  display:flex;align-items:center;gap:20px;padding:0 14px;font-size:11.5px}
+.statusbar .sp{margin-left:auto;opacity:.9}
+
+/* ---------- 社区身份（只在社区态露出） ---------- */
+.brandbar{display:flex;align-items:center;gap:11px;padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--rule)}
+.brandbar svg{width:34px;height:24px;color:var(--brand);flex:none}
+.brandbar .bn{font-size:16px;font-weight:700;color:var(--brand);letter-spacing:1px}
+.brandbar .bs{font-family:var(--serif);font-size:12.5px;color:var(--ink-3)}
+.brandbar .bs b{color:var(--ink-2);font-weight:400}
+.brandbar .me{margin-left:auto;font-size:11.5px;color:var(--ink-3)}
+.brandbar .me b{color:var(--brand);font-weight:600}
+
+/* ---------- 视图 ---------- */
+.view{display:none}
+.view.on{display:block}
+.split{display:flex;gap:16px;align-items:flex-start}
+.rail{width:236px;flex:none}
+.card{border:1px solid var(--rule);border-radius:3px;margin-bottom:12px}
+.card h4{font-size:11.5px;font-weight:600;color:var(--ink-2);padding:7px 10px;border-bottom:1px solid var(--rule);background:#FAFAFA;letter-spacing:.5px}
+.card h4 small{font-weight:400;font-size:11px;color:var(--ink-3);margin-left:8px;letter-spacing:0}
+.card .bd{padding:9px 10px;font-size:12px;color:var(--ink-2);line-height:1.75}
+.muted{color:var(--ink-3);font-size:11.5px;line-height:1.7}
+
+/* ---------- 泡泡舞台 ---------- */
+.stage{position:relative;flex:1;height:520px;border:1px solid var(--rule);border-radius:3px;overflow:hidden;
+  background:linear-gradient(180deg,#FCFDFE 0%,#F6F9FB 60%,#EFF3F6 100%)}
+.waterline{position:absolute;left:0;right:0;top:44px;border-top:1px dashed #CBD8E0;pointer-events:none}
+.waterline i{position:absolute;left:8px;top:-16px;font-style:normal;font-size:10.5px;color:#9DB0BC;letter-spacing:2px}
+.bub{position:absolute;left:0;top:0;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  text-align:center;cursor:pointer;user-select:none;will-change:transform;
+  border:1px solid rgba(0,0,0,.07);transition:box-shadow .15s}
+.bub .tx{padding:0 12%;line-height:1.35;color:#25333B;pointer-events:none;overflow:hidden}
+.bub .mt{position:absolute;bottom:8%;font-size:9.5px;color:rgba(40,60,72,.5);pointer-events:none}
+.bub:hover{box-shadow:0 0 0 3px rgba(43,87,154,.14)}
+.bub.pop{animation:pop .18s ease-out}
+@keyframes pop{0%{filter:brightness(1)}40%{filter:brightness(1.28)}100%{filter:brightness(1)}}
+.bub.tense::after{content:'';position:absolute;inset:-5px;border-radius:50%;pointer-events:none;
+  border:1.5px solid rgba(192,80,63,.6);animation:tense 1s ease-in-out infinite}
+@keyframes tense{0%,100%{opacity:.22;transform:scale(1)}50%{opacity:.95;transform:scale(1.06)}}
+.bub.tense .mt{color:#C0503F}
+.bub .acts{position:absolute;top:-9px;right:-6px;display:none;gap:3px}
+.bub:hover .acts{display:flex}
+.bub .acts b{font-weight:400;font-size:10px;background:#fff;border:1px solid var(--rule);border-radius:9px;padding:1px 6px;color:var(--ink-2)}
+.bub .acts b:hover{background:var(--word-blue);color:#fff;border-color:var(--word-blue)}
+.ripple{position:absolute;border-radius:50%;border:1.5px solid rgba(43,87,154,.5);pointer-events:none;animation:rip .55s ease-out forwards}
+@keyframes rip{to{transform:scale(2.1);opacity:0}}
+
+/* 筛选：命中的浮上来，没命中的淡出下沉 —— 是水面重组，不是列表刷新 */
+.bub.dim{pointer-events:none}
+.filt{display:flex;flex-wrap:wrap;align-items:center;gap:5px;border:1px solid var(--rule);border-radius:3px;
+  padding:6px 9px;margin-bottom:8px;background:#FAFAFA}
+.filt .fl{font-size:11px;color:var(--ink-3);letter-spacing:.5px;margin-right:2px}
+.filt .fc{font-size:11px;border:1px solid var(--rule);background:#fff;border-radius:11px;padding:3px 9px;color:var(--ink-2);cursor:pointer}
+.filt .fc:hover{border-color:#B7CDE8;color:var(--word-blue)}
+.filt .fc.on{background:var(--word-blue);border-color:var(--word-blue);color:#fff}
+.filt .fc.lock{color:var(--ink-3);border-style:dashed;cursor:not-allowed}
+.filt .fc.lock:hover{border-color:var(--rule);color:var(--ink-3)}
+.filt .sep{width:1px;height:15px;background:var(--rule-2);margin:0 3px}
+.filt .frow{width:100%;margin-top:5px}
+.tagn{font-size:10.5px;color:var(--ink-3);border:1px solid var(--rule);border-radius:2px;padding:0 4px;margin-left:5px;white-space:nowrap}
+.lib .li{padding:6px 0;border-bottom:1px dotted var(--rule)}
+.lib .li:last-child{border:none}
+.lib b.act{color:var(--word-blue);font-weight:400;cursor:pointer}
+.lib b.act:hover{text-decoration:underline}
+
+.sediment{margin-top:10px;border:1px solid var(--rule);border-radius:3px;padding:8px 10px;background:#FAFAFA}
+.sediment .st{font-size:11px;color:var(--ink-3);margin-bottom:6px;letter-spacing:.5px}
+.sediment .row{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:11px;border:1px solid var(--rule);background:#fff;border-radius:11px;padding:3px 9px;color:var(--ink-3)}
+.chip b{font-weight:400;color:var(--word-blue);margin-left:6px}
+.chip b:hover{text-decoration:underline;cursor:pointer}
+
+.hot li{list-style:none;font-size:12px;padding:5px 0;border-bottom:1px dotted var(--rule);display:flex;gap:7px}
+.hot li:last-child{border:none}
+.hot li i{font-style:normal;color:var(--ink-3);font-size:11px;min-width:13px}
+.hot li span{flex:1;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hot li em{font-style:normal;color:#C0503F;font-size:11px}
+
+/* ---------- 通用小件 ---------- */
+.ta{width:100%;border:1px solid var(--rule);border-radius:3px;padding:9px 10px;font-family:inherit;font-size:13px;resize:vertical;outline:none}
+.ta:focus{border-color:#B7CDE8}
+.pick{display:flex;gap:6px;flex-wrap:wrap;margin:9px 0}
+.pick label{font-size:12px;border:1px solid var(--rule);border-radius:13px;padding:4px 11px;cursor:pointer;color:var(--ink-2)}
+.pick input{display:none}
+.pick input:checked+span{color:#fff}
+.pick label:has(input:checked){background:var(--word-blue);border-color:var(--word-blue);color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+h3.sec{font-family:var(--serif);font-size:16px;font-weight:600;margin:2px 0 10px;color:var(--ink)}
+h3.sec small{font-family:var(--ui);font-size:11.5px;font-weight:400;color:var(--ink-3);margin-left:9px;letter-spacing:.5px}
+.stub{border:1px dashed var(--rule-2);border-radius:3px;padding:14px;color:var(--ink-3);font-size:12px;line-height:1.85;background:#FCFCFC}
+.stub b{color:var(--word-blue);font-weight:600}
+
+/* 拼豆 */
+.beadwrap{display:flex;gap:14px;align-items:flex-start}
+.sheet{border:1px solid var(--rule-2);display:grid;grid-template-columns:26px repeat(30,17px);font-size:9px;color:var(--ink-3);background:#fff}
+.sheet .hd{height:17px;display:flex;align-items:center;justify-content:center;background:#F1F1F1;border-right:1px solid #E4E4E4;border-bottom:1px solid #D6D6D6}
+.sheet .cell{width:17px;height:17px;border-right:1px solid #EDEDED;border-bottom:1px solid #EDEDED;cursor:crosshair}
+.sheet .rh{height:17px;display:flex;align-items:center;justify-content:center;background:#F1F1F1;border-right:1px solid #D6D6D6;border-bottom:1px solid #E4E4E4}
+.pal{display:flex;gap:4px;flex-wrap:wrap;width:120px}
+.pal i{width:20px;height:20px;border:1px solid rgba(0,0,0,.14);border-radius:2px;cursor:pointer;display:block}
+.pal i.on{outline:2px solid var(--word-blue);outline-offset:1px}
+
+/* 批注栏 */
+.cmt{border-left:2px solid #E8C07A;background:#FFFDF7;padding:8px 10px;margin-bottom:8px;font-size:12px;line-height:1.75}
+.cmt .who{font-size:11px;color:#A8801F;margin-bottom:3px}
+.cmt .who b{color:var(--ink);font-weight:600}
+
+/* ---------- 老板键伪装态 ---------- */
+.mask{position:fixed;inset:0;z-index:60;display:none}
+.mask.on{display:block}
+#reportMask{background:var(--word-bg);overflow:auto}
+#reportMask .paper{margin-top:18px}
+.rpt{font-family:var(--serif);font-size:15px;line-height:2.05;color:#1a1a1a}
+.rpt h1{font-size:20px;text-align:center;margin-bottom:6px;font-weight:600}
+.rpt .sub{text-align:center;font-family:var(--ui);font-size:12px;color:var(--ink-3);margin-bottom:22px}
+.rpt h2{font-size:16px;margin:20px 0 8px;font-weight:600}
+.rpt p{text-indent:2em;margin-bottom:10px}
+
+#desktopMask{background:linear-gradient(150deg,#1B3B5A 0%,#2C5A7C 45%,#4E7C94 100%)}
+.dicons{position:absolute;top:16px;left:16px;display:grid;grid-template-columns:repeat(auto-fill,86px);gap:4px;width:400px}
+.dicon{width:86px;padding:8px 4px;text-align:center;color:#fff;font-size:11px;line-height:1.35;border-radius:3px;cursor:default}
+.dicon:hover{background:rgba(255,255,255,.14)}
+.dicon .ic{width:34px;height:40px;margin:0 auto 5px;border-radius:2px;position:relative;
+  background:linear-gradient(160deg,#fff 0%,#E8EDF2 100%);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.dicon .ic::after{content:attr(data-x);position:absolute;left:0;bottom:5px;font-size:9px;font-weight:700;color:#fff;
+  background:var(--tag,#217346);padding:1px 4px;border-radius:2px}
+.taskbar{position:absolute;left:0;right:0;bottom:0;height:40px;background:rgba(243,243,243,.92);
+  display:flex;align-items:center;padding:0 12px;gap:14px;font-size:12px;color:#333}
+.taskbar .clk{margin-left:auto;text-align:right;line-height:1.25;font-size:11.5px}
+.dlg{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:330px;background:#fff;border-radius:6px;
+  box-shadow:0 12px 40px rgba(0,0,0,.4);display:none}
+.dlg.on{display:block}
+.dlg .h{background:#F3F3F3;padding:9px 12px;font-size:12px;border-bottom:1px solid var(--rule)}
+.dlg .b{padding:18px 16px;font-size:12.5px;color:var(--ink-2)}
+.dlg .f{padding:0 16px 14px;text-align:right}
+
+.hintbar{position:fixed;right:14px;bottom:32px;z-index:70;background:rgba(31,31,31,.86);color:#fff;
+  font-size:11.5px;padding:6px 11px;border-radius:3px;letter-spacing:.5px}
+.fake{font-size:11px;color:var(--ink-3);border-top:1px solid var(--rule);margin-top:16px;padding-top:9px;line-height:1.7}
+</style>
+</head>
+<body>
+
+<div class="titlebar">
+  <div class="qat">保存 · 撤销 · 重做</div>
+  2026年度第三季度工作述职报告.docx - Word
+  <div class="win"><span>—</span><span>□</span><span>×</span></div>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="t on" data-v="home">开始</div>
+  <div class="t" data-v="insert">插入</div>
+  <div class="t" data-v="draw">绘图</div>
+  <div class="t" data-v="ref">引用</div>
+  <div class="t" data-v="review">审阅</div>
+  <div class="t" data-v="ops">视图</div>
+</div>
+
+<div class="ribbon" id="ribbon"></div>
+<div class="ruler"><div class="rin"></div></div>
+
+<div class="docwrap">
+  <div class="paper">
+
+    <div class="brandbar">
+      <svg viewBox="0 0 42 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 17C10 9 24 8 30 16C24 24 10 25 5 17Z"/>
+        <path d="M30 16L38 10V23L30 16Z"/>
+        <circle cx="12" cy="15" r="1.1" fill="currentColor" stroke="none"/>
+        <path d="M17 20C19 21.5 24 21.5 26 20"/>
+        <circle cx="12" cy="7" r="2.6"/><circle cx="19" cy="3.4" r="1.6"/>
+      </svg>
+      <div>
+        <div class="bn">变大泡泡</div>
+        <div class="bs">专业摸鱼社区 · <b>子非鱼，安知鱼之乐</b></div>
+      </div>
+      <div class="me">今日马甲 <b id="alias">—</b><span class="tagn" id="aliasTag">—</span> · 已吹 <b id="blows">0</b> 口气</div>
+    </div>
+
+    <!-- ============ 开始 · 泡泡广场 ============ -->
+    <div class="view on" id="v-home">
+      <div class="split">
+        <div style="flex:1">
+          <div class="filt" id="filt"></div>
+          <div class="stage" id="stage"><div class="waterline"><i>水 面 线</i></div></div>
+          <div class="sediment">
+            <div class="st">沉积层 · 凉掉的泡泡沉在这儿，吹一口气就能复活（行业类不沉这儿，转进「引用 → 行业资讯库」）</div>
+            <div class="row" id="sed"><span class="muted">暂无</span></div>
+          </div>
+        </div>
+        <div class="rail">
+          <div class="card"><h4>今日最大泡<small>全站唯一 · 按人气评</small></h4><div class="bd" id="topBub"><span class="muted">还没有</span></div></div>
+          <div class="card"><h4>水面热榜</h4><div class="bd"><ul class="hot" id="hot"></ul></div></div>
+          <div class="card"><h4>名人堂 · 已爆的泡泡</h4><div class="bd"><ul class="hot" id="hall"><li><span class="muted">还没有泡泡爆过</span></li></ul></div></div>
+          <div class="card"><h4>玩法</h4><div class="bd muted">
+            点泡泡 = 吹气，不限次<br>
+            吹大 → 浮得更高、活得更久<br>
+            吹爆 → 炸成衍生话题，进名人堂<br>
+            悬停泡泡：<b>料</b> 加爆料 · <b>戳</b> 质疑<br>
+            一个人戳不破，要 5 个人一起戳<br>
+            筛选是物理的：没命中的淡出下沉，不是刷新列表<br>
+            花名带粗标签「互联网 · P7」：够判断可信度，不够定位到人
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 插入 · 发泡泡 ============ -->
+    <div class="view" id="v-insert">
+      <h3 class="sec">吹一个新泡泡<small>插入 → 批注</small></h3>
+      <div class="split">
+        <div style="flex:1">
+          <textarea class="ta" id="npText" rows="4" placeholder="听说什么了？（匿名，只挂今日马甲）"></textarea>
+          <div class="pick" id="npType"></div>
+          <button class="rbtn pri" id="npGo">吹出去</button>
+          <span class="muted" style="margin-left:10px">新泡泡初始热度 3，能不能浮上去看大家</span>
+        </div>
+        <div class="rail">
+          <div class="card"><h4>今日选题（运营种子）</h4><div class="bd" id="seedList"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 绘图 · Excel 拼豆 ============ -->
+    <div class="view" id="v-draw">
+      <h3 class="sec">织梦坊 · Excel 拼豆<small>绘图 → 画布</small></h3>
+      <div class="beadwrap">
+        <div>
+          <div class="sheet" id="sheet"></div>
+          <div class="muted" style="margin-top:8px">按住拖动可连续填色 · 右键橡皮</div>
+        </div>
+        <div class="rail">
+          <div class="card"><h4>色板</h4><div class="bd"><div class="pal" id="pal"></div></div></div>
+          <div class="card"><h4>搭子</h4><div class="bd">
+            <div class="muted" id="mateState">当前：单人拼</div>
+            <div style="margin-top:8px;display:flex;gap:6px">
+              <button class="rbtn" id="mateBtn">匹配搭子</button>
+              <button class="rbtn" id="teamBtn">组团</button>
+            </div>
+          </div></div>
+          <div class="card"><h4>模板与作品</h4><div class="bd" id="drawOpsPanel"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 引用 · 南华 ============ -->
+    <div class="view" id="v-ref">
+      <h3 class="sec">南华 · 情报与真诚区<small>引用 → 参考文献</small></h3>
+      <div class="split">
+        <div style="flex:1">
+          <div class="card"><h4>今日工作情报 · 抓取于 09:12</h4><div class="bd" id="newsList"></div></div>
+          <div class="card"><h4>行业资讯库<small>广场是流，这里是存 · 行业类泡泡凉了就转进这儿</small></h4><div class="bd lib">
+            <input class="ta" id="libQ" placeholder="搜条目或行业，比如「互联网」「HC」" style="margin-bottom:7px">
+            <div id="libList"></div>
+          </div></div>
+          <div class="grid2">
+            <div class="card"><h4>捡手机文学</h4><div class="bd" id="phoneStories"><div class="muted">这是虚构故事，如有雷同纯属巧合</div></div></div>
+            <div class="card"><h4>爽文背单词 <span class="muted" id="swagger" style="float:right">今日装逼值 0</span></h4><div class="bd" id="wordGame"></div></div>
+          </div>
+          <div class="card"><h4>真学习区 · 不做热度排序，故意保持安静</h4><div class="bd" id="studyZone"></div></div>
+        </div>
+        <div class="rail">
+          <div class="card"><h4>信源</h4><div class="bd" id="srcList"></div></div>
+          <div class="card"><h4>待审队列</h4><div class="bd muted" id="queue">3 条待审</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 审阅 · 化蝶 ============ -->
+    <div class="view" id="v-review">
+      <h3 class="sec">化蝶 · 机器人水域<small>审阅 → 批注</small></h3>
+      <div class="split">
+        <div style="flex:1">
+          <div id="cmts"></div>
+          <div style="display:flex;gap:6px;margin-top:8px">
+            <input class="ta" id="askIn" style="flex:1" placeholder="@菠萝 / @如镜 / @Codex / @小龙虾 问点什么">
+            <button class="rbtn pri" id="askGo">问</button>
+          </div>
+          <div class="card" style="margin-top:14px"><h4>梦蝶局 · 机器人身份局</h4><div class="bd" id="dreamGame"></div></div>
+        </div>
+        <div class="rail">
+          <div class="card"><h4>放养 · 我的机器人</h4><div class="bd" id="farmPanel"></div></div>
+          <div class="card"><h4>博主机器人</h4><div class="bd" id="kolList"></div></div>
+          <div class="card"><h4>机器人工坊</h4><div class="bd" id="workshop"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 视图 · 守藏 ============ -->
+    <div class="view" id="v-ops">
+      <h3 class="sec">守藏 · 运营后台<small>视图 → 文档属性</small></h3>
+      <div class="grid3">
+        <div class="card"><h4>控温 · 全站衰减</h4><div class="bd">
+          <input type="range" id="decayR" min="0" max="30" value="6" style="width:100%">
+          <div class="muted" id="decayTxt">当前 0.06 /秒 · 周一放慢、周五加快</div>
+        </div></div>
+        <div class="card"><h4>注气 · 人工加热</h4><div class="bd">
+          <select id="injSel" class="ta" style="padding:5px"></select>
+          <button class="rbtn" id="injGo" style="margin-top:7px">注气 +10</button>
+        </div></div>
+        <div class="card"><h4>数据看板</h4><div class="bd muted" id="board"></div></div>
+      </div>
+      <div class="grid3">
+        <div class="card"><h4>戳破仲裁</h4><div class="bd muted" id="arb">队列为空</div></div>
+        <div class="card"><h4>商业泡泡</h4><div class="bd">
+          <button class="rbtn" id="brandGo">投放品牌泡泡</button>
+          <button class="rbtn" id="jobGo" style="margin-top:6px">投放招聘泡泡</button>
+          <div class="muted" style="margin-top:6px">收入线一 / 收入线二</div>
+        </div></div>
+        <div class="card"><h4>留存与收入运营</h4><div class="bd" id="opsPanel"></div></div>
+      </div>
+    </div>
+
+    <div class="fake">本页为演示原型，全部数据均为假数据；资讯抓取、机器人回复、梦蝶局剧本均为脚本模拟，未调用任何模型。</div>
+  </div>
+</div>
+
+<div class="statusbar">
+  <span>第 1 页，共 8 页</span>
+  <span id="wc">1,240 个字</span>
+  <span>中文(中国)</span>
+  <span class="sp">全站摸鱼水位 <b id="lvl">—</b></span>
+</div>
+
+<!-- 老板键：述职报告态 -->
+<div class="mask" id="reportMask">
+  <div class="titlebar"><div class="qat">保存 · 撤销 · 重做</div>2026年度第三季度工作述职报告.docx - Word<div class="win"><span>—</span><span>□</span><span>×</span></div></div>
+  <div class="paper rpt" style="margin:18px auto">
+    <h1>2026 年度第三季度工作述职报告</h1>
+    <div class="sub">部门：运营中心　汇报人：李佳　日期：2026-08-06</div>
+    <h2>一、本季度工作概述</h2>
+    <p>本季度围绕部门年初制定的三项核心目标推进工作，整体完成度达到 94%。在流程规范化方面，完成了跨部门协作机制的重新梳理，将原有的七个审批节点压缩至四个，平均流转时长由 3.2 个工作日降至 1.6 个工作日。</p>
+    <p>在人员协同方面，组织了四次专项复盘会议，形成会议纪要十二份，其中五项改进措施已落地执行。团队成员对协作流程的满意度较上季度提升明显。</p>
+    <h2>二、重点事项进展</h2>
+    <p>其一，数据口径统一工作已完成第一阶段。与技术、财务两部门确认了核心指标的计算方式，消除了此前月度报表中长期存在的口径差异问题，为后续经营分析打下基础。</p>
+    <p>其二，季度预算执行率为 87.4%，略低于既定目标。主要原因是第二项专项支出的采购流程延后，预计将在下季度初完成结算。已与相关部门确认时间节点，不影响全年整体安排。</p>
+    <h2>三、存在的问题与不足</h2>
+    <p>一是部分环节的信息同步仍依赖人工传递，存在遗漏风险，需要在下季度通过工具化手段解决。二是新同事的上手周期偏长，现有的交接文档不够体系化，计划整理一套标准化的岗位说明。</p>
+    <h2>四、下季度工作计划</h2>
+    <p>下季度将聚焦三件事：完成信息同步的工具化改造；建立岗位标准化文档体系；配合公司整体节奏完成年度目标的中期校准。相关排期已同步至部门共享日历，将按周跟进落实情况。</p>
+  </div>
+</div>
+
+<!-- 老板键：桌面态 -->
+<div class="mask" id="desktopMask">
+  <div class="dicons" id="dicons"></div>
+  <div class="taskbar">
+    <span>开始</span><span>搜索</span><span>文件资源管理器</span><span>Word</span><span>Excel</span>
+    <div class="clk"><div id="dclk">--:--</div><div id="ddate">2026/8/6</div></div>
+  </div>
+  <div class="dlg" id="dlg">
+    <div class="h">Microsoft Excel</div>
+    <div class="b" id="dlgTx">正在打开文件，请稍候…</div>
+    <div class="f"><button class="rbtn" onclick="document.getElementById('dlg').classList.remove('on')">取消</button></div>
+  </div>
+</div>
+
+<div class="hintbar">Esc 或 Ctrl+空格 切换伪装：社区 → 述职报告 → 桌面</div>
+
+<script>
+/* ============================================================
+   变大泡泡 · 原型骨架
+   已实现：泡泡物理 / 吹气 / 爆泡 / 戳破 / 加料 / 沉积 / 热榜 /
+           发泡泡 / 情报投放 / 控温注气 / 商业泡泡 / 老板键三态 / 拼豆网格
+   留给 Codex：见页面各处 .stub 与文末 HOOKS 说明
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+/* ---------- 类型 ---------- */
+const TYPES = {
+  salary:{n:'薪资',c:[201,150,46]}, layoff:{n:'裁员',c:[192,80,63]},
+  boss:{n:'领导',c:[122,106,166]},  peer:{n:'同事',c:[62,143,130]},
+  biz:{n:'行业',c:[63,114,164]},    fun:{n:'乐子',c:[210,118,74]}
+};
+const KIND_MARK = {bot:'机器人', brand:'广告', job:'招聘', news:'情报'};
+
+const ALIASES = ['隔壁组的P7','三楼那个总加班的','工位在打印机旁边的','刚转正的','带薪拉屎冠军','会议室常驻人口','摸鱼十级学者'];
+const SEEDS = ['隔壁组年终系数下调了','新来的总监第一天就改了组织架构','食堂三楼今天有小龙虾','据说要推行 OKR 双周复盘','有人在工位上被叫去谈话了'];
+
+/* ---------- 跨公司 + 匿名：行业、公司、花名粗标签 ---------- */
+const INDS = ['互联网','金融','制造','教育','医药','体制内','快消'];
+// 池子里互联网和「我司」多给几个权重，否则「我这行 / 我司」两档筛出来是空水面
+const IND_POOL = ['互联网','互联网','互联网','金融','金融','制造','教育','医药','体制内','快消'];
+const CO_POOL  = ['我司','我司','A 厂','B 厂','C 公司','某中厂','某国企','某外企'];
+const LVLS = ['应届','两年','三年','五年','十年','P6','P7','P8'];
+const ME = { ind:'互联网', co:'我司' };
+// 一个花名对应一个固定标签 —— 够判断可信度，不够定位到人
+const ALIAS_TAG = {};
+function tagOf(author, ind){
+  if (!ALIAS_TAG[author]) ALIAS_TAG[author] = ind + ' · ' + LVLS[(Math.random()*LVLS.length)|0];
+  return ALIAS_TAG[author];
+}
+const pick = a => a[(Math.random()*a.length)|0];
+
+/* ---------- 状态 ---------- */
+const S = {
+  bubbles:[], sunk:[], hall:[], arb:[], lib:[], id:1,
+  decay:0.06, blows:0, words:1240, W:0, H:0, last:0
+};
+const R_MIN = 20, R_MAX = 88, BURST = 55, POKE_NEED = 5;
+// 半径在「刚出生」到「濒临爆炸」之间铺满全程 —— 每一口气都看得见
+const rOf = h => R_MIN + (R_MAX - R_MIN) * Math.pow(Math.max(h,0) / BURST, 0.6);
+
+/* ---------- 建泡泡 ---------- */
+function mk(text, type, heat, kind, author, ind, co){
+  const au = author || pick(ALIASES);
+  const b = {
+    id:S.id++, text, type, kind:kind||'user', author:au,
+    ind: ind || pick(IND_POOL), co: co || pick(CO_POOL),
+    heat: heat==null ? 3 : heat, layers:[], pokes:0,
+    x: 60 + Math.random()*(Math.max(S.W,600)-180), y: S.H*0.55 + Math.random()*120,
+    vx:(Math.random()-.5)*0.5, vy:0, el:null, r:0
+  };
+  b.peak = b.heat;
+  b.tag = tagOf(au, b.ind);
+  b.r = rOf(b.heat);
+  const el = document.createElement('div');
+  el.className = 'bub'; el.dataset.id = b.id;
+  el.innerHTML = '<div class="tx"></div><div class="mt"></div>' +
+    '<div class="acts"><b data-a="add">料</b><b data-a="poke">戳</b></div>';
+  $('#stage').appendChild(el);
+  b.el = el; S.bubbles.push(b); paint(b); return b;
+}
+
+function paint(b){
+  const t = TYPES[b.type] || TYPES.fun, c = t.c;
+  const bg = `radial-gradient(circle at 32% 26%, rgba(255,255,255,.95) 0 12%, rgba(${c[0]},${c[1]},${c[2]},.13) 42%, rgba(${c[0]},${c[1]},${c[2]},.30) 100%)`;
+  b.el.style.background = bg;
+  b.el.style.borderColor = `rgba(${c[0]},${c[1]},${c[2]},.42)`;
+  if (b.kind !== 'user') b.el.style.borderStyle = 'dashed';
+  b.el.style.boxShadow = b.layers.length
+    ? b.layers.map((_,i)=>`0 0 0 ${3+i*3}px rgba(${c[0]},${c[1]},${c[2]},${.18-i*.04})`).join(',') : '';
+}
+
+/* ---------- 物理 ---------- */
+function size(){ const s = $('#stage'); S.W = s.clientWidth; S.H = s.clientHeight; }
+function step(dt){
+  const bs = S.bubbles.slice();
+  for (const b of bs){
+    if (b.dead) continue;
+    b.heat -= S.decay * dt;
+    if (b.heat <= 0.6){ sink(b); continue; }
+    const nr = rOf(b.heat);
+    if (Math.abs(nr - b.r) > .3) b.r = b.r + (nr - b.r) * 0.25;
+
+    // 浮力：热度 ≈5 是中性线。低于它往下沉，高于它往上浮，越大浮得越急
+    b.vy += (0.9 - 2.2 * (b.r / R_MAX)) * dt;
+    // 筛选是物理的：没命中的被压下去淡出，命中的额外浮一把，整个水面重组
+    const on = filtOn(), out = on && !matchF(b);
+    if (out !== !!b.out){ b.out = out; b.el.classList.toggle('dim', out); }
+    if (on) b.vy += (out ? 2.6 : -1.7) * dt;
+    if (b.hover){ b.vx *= 0.72; b.vy *= 0.72; }   // 悬停时几乎静止，方便点中
+    else b.vx += (Math.random() - .5) * 1.4 * dt;
+    b.vx *= 0.985; b.vy *= 0.985;
+    b.x += b.vx * dt * 60; b.y += b.vy * dt * 60;
+
+    const d = b.r * 2;
+    if (b.x < 0){ b.x = 0; b.vx = Math.abs(b.vx)*.4 }
+    if (b.x + d > S.W){ b.x = S.W - d; b.vx = -Math.abs(b.vx)*.4 }
+    if (b.y < 6){ b.y = 6; b.vy = Math.abs(b.vy)*.25 }
+    if (b.y + d > S.H){ b.y = S.H - d; b.vy = -Math.abs(b.vy)*.25 }
+  }
+  // 碰撞分离
+  for (let i=0;i<bs.length;i++) for (let j=i+1;j<bs.length;j++){
+    const a=bs[i],b=bs[j];
+    if (a.dead || b.dead) continue;
+    const ax=a.x+a.r, ay=a.y+a.r, bx=b.x+b.r, by=b.y+b.r;
+    let dx=bx-ax, dy=by-ay, dd=Math.hypot(dx,dy), min=a.r+b.r+1;
+    if (dd < min && dd > 0){
+      const push=(min-dd)/2, ux=dx/dd, uy=dy/dd;
+      a.x-=ux*push; a.y-=uy*push; b.x+=ux*push; b.y+=uy*push;
+      a.vx-=ux*.12; a.vy-=uy*.12; b.vx+=ux*.12; b.vy+=uy*.12;
+    }
+  }
+  for (const b of bs) if (!b.dead) draw(b);
+}
+function draw(b){
+  const d = b.r*2, fs = Math.max(9, Math.min(15, b.r*0.30));
+  b.el.style.width = b.el.style.height = d+'px';
+  b.el.style.transform = `translate3d(${b.x|0}px,${b.y|0}px,0)`;
+  const tx = b.el.firstChild;
+  const label = b.r > 52 ? b.text
+              : b.r > 34 ? (b.text.length > 11 ? b.text.slice(0,10)+'…' : b.text)
+              : (TYPES[b.type]||TYPES.fun).n;
+  if (tx.textContent !== label){ tx.textContent = label; }
+  tx.style.fontSize = fs+'px';
+  const mt = b.el.children[1];
+  const mark = KIND_MARK[b.kind] ? KIND_MARK[b.kind]+' · ' : '';
+  const tense = b.heat >= BURST*0.8;
+  if (tense !== !!b.tense){ b.tense = tense; b.el.classList.toggle('tense', tense); }
+  const s = b.r > 40 ? (tense ? '快爆了 · ' : mark) + '热 ' + Math.round(b.heat)
+                       + (b.r > 60 ? ' · ' + b.tag : '')
+                       + (b.layers.length?' · 料'+b.layers.length:'') : '';
+  if (mt.textContent !== s) mt.textContent = s;
+  const op = b.out ? 0.16 : 1 - b.pokes*0.12;
+  if (b.op !== op){ b.op = op; b.el.style.opacity = op; }
+}
+function loop(t){
+  const dt = Math.min(0.05, (t - S.last)/1000 || 0.016); S.last = t;
+  if (!document.hidden && !maskOn) step(dt);
+  requestAnimationFrame(loop);
+}
+
+/* ---------- 交互 ---------- */
+function blow(b, n, byBot){
+  const q = n||1;
+  b.heat += q; S.blows += q; S.words += 3;
+  // 机器人吹的气只算预热：进热度，不进人气 —— 今日最大泡按人气评
+  if (byBot) b.botHeat = (b.botHeat||0) + q; else b.manHeat = (b.manHeat||0) + q;
+  if (b.heat > (b.peak||0)) b.peak = b.heat;   // 沉底后进资讯库时记的是最高热度，不是临沉的余温
+  b.vy -= 0.9; b.el.classList.remove('pop'); void b.el.offsetWidth; b.el.classList.add('pop');
+  ripple(b);
+  if (b.heat >= BURST) burst(b);
+  sync();
+}
+function ripple(b){
+  const d = b.r*2, w = document.createElement('div');
+  w.className = 'ripple';
+  w.style.cssText = `left:${b.x|0}px;top:${b.y|0}px;width:${d}px;height:${d}px`;
+  $('#stage').appendChild(w); setTimeout(()=>w.remove(), 560);
+}
+function burst(b){
+  S.hall.unshift({text:b.text, heat:Math.round(b.heat)});
+  const kids = ['「'+b.text.slice(0,8)+'」是真的吗','有人能证实一下吗','我们组也听说了'];
+  kill(b);
+  kids.forEach(t => { const k = mk(t, b.type, 6); k.x = b.x; k.y = b.y; k.vy = -1.5; });
+  sync();
+}
+function pop(b, reason){
+  if (reason === 'poke') S.arb.unshift({text:b.text, pokes:b.pokes});
+  kill(b); sync();
+}
+function kill(b){ b.dead = true; b.el.remove(); S.bubbles = S.bubbles.filter(x=>x!==b); }
+// 凉掉之后分两条路：行业类不沉底，转进资讯库变成可检索条目；其余进沉积层等人捞
+function sink(b){
+  if (b.type === 'biz' || b.kind === 'news'){
+    S.lib.unshift({text:b.text, ind:b.ind, type:b.type, peak:Math.round(b.peak||b.heat), t:stamp()});
+    if (S.lib.length > 40) S.lib.pop();
+    libRender();
+  } else {
+    S.sunk.unshift({text:b.text, type:b.type, ind:b.ind});
+    if (S.sunk.length > 14) S.sunk.pop();
+  }
+  kill(b); sync();
+}
+
+$('#stage').addEventListener('mouseover', e=>{
+  const h = e.target.closest('.bub'); if(!h) return;
+  const b = S.bubbles.find(x=>x.id == h.dataset.id); if(b) b.hover = true;
+});
+$('#stage').addEventListener('mouseout', e=>{
+  const h = e.target.closest('.bub'); if(!h) return;
+  const b = S.bubbles.find(x=>x.id == h.dataset.id); if(b) b.hover = false;
+});
+
+$('#stage').addEventListener('click', e => {
+  const act = e.target.closest('[data-a]'), host = e.target.closest('.bub');
+  if (!host) return;
+  const b = S.bubbles.find(x => x.id == host.dataset.id); if (!b) return;
+  if (act){
+    e.stopPropagation();
+    if (act.dataset.a === 'add'){
+      const v = prompt('补一条爆料：'); if (v){ b.layers.push(v); b.heat += 4; paint(b); sync(); }
+    } else {
+      b.pokes++;
+      if (b.pokes >= POKE_NEED) pop(b,'poke');
+      else alert(`已戳 ${b.pokes}/${POKE_NEED}，一个人戳不破，得大家一起戳`);
+    }
+    return;
+  }
+  blow(b, 1);
+});
+
+/* ---------- 同步面板 ---------- */
+function sync(){
+  const top = [...S.bubbles].sort((a,b)=>b.heat-a.heat).slice(0,6);
+  $('#hot').innerHTML = top.map((b,i)=>`<li><i>${i+1}</i><span>${esc(b.text)}</span><em>${Math.round(b.heat)}</em></li>`).join('')
+    || '<li><span class="muted">水面空空</span></li>';
+  $('#hall').innerHTML = S.hall.slice(0,6).map(h=>`<li><span>${esc(h.text)}</span><em>${h.heat}</em></li>`).join('')
+    || '<li><span class="muted">还没有泡泡爆过</span></li>';
+  // 今日最大泡：只按人吹的气排，机器人预热不算
+  const man = [...S.bubbles].filter(b=>(b.manHeat||0)>0).sort((a,b)=>(b.manHeat||0)-(a.manHeat||0))[0];
+  $('#topBub').innerHTML = man
+    ? `<div style="font-weight:600;line-height:1.5">${esc(man.text)}</div>
+       <div class="muted" style="margin-top:4px">${esc(man.author)}<span class="tagn">${esc(man.tag)}</span></div>
+       <div class="muted">人气 ${Math.round(man.manHeat)}${man.botHeat?` · 机器人预热 ${Math.round(man.botHeat)}（不计入）`:''}</div>`
+    : '<span class="muted">还没有人吹过</span>';
+  $('#sed').innerHTML = S.sunk.map((s,i)=>`<span class="chip">${esc(s.text)}<b data-sed="${i}">捞</b></span>`).join('')
+    || '<span class="muted">暂无</span>';
+  const fs = $('#filtStat');
+  if (fs) fs.textContent = filtOn()
+    ? `命中 ${S.bubbles.filter(matchF).length} / ${S.bubbles.length} 个泡泡，其余淡出下沉`
+    : '';
+  $('#blows').textContent = Math.round(S.blows);
+  $('#wc').textContent = S.words.toLocaleString() + ' 个字';
+  const lvl = Math.round(S.bubbles.reduce((s,b)=>s+b.heat,0));
+  $('#lvl').textContent = lvl + ' cm';
+  $('#injSel').innerHTML = S.bubbles.map(b=>`<option value="${b.id}">${esc(b.text.slice(0,18))}</option>`).join('');
+  $('#arb').innerHTML = S.arb.length
+    ? S.arb.slice(0,5).map(a=>`<div style="padding:3px 0;border-bottom:1px dotted #E1DFDD">${esc(a.text)} <span class="muted">· ${a.pokes} 人戳破</span></div>`).join('')
+    : '队列为空';
+  $('#board').innerHTML = `日活 <b>1,284</b><br>今日吹气 <b>${S.blows}</b> 次<br>在场泡泡 <b>${S.bubbles.length}</b><br>已爆 <b>${S.hall.length}</b> · 已沉 <b>${S.sunk.length}</b><br>次日留存 <b>41.2%</b>`;
+}
+$('#sed').addEventListener('click', e=>{
+  const i = e.target.dataset.sed; if (i==null) return;
+  const s = S.sunk.splice(+i,1)[0]; mk(s.text, s.type, 8, 'user', null, s.ind); sync();
+});
+const esc = s => String(s).replace(/[<>&]/g, c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+
+/* ---------- Ribbon ---------- */
+const RIBBONS = {
+  home:`<div class="rgrp"><span class="rlab">剪贴板</span></div>
+        <div class="rgrp"><button class="rbtn" onclick="feedRandom()">刷新水面</button><button class="rbtn" onclick="go('insert')">吹泡泡</button></div>
+        <div class="rgrp"><span class="rlab">字体</span><button class="rbtn">宋体</button><button class="rbtn">小四</button></div>`,
+  insert:`<div class="rgrp"><span class="rlab">插入</span><button class="rbtn">表格</button><button class="rbtn">图片</button><button class="rbtn pri" onclick="$('#npText').focus()">批注</button></div>`,
+  draw:`<div class="rgrp"><span class="rlab">画笔</span><button class="rbtn" onclick="clearSheet()">清空画布</button><button class="rbtn" onclick="fillDemo()">来个示例</button></div>`,
+  ref:`<div class="rgrp"><span class="rlab">引用</span><button class="rbtn">插入脚注</button><button class="rbtn">目录</button></div>`,
+  review:`<div class="rgrp"><span class="rlab">修订</span><button class="rbtn">显示标记</button><button class="rbtn">接受</button></div>`,
+  ops:`<div class="rgrp"><span class="rlab">视图</span><button class="rbtn">页面布局</button><button class="rbtn">导航窗格</button></div>`
+};
+function go(v){
+  $$('.tabs .t').forEach(t=>t.classList.toggle('on', t.dataset.v===v));
+  $$('.view').forEach(x=>x.classList.remove('on'));
+  $('#v-'+v).classList.add('on');
+  $('#ribbon').innerHTML = RIBBONS[v] || '';
+  if (v==='home') requestAnimationFrame(size);
+}
+$('#tabs').addEventListener('click', e=>{ const t=e.target.closest('.t'); if(t) go(t.dataset.v); });
+
+/* ---------- 发泡泡 ---------- */
+$('#npType').innerHTML = Object.entries(TYPES).map(([k,v],i)=>
+  `<label><input type="radio" name="tp" value="${k}"${i===0?' checked':''}><span>${v.n}</span></label>`).join('');
+$('#npGo').onclick = ()=>{
+  const t = $('#npText').value.trim(); if(!t) return alert('先写点什么');
+  const tp = document.querySelector('input[name=tp]:checked').value;
+  mk(t, tp, 3); $('#npText').value=''; go('home'); sync();
+};
+$('#seedList').innerHTML = SEEDS.map(s=>`<div style="padding:4px 0;border-bottom:1px dotted #E1DFDD">${s} <b style="color:#2B579A;cursor:pointer" data-seed="${esc(s)}">用</b></div>`).join('');
+$('#seedList').addEventListener('click',e=>{ if(e.target.dataset.seed){ $('#npText').value=e.target.dataset.seed; } });
+
+/* ---------- 筛选：行业 / 类型 / 关我什么事 ----------
+   做成下拉框刷新列表，这个产品的气质当场就断了。所以它只改物理：
+   没命中的往下压 + 淡出 + 不可点，命中的额外浮一把。 */
+const FT = { ind:'', type:'', scope:'all', coCount:8, coGate:30, open:false };
+const filtOn = () => !!(FT.ind || FT.type || FT.scope !== 'all');
+function matchF(b){
+  if (FT.ind  && b.ind  !== FT.ind)  return false;
+  if (FT.type && b.type !== FT.type) return false;
+  if (FT.scope === 'co'  && b.co  !== ME.co)  return false;
+  if (FT.scope === 'ind' && b.ind !== ME.ind) return false;
+  return true;
+}
+function filtSummary(){
+  const t = [];
+  if (FT.scope === 'ind') t.push('我这行 · ' + ME.ind);
+  if (FT.scope === 'co')  t.push('我司');
+  if (FT.ind)  t.push(FT.ind);
+  if (FT.type) t.push(TYPES[FT.type].n);
+  return t.join(' · ');
+}
+function filtRender(){
+  const fc = (k,v,label) => `<span class="fc${FT[k]===v?' on':''}" data-f="${k}" data-v="${v}">${label}</span>`;
+  // 默认收起：第一眼该是一片水，不是一排十八个筛选钮
+  if (!FT.open){
+    $('#filt').innerHTML =
+      `<span class="fc${filtOn()?' on':''}" data-toggle="1">筛</span>` +
+      (filtOn() ? `<span class="fl">当前 ${filtSummary()}</span><span class="fc" data-reset="1">清空</span>`
+                : `<span class="fl">按行业 / 类型 / 关我什么事 挑一片水</span>`) +
+      `<span class="fl" id="filtStat" style="margin-left:auto"></span>`;
+    sync(); return;
+  }
+  // 我司档设人数门槛：站内我司人太少，点开就等于互相暴露
+  const gate = FT.coCount >= FT.coGate;
+  $('#filt').innerHTML =
+    `<span class="fc on" data-toggle="1">收起</span><span class="sep"></span>` +
+    `<span class="fl">关我什么事</span>` +
+    fc('scope','all','全站') + fc('scope','ind','我这行 · '+ME.ind) +
+    (gate ? fc('scope','co','我司 · 站内 '+FT.coCount+' 人')
+          : `<span class="fc lock">我司 · 未开放</span>`) +
+    `<span class="sep"></span><span class="fl">行业</span>` +
+    fc('ind','','不限') + INDS.map(i=>fc('ind',i,i)).join('') +
+    `<span class="sep"></span><span class="fl">类型</span>` +
+    fc('type','','不限') + Object.entries(TYPES).map(([k,v])=>fc('type',k,v.n)).join('') +
+    (filtOn() ? `<span class="sep"></span><span class="fc" data-reset="1">清空</span>` : '') +
+    `<div class="frow muted">${gate ? '' :
+       `站内「我司」只有 ${FT.coCount} 人，不足 ${FT.coGate} 人不开放 —— 匿名的安全性是人群规模的函数。` +
+       `<b class="fake-gate" style="color:var(--word-blue);cursor:pointer">［演示：假装站内我司满 ${FT.coGate} 人］</b><br>`
+     }<span id="filtStat"></span></div>`;
+  sync();
+}
+$('#filt').addEventListener('click', e=>{
+  const t = e.target;
+  if (t.dataset.toggle){ FT.open = !FT.open; filtRender(); return; }
+  if (t.classList.contains('fake-gate')){ FT.coCount = FT.coGate; filtRender(); return; }
+  if (t.dataset.reset){ FT.ind=''; FT.type=''; FT.scope='all'; filtRender(); return; }
+  if (t.dataset.f == null) return;
+  FT[t.dataset.f] = t.dataset.v;
+  filtRender();
+});
+
+/* ---------- 行业资讯库：广场是流，这里是存 ---------- */
+function stamp(){ const d = new Date(); return `${d.getMonth()+1}/${d.getDate()}`; }
+function libRender(){
+  const box = $('#libList'); if (!box) return;
+  const q = ($('#libQ').value || '').trim();
+  const rows = S.lib.map((x,i)=>[x,i]).filter(([x])=> !q || x.text.includes(q) || x.ind.includes(q));
+  box.innerHTML = rows.length
+    ? rows.map(([x,i])=>`<div class="li"><span class="tagn" style="margin:0">${esc(x.ind)}</span><span class="tagn">${(TYPES[x.type]||TYPES.fun).n}</span> ${esc(x.text)}
+        <div class="muted">凉于 ${x.t} · 最高热度 ${x.peak} <b class="act" data-lib="${i}">捞回广场</b></div></div>`).join('')
+    : `<div class="muted">${S.lib.length ? '没有匹配的条目' : '还没有行业泡泡凉下来。它们凉了不会消失，会转到这里。'}</div>`;
+}
+$('#libQ').addEventListener('input', libRender);
+$('#libList').addEventListener('click', e=>{
+  const i = e.target.dataset.lib; if (i == null) return;
+  const x = S.lib.splice(+i,1)[0];
+  mk(x.text, x.type, 10, 'news', '资讯库', x.ind);
+  libRender(); go('home'); sync();
+});
+
+/* ---------- 情报 ---------- */
+const NEWS = [
+  ['某大厂调整绩效系数，据称影响面覆盖三条业务线','脉脉','biz'],
+  ['一批 HR 岗位挂出，多为「组织发展」方向','招聘站','biz'],
+  ['行业年中薪酬报告：产品岗中位数持平，技术岗微降','公开报告','salary'],
+  ['多家公司恢复线下办公，通勤补贴同步调整','新闻','fun']
+];
+$('#newsList').innerHTML = NEWS.map((n,i)=>
+  `<div style="padding:6px 0;border-bottom:1px dotted #E1DFDD">[${i+1}] ${n[0]}<br>
+   <span class="muted">来源：${n[1]} · 抓取 09:12</span>
+   <b style="color:#2B579A;cursor:pointer;margin-left:8px" data-news="${i}">投放为泡泡</b></div>`).join('');
+$('#newsList').addEventListener('click', e=>{
+  const i = e.target.dataset.news; if(i==null) return;
+  mk(NEWS[i][0], NEWS[i][2], 10, 'news', '情报站'); go('home'); sync();
+});
+$('#srcList').innerHTML = ['脉脉话题页','招聘站职位流','行业公众号','公司公告栏']
+  .map(s=>`<div style="padding:3px 0">${s} <span class="muted">· 09:12</span></div>`).join('');
+
+/* ---------- B1：捡手机文学 / 爽文单词 / 真学习区 ---------- */
+const PHONE_STORIES = [
+  {title:'会议室捡到 HR 的手机', cast:'HR 小林 / 前同事老王', lines:[
+    ['小林','09:08','午休有人一起吃饭吗？'],['老王','09:10','我在楼下，顺便把上次的咖啡钱转你。'],['小林','09:12','不用啦，才十几块。'],['老王','09:13','你们新办公室窗边位置还留着吗？'],['小林','09:16','留着呢，今天会议也不多。'],['老王','09:20','那就好，我下午去办离职手续。'],['小林','09:21','你不是上周才说要留下？'],['老王','09:23','名单已经发了，我的名字在里面。'],['小林','09:24','等等，名单不是明天才定吗？'],['老王','09:25','明天只是宣布，裁员会议昨晚就开完了。'],['小林','09:26','你怎么知道？我昨晚的手机就在会议室。'],['老王','09:27','因为我就是帮忙整理名单的人。'],['小林','09:28','这部手机不是我的，是我故意放在桌上的。'],['老王','09:29','那你已经看到谁会被留下了。'] ]},
+  {title:'前台捡到实习生的手机', cast:'实习生阿满 / 采购陈姐', lines:[
+    ['阿满','18:01','陈姐，报销单我重新扫好了。'],['陈姐','18:03','收到，别忘了把发票抬头写全。'],['阿满','18:05','下周转正答辩你会来吗？'],['陈姐','18:07','会啊，你的汇报很稳。'],['阿满','18:10','那我就放心了，主管说名额只剩一个。'],['陈姐','18:12','你肯定没问题，另一个人最近总迟到。'],['阿满','18:20','奇怪，群里怎么把我移出了项目？'],['陈姐','18:22','先别问，今天的采购单别发出去。'],['阿满','18:24','可采购单上签名是我的。'],['陈姐','18:25','那张单子是假的，真正的供应商不是这家。'],['阿满','18:26','你让我背锅？'],['陈姐','18:27','不是我，是系统自动替换了附件。'],['阿满','18:28','手机在前台，我去拿。'],['陈姐','18:29','别拿，里面有你昨晚发给审计的录音。'] ]}
+];
+let phoneIndex=0, phoneLine=0;
+function renderPhone(){
+  const box=$('#phoneStories'), story=PHONE_STORIES[phoneIndex], done=phoneLine>=story.lines.length;
+  box.innerHTML=`<div class="muted">这是虚构故事，如有雷同纯属巧合 · ${story.title}</div><div id="phoneLog" style="margin-top:8px"></div><div style="margin-top:8px"><button class="rbtn pri" id="phoneNext">${done?'重新阅读':'下一条'}</button>${done?'<button class="rbtn" id="phoneBubble" style="margin-left:6px">转成泡泡</button>':''}<button class="rbtn" id="phoneSwitch" style="margin-left:6px">换一部手机</button></div>`;
+  const log=$('#phoneLog'); story.lines.slice(0,phoneLine).forEach((m,i)=>{ const side=i%2?'right':'left'; log.insertAdjacentHTML('beforeend',`<div class="cmt" style="margin:4px 0;max-width:90%;${side==='right'?'margin-left:10%;background:#F7FAFD':''}"><div class="who"><b>${esc(m[0])}</b> · ${m[1]}</div>${esc(m[2])}</div>`); });
+  if(!done) $('#phoneNext').onclick=()=>{phoneLine++;renderPhone();}; else $('#phoneNext').onclick=()=>{phoneLine=0;renderPhone();};
+  $('#phoneSwitch').onclick=()=>{phoneIndex=(phoneIndex+1)%PHONE_STORIES.length;phoneLine=0;renderPhone();};
+  if(done) $('#phoneBubble').onclick=()=>{mk('捡到手机：'+story.title+'，聊天记录透出名单与录音的反转','peer',12,'news','捡到的手机');sync();alert('已转成泡泡');};
+}
+renderPhone();
+
+const WORDS = [
+ ['redundant','冗余的','他冷笑一声：“redundant？”全场死寂，三年前被裁掉的他坐在谈判桌主位。'],['severance','遣散费','HR 递来 severance 方案，他看完只说：“把利息也算上。”'],['headcount','编制人数','老板说 headcount 冻结，他打开表格：冻结的是你们，不是我的晋升。'],['attrition','人员流失','attrition 曲线一路上扬，董事会终于发现留下的都是会点头的人。'],['probation','试用期','probation 还没结束，他已经给 CEO 做完了季度复盘。'],['escalate','升级处理','对方让他别 escalate，他把邮件抄送了全公司。'],['align','对齐','大家 align 了三小时，最后发现只有他的目标和奖金对齐。'],['bandwidth','精力带宽','领导问还有没有 bandwidth，他把日历摊开：只剩离职面试。'],['leverage','杠杆/筹码','他没有背景，只有 leverage：客户的续约合同在他抽屉里。'],['synergy','协同效应','两个部门谈 synergy，最后协同出来一张加班排班表。'],['pipeline','项目管线','pipeline 看似满满，真正能落地的只有他的辞职信。'],['churn','流失率','churn 报表红得发亮，老板却要求把红色改成“积极”。'],['onboarding','入职流程','新人 onboarding 第一天就学会了如何绕过三层审批。'],['offboarding','离职交接','offboarding 会议上，他把所有坑标成了自己的名字。'],['KPI','关键绩效指标','KPI 写着“保持稳定”，他稳定地拿下了最大客户。'],['OKR','目标与关键结果','OKR 复盘结束，他的 O 只有一个：离开这间会议室。'],['stakeholder','利益相关者','stakeholder 们投票选方案，最后客户一句话决定一切。'],['deliverable','交付物','deliverable 按时交了，唯一没交的是他的耐心。'],['bottleneck','瓶颈','大家找 bottleneck 找了半天，发现瓶颈就是那个不批预算的人。'],['scope creep','范围蔓延','scope creep 一路长大，最后把“顺手”变成了一个新部门。'],['deadline','截止日期','deadline 到了，他准时交付，也准时关掉了工作电脑。'],['burnout','职业倦怠','burnout 体检报告出来，他决定把加班当成历史资料。'],['turnover','人员更替','turnover 高到需要轮班离职，他排在第一位。'],['benchmark','基准','benchmark 说行业都这样，他问：“那行业都错呢？”'],['forecast','预测','forecast 预测下季度增长，他预测自己下季度不在这里。'],['stake','利害关系','会议上人人谈 stake，只有他把 stake 换成了股份。'],['roadmap','路线图','roadmap 画得很远，他先走到出口。'],['retention','留存','公司研究 retention，他的办法是给员工真正的周末。'],['feedback','反馈','feedback 表里写着“需更有主人翁精神”，他把房产证带来了。'],['ownership','主人翁意识','ownership 不是背锅，他在会上把责任和资源一起领走。']
+];
+let wordRound=WORDS.slice(), wordPos=0, wordQueue=[], swagger=Number(localStorage.getItem('bp-swagger')||0);
+function renderWord(){
+  if(!wordRound.length){$('#wordGame').innerHTML='<div style="font-family:var(--serif);font-size:18px">这一轮结束：你已经能在会议里自然说出这些词了。</div><button class="rbtn pri" id="wordAgain" style="margin-top:8px">再来一轮</button>';$('#wordAgain').onclick=()=>{wordRound=WORDS.slice();wordPos=0;wordQueue=[];renderWord();};return;}
+  const w=wordRound[wordPos];$('#wordGame').innerHTML=`<div class="muted">第 ${wordPos+1} / ${wordRound.length} 章</div><div style="font-size:28px;margin:8px 0;color:var(--word-blue)"><b>${esc(w[0])}</b></div><div class="chip">${esc(w[1])}</div><p style="font-family:var(--serif);font-size:16px;line-height:1.9">${esc(w[2])}</p><div><button class="rbtn pri" id="wordKnow">认识</button><button class="rbtn" id="wordNo" style="margin-left:6px">不认识</button><button class="rbtn" id="wordNext" style="margin-left:6px">下一章</button></div>`;$('#swagger').textContent='今日装逼值 '+swagger;
+  const advance=(unknown)=>{if(unknown)wordQueue.push(w);wordPos++;if(wordPos>=wordRound.length){wordRound=wordQueue.splice(0);wordPos=0;}renderWord();};
+  $('#wordKnow').onclick=()=>{swagger++;localStorage.setItem('bp-swagger',swagger);advance(false);};
+  $('#wordNo').onclick=()=>advance(true); $('#wordNext').onclick=()=>advance(false);
+}
+renderWord();
+
+const STUDY_ARTS=[
+  ['怎么读懂 HR 的话术','林默','我第一次听到“组织调整”是在周三下午四点。HR 约我进小会议室，桌上只有一瓶没有撕膜的水。她说：“这不是针对个人，公司要保持弹性。”我问具体是哪一项变化，她把话题换成“未来机会”。后来我发现，真正有用的信息都在动词后面：暂停、优化、收口，而不是那些听起来体面的名词。那周我做了三件事：把工资、奖金、未休年假逐项列出来；请 HR 用邮件确认生效日期；找两位同事交叉核对。她说“月底前会有安排”，我追问“是 30 号还是 31 号”，最后拿到了 28 号的书面通知。没用的做法是反复猜她的语气，也不是在群里转发所谓内部消息。真正能保护你的，是把模糊句子翻译成时间、金额和责任人。后来我又问了三个问题：“谁是决定人？”“如果我不同意，申诉窗口到哪天？”“补偿按哪一个月的工资算？”她一开始说“按流程”，我就把问题编号写进邮件，抄送直属领导。第二天她回了 6 行文字，其中 4 行是日期和金额。那一刻我才明白，听懂 HR 不是学会猜心，而是把谈话变成可核对的记录。第三周，我陪同事去谈绩效。HR 说“这个结果已经充分校准”，同事问校准用了哪些目标，对方只重复“综合判断”。我们没有争辩公平，而是把年初签过的四项指标摆出来：两项超过 110%，一项 98%，一项因项目取消无法计算。会后我们发邮件复述，并请对方指出哪一项导致降档。两天后，绩效没有翻盘，但奖金计算口径从“另行通知”变成了工资的 0.8 倍，申诉截止日也写清了。有人会说这仍然没有赢。确实，记录不能保证好结果，却能让你知道自己失去什么、还能争取什么。HR 的礼貌不是承诺，沉默也不是同意。每次谈话结束前，我现在都会复述一遍：“我理解的是 A 在 28 日生效，B 按税前十二个月平均数计算，C 由王经理在周五回复。哪里不对请现在纠正。”这句话很笨，却比揣摩微笑有用。'],
+  ['被裁之后前 30 天怎么走','周野','被裁当天我在地铁站坐了 40 分钟，手机里有三条消息：两条慰问，一条问我能不能下周帮忙。前 30 天最难的不是找工作，是让生活重新有刻度。我把存款按 6 个月倒推，每周只投 8 个岗位，每个岗位都写一段针对性说明。第 7 天我去办失业登记，第 12 天找前同事做了一次模拟面试，第 18 天才删掉简历里那句“负责多个项目”。我也承认，早起打卡和励志播客没有帮到我，真正有用的是把过去项目的结果写成数字：交付提前 11 天，成本降 17%。第 30 天我拿到两个 offer，选了薪资低 8% 但汇报线更清楚的那个。失去职位不会自动变成成长，只有把每一天的选择记下来，才知道自己在往哪里走。前 3 天我只做整理：合同、工资单、社保记录各存一份，给房贷和房租留出 90 天现金。第 4 到 10 天，我每天上午投递，下午联系两位旧同事，不在深夜刷新招聘网站。第 11 天一次面试失败，我把面试官问的“带团队冲突”写成 300 字复盘，第二周又用上了。朋友建议我报昂贵训练营，我算了算要花掉一个月生活费，最后没有报名。第 23 天我接了一个短期顾问活，收入不高，却让我重新找回节奏。数字和小动作比“振作起来”更能把人带出低谷。还有一件没人提醒我：失业后的社交很耗钱。第一周我答应了四顿饭，大家都是真心安慰，但每次回来我都更累。后来我把见面改成散步，直接说自己目前控制开支。没人因此看不起我。第 16 天，我收到一家公司的口头意向，对方催我当天答复。我以前会把它当救命绳，那次却问了试用期工资、汇报对象和最近半年离职人数。招聘经理只回答前两个，我又联系到一位刚离职的员工，才知道岗位三个月换了两个人。最后我没有接。那几天让我明白，焦虑会把任何门都看成出口，而现金流给了我辨认方向的时间。所谓走出来，不是每天都积极，而是即使某天只完成一通电话，也能在第二天继续。'],
+  ['怎么跟一个不喜欢你的领导共事','沈青','我的领导不喜欢我，表现得很具体：周会上只问我细节，重要项目却不让我参加。最初我试过加班和讨好，结果只是让他更放心地把杂活交给我。转折在一次 1:1，我没有问“您是不是对我有意见”，而是拿出一页纸：本季度三个目标、当前风险、需要他拍板的两个选择。他沉默了几秒，说“先把第二项做完”。我回去发了确认邮件，写清截止日和验收标准。之后每周固定 15 分钟同步，不聊情绪，只聊事实。三个月后他仍然不喜欢我，但开始把我当成可靠的人。没用的是试图改变对方的性格，也不是在同事面前证明自己受委屈。你能控制的只有边界、记录和交付；如果这些都做了，资源仍被持续剥夺，就该把换组或离开写进计划。第一次同步时他把我的方案退回三次，我没有继续熬夜改，而是问：“三个版本里，您愿意承担哪一个风险？”他选了第二个，我在会议纪要里写明由他拍板。两周后项目延期，他没有再把锅直接推给我，因为取舍有记录。后来我争取到一个实习生帮忙，把每周 20 小时的杂活降到 8 小时。关系没有变好，合作却变得可预测。对不喜欢你的领导，最有效的礼貌是让他每次都能看见进度、风险和下一步；如果连续三个月不给资源、不给反馈、还否定已确认的结果，就把换组和离开当成正常的职业选项。有一次他在会上说“这个方案我从来没同意过”。我没有立刻翻邮件反驳，而是说：“我们先按今天的新决定走，会后我把前后两个版本和成本差异发出来。”那封邮件只有 8 行，附上了两次会议纪要。第二天他回复：“按原方案推进。”我没有得到道歉，也没必要追着要。真正的目标是让工作重新可执行。与此同时，我每月和其他团队吃一次午饭，了解内部机会；简历也一直更新。第 11 周，另一个部门邀请我加入，我没有立刻走，而是拿着明确职责再谈了一次资源。领导给了半个人力和一个季度期限。我们后来仍谈不上合拍，但我不再把全部希望押在他的喜欢上。共事不是争取被爱，而是判断这段关系还能不能产生清楚、公平、可持续的交换。']
+];
+let studyState=JSON.parse(localStorage.getItem('bp-study')||'{"days":0,"minutes":0,"last":"","feedback":{}}'); studyState.feedback=studyState.feedback||{};
+function studyFeedback(i,v){studyState.feedback[i]=studyState.feedback[i]||{有用:0,没用:0};studyState.feedback[i][v]++;localStorage.setItem('bp-study',JSON.stringify(studyState));}
+function renderStudy(){const z=$('#studyZone');z.innerHTML=`<div style="font-family:var(--serif);color:var(--ink-3);font-size:13px;margin-bottom:10px">无用之用，方为大用</div><div style="display:flex;justify-content:space-between;margin-bottom:5px"><span>连续学习 ${studyState.days} 天</span><span class="muted">今日 ${studyState.minutes} / 15 分钟</span></div><div style="height:8px;background:var(--rule)"><div style="height:8px;width:${Math.min(100,studyState.minutes/15*100)}%;background:var(--word-blue)"></div></div><button class="rbtn pri" id="studyCheck" style="margin:10px 0">完成今日 15 分钟</button><div id="studyArticles"></div>`;const list=$('#studyArticles');STUDY_ARTS.forEach((a,i)=>{const open=i===0;list.insertAdjacentHTML('beforeend',`<article style="border-top:1px solid var(--rule);padding:10px 0"><h4 style="cursor:pointer;margin:0" data-study="${i}">${a[0]}</h4><div class="studyBody" data-body="${i}" style="display:${open?'block':'none'};font-family:var(--serif);line-height:2.0;font-size:14px;margin-top:8px">${a[2]}<div class="muted" style="margin-top:8px">作者：${a[1]} · <button class="rbtn" data-feedback="有用">这篇有用（${studyState.feedback[i]?.有用||0}）</button> <button class="rbtn" data-feedback="没用">没用（${studyState.feedback[i]?.没用||0}）</button></div></div></article>`);});
+  $$('#studyArticles [data-study]').forEach(h=>h.onclick=()=>{const b=$(`[data-body="${h.dataset.study}"]`);b.style.display=b.style.display==='none'?'block':'none';}); $$('#studyArticles [data-feedback]').forEach(b=>b.onclick=()=>{const i=b.closest('[data-body]').dataset.body;studyFeedback(i,b.dataset.feedback);b.textContent=`已记录（${studyState.feedback[i][b.dataset.feedback]}）`;b.disabled=true;}); $('#studyCheck').onclick=()=>{const today=new Date().toISOString().slice(0,10),last=studyState.last?new Date(studyState.last):null,diff=last?Math.floor((new Date(today)-last)/86400000):0;if(studyState.last!==today){studyState.days=diff===1?studyState.days+1:1;studyState.last=today;}studyState.minutes=15;localStorage.setItem('bp-study',JSON.stringify(studyState));renderStudy();};}
+renderStudy();
+
+/* ---------- 机器人 ---------- */
+const BOTS = {
+  '菠萝':'先别急着信。这事有没有第二个信源？如果只有一个人说，那它现在还是情绪不是事实。',
+  '如镜':'先分清你此刻是想赢，还是真想要那个结果。目标错了，后面全错。',
+  'Codex':'技术侧的观察：这类调整通常先动 job title，再动薪级，中间隔一个季度。',
+  '小龙虾':'哎，这个我懂。先去楼下买杯冰的，回来再气也不迟。'
+};
+$('#cmts').innerHTML = Object.entries(BOTS).map(([k,v])=>
+  `<div class="cmt"><div class="who"><b>${k}</b> · 机器人 · 09:2${(Math.random()*9)|0}</div>${v}</div>`).join('');
+$('#askGo').onclick = ()=>{
+  const q = $('#askIn').value.trim(); if(!q) return;
+  const who = Object.keys(BOTS).find(k => q.includes(k)) || '小龙虾';
+  $('#cmts').insertAdjacentHTML('afterbegin',
+    `<div class="cmt" style="border-color:#B7CDE8;background:#F7FAFD"><div class="who"><b>你</b></div>${esc(q)}</div>
+     <div class="cmt"><div class="who"><b>${who}</b> · 机器人 · 演示脚本</div>${BOTS[who]}</div>`);
+  $('#askIn').value='';
+};
+$('#kolList').innerHTML = [['十年 HRD','看得懂 HR 话术'],['外企转国企的人','讲体制内适配'],['被裁两次的产品','讲怎么止损']]
+  .map(k=>`<div style="padding:5px 0;border-bottom:1px dotted #E1DFDD"><b>${k[0]}</b><br><span class="muted">${k[1]} · 免费 3 问</span></div>`).join('');
+
+/* ---------- 放养收菜：我的机器人替我在社区里活动，隔天回来收 ---------- */
+const FARM_SCOPES = ['我这行 · 互联网','我关注的 5 家公司','我想跳的赛道 · 新能源'];
+const FARM_INDS = ['互联网','金融','制造'];   // 采集范围决定收回来的东西落在哪个行业
+const CROPS = [
+  {t:'某中厂 P7 薪资带宽 45-60W',    k:'情报', v:'salary', kd:'news'},
+  {t:'两家公司同时冻结了 HC',        k:'情报', v:'biz',    kd:'news'},
+  {t:'内推：双休不打卡的产品岗',      k:'招聘', v:'biz',    kd:'job'},
+  {t:'隔壁赛道年终从 4 个月砍到 2 个',k:'情报', v:'biz',    kd:'news'},
+  {t:'有人在梦蝶局被假猎头套了简历',  k:'见闻', v:'fun',    kd:'news'}
+];
+const F = { scope:0, running:false, ripe:[], timer:null, acted:0, tick:0 };
+
+function farmRender(){
+  const p = $('#farmPanel'); if(!p) return;
+  const ripeList = F.ripe.length
+    ? F.ripe.map((c,i)=>`<div style="display:flex;gap:6px;align-items:center;padding:4px 0;border-bottom:1px dotted #E1DFDD">
+        <span style="flex:1">${esc(c.t)}<br><span class="muted">${c.k} · 熟了</span></span>
+        <button class="rbtn" data-crop="${i}">收</button></div>`).join('')
+    : '<div class="muted">还没熟。它得先在水域里待一会儿。</div>';
+  p.innerHTML = `
+    <div class="muted">采集范围（付费可扩）</div>
+    <select class="ta" id="farmScope" style="margin:4px 0 7px">${FARM_SCOPES.map((s,i)=>`<option value="${i}"${i===F.scope?' selected':''}>${s}</option>`).join('')}</select>
+    <button class="rbtn ${F.running?'':'pri'}" id="farmGo">${F.running?'收回机器人':'放进水域'}</button>
+    <div class="muted" style="margin-top:6px" id="farmStat"></div>
+    <div style="border-top:1px solid var(--rule);margin:9px 0 7px;padding-top:7px"><b>待收（${F.ripe.length}）</b></div>
+    ${ripeList}
+    ${F.ripe.length?'<button class="rbtn pri" id="farmAll" style="margin-top:6px">全部收走</button>':''}
+    <div class="muted" style="margin-top:8px;line-height:1.6">机器人吹的气只算预热，不计入今日最大泡评选。</div>`;
+
+  farmStat();
+  $('#farmScope').onchange = e => { F.scope = +e.target.value; };
+  $('#farmGo').onclick = farmToggle;
+  const all = $('#farmAll'); if(all) all.onclick = ()=>{ while(F.ripe.length) harvest(0); };
+  p.querySelectorAll('[data-crop]').forEach(b=> b.onclick = ()=> harvest(+b.dataset.crop));
+}
+
+// 只刷状态行，不重建面板 —— 否则每 1.6 秒会把用户正在操作的下拉框重置掉
+function farmStat(){
+  const s = $('#farmStat'); if(!s) return;
+  s.textContent = F.running ? `在水域里活动中 · 已互动 ${F.acted} 次` : '未放养';
+}
+
+function harvest(i){
+  const c = F.ripe.splice(i,1)[0]; if(!c) return;
+  mk(c.t, c.v, 6, c.kd, '我的机器人', FARM_INDS[F.scope]);
+  farmRender(); sync();
+}
+
+function farmToggle(){
+  F.running = !F.running;
+  if (F.running){
+    F.timer = setInterval(()=>{
+      F.tick++;
+      // 像人一样互动：随机吹一口别人的泡泡（只算预热）
+      const live = S.bubbles.filter(b=>!b.dead);
+      if (live.length && F.tick % 2 === 0){
+        blow(live[(Math.random()*live.length)|0], 1, true);
+        F.acted++;
+      }
+      const before = F.ripe.length;
+      if (F.tick % 5 === 0 && F.ripe.length < 5){
+        F.ripe.push(CROPS[(Math.random()*CROPS.length)|0]);
+      }
+      if (F.ripe.length !== before) farmRender(); else farmStat();
+    }, 1600);
+  } else { clearInterval(F.timer); F.timer = null; }
+  farmRender();
+}
+farmRender();
+
+/* ---------- 运营后台 ---------- */
+$('#decayR').oninput = e=>{ S.decay = e.target.value/100; $('#decayTxt').textContent = `当前 ${S.decay.toFixed(2)} /秒 · 周一放慢、周五加快`; };
+$('#injGo').onclick = ()=>{ const b=S.bubbles.find(x=>x.id==$('#injSel').value); if(b){ blow(b,10); go('home'); } };
+$('#brandGo').onclick = ()=>{ mk('某咖啡品牌：下午三点第二杯半价','fun',14,'brand','品牌'); go('home'); sync(); };
+$('#jobGo').onclick = ()=>{ mk('内推：中厂产品岗，双休不打卡','biz',12,'job','企业号'); go('home'); sync(); };
+
+/* ---------- 拼豆 ---------- */
+const COLS=30, ROWS=18, PALETTE=['#FFFFFF','#1F1F1F','#C0503F','#C9962E','#3E8F82','#3F72A4','#7A6AA6','#D2764A','#E8C07A','#9DB0BC'];
+let curColor = PALETTE[1], painting=false;
+(function buildSheet(){
+  const s=$('#sheet'); let h='<div class="hd"></div>';
+  for(let c=0;c<COLS;c++) h+=`<div class="hd">${String.fromCharCode(65+c%26)}</div>`;
+  for(let r=0;r<ROWS;r++){ h+=`<div class="rh">${r+1}</div>`;
+    for(let c=0;c<COLS;c++) h+=`<div class="cell" data-i="${r*COLS+c}"></div>`; }
+  s.innerHTML=h;
+  $('#pal').innerHTML = PALETTE.map((c,i)=>`<i style="background:${c}" data-c="${c}" class="${i===1?'on':''}"></i>`).join('');
+})();
+$('#pal').onclick = e=>{ if(!e.target.dataset.c) return;
+  curColor=e.target.dataset.c; $$('#pal i').forEach(x=>x.classList.remove('on')); e.target.classList.add('on'); };
+$('#sheet').addEventListener('mousedown', e=>{ if(e.target.classList.contains('cell')){ painting=true; e.target.style.background=curColor; e.preventDefault(); }});
+$('#sheet').addEventListener('mouseover', e=>{ if(painting && e.target.classList.contains('cell')) e.target.style.background=curColor; });
+$('#sheet').addEventListener('contextmenu', e=>{ if(e.target.classList.contains('cell')){ e.preventDefault(); e.target.style.background=''; }});
+document.addEventListener('mouseup', ()=>painting=false);
+function clearSheet(){ $$('#sheet .cell').forEach(c=>c.style.background=''); }
+function fillDemo(){ // 一条鱼
+  clearSheet();
+  const art=[[6,10],[6,11],[7,9],[7,12],[8,8],[8,13],[9,8],[9,14],[10,9],[10,13],[11,10],[11,11],[7,15],[8,16],[9,16],[10,15],[8,10]];
+  art.forEach(([r,c])=>{ const el=$(`#sheet .cell[data-i="${r*COLS+c}"]`); if(el) el.style.background='#3F72A4'; });
+}
+$('#mateBtn').onclick = ()=>{ $('#mateState').textContent='已匹配：工位在打印机旁边的（在线）'; };
+$('#teamBtn').onclick = ()=>{ $('#mateState').textContent='组团中：3 人 · 搭子的格子会实时出现（Codex 补）'; };
+
+/* ---------- 老板键 ---------- */
+let maskState = 0, maskOn = false;
+const MASKS = [null, '#reportMask', '#desktopMask'];
+function cycleMask(){
+  maskState = (maskState+1) % 3;
+  $$('.mask').forEach(m=>m.classList.remove('on'));
+  maskOn = maskState !== 0;
+  if (maskOn){ $(MASKS[maskState]).classList.add('on'); if(maskState===2) buildDesktop(); }
+}
+document.addEventListener('keydown', e=>{
+  if (e.key==='Escape' || (e.ctrlKey && e.code==='Space')){ e.preventDefault(); cycleMask(); }
+});
+const FILE_EXT=['xlsx','docx','pptx','xlsx','docx'];
+const EXT_TAG={xlsx:['X','#217346'], docx:['W','#2B579A'], pptx:['P','#C43E1C']};
+function buildDesktop(){
+  const base = ['Q3_数据汇总','部门周报','项目排期','预算执行表','会议纪要','人员编制','复盘材料','对外汇报','指标口径','年度目标'];
+  const names = S.bubbles.slice(0,10).map((b,i)=>{
+    const ext = FILE_EXT[i%5];
+    return { n: base[i%10]+'_v'+(2+i%4)+'.'+ext, ext, real:b.text };
+  });
+  $('#dicons').innerHTML = names.map(f=>{
+    const [tag,col] = EXT_TAG[f.ext];
+    return `<div class="dicon" data-real="${esc(f.real)}"><div class="ic" data-x="${tag}" style="--tag:${col}"></div>${f.n}</div>`;
+  }).join('');
+  tick();
+}
+$('#dicons').addEventListener('dblclick', e=>{
+  const d = e.target.closest('.dicon'); if(!d) return;
+  $('#dlgTx').textContent = '正在打开文件，请稍候…'; $('#dlg').classList.add('on');
+});
+function tick(){ const d=new Date();
+  $('#dclk').textContent = String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+  $('#ddate').textContent = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`; }
+setInterval(tick, 20000);
+
+/* ---------- 启动 ---------- */
+function feedRandom(){
+  const pool = [
+    ['隔壁组的年终系数被下调了','salary'],['新总监第一天就改了组织架构','boss'],
+    ['听说要合并两个部门','layoff'],['食堂三楼今天有小龙虾','fun'],
+    ['行业里在传下半年冻结招聘','biz'],['同组的人偷偷在面试','peer'],
+    ['转正答辩延后了两周','peer'],['有人把周报模板改成了双周','boss']
+  ];
+  const p = pool[(Math.random()*pool.length)|0];
+  mk(p[0], p[1], 4 + Math.random()*10); sync();
+}
+function boot(){
+  size();
+  const me = pick(ALIASES);
+  ALIAS_TAG[me] = ME.ind + ' · P7';
+  $('#alias').textContent = me;
+  $('#aliasTag').textContent = ALIAS_TAG[me];
+  const init = [
+    ['隔壁组年终系数集体下调，有人已经在看机会了','salary',34,'互联网','我司'],
+    ['新来的总监第一天就把组织架构图改了','boss',26,'互联网','我司'],
+    ['据说下半年要冻结招聘，HC 已经收了','biz',21,'互联网','某中厂'],
+    ['食堂三楼今天有小龙虾，去晚就没了','fun',17,'制造','我司'],
+    ['同组那位每天中午出去打两个小时电话','peer',13,'互联网','我司'],
+    ['公司体检套餐今年砍了三项','fun',9,'金融','A 厂'],
+    ['转正答辩统一延后两周，说是流程调整','peer',7,'教育','B 厂'],
+    ['某条业务线在做人员盘点了','layoff',24,'金融','某国企']
+  ];
+  init.forEach(([t,tp,h,ind,co])=>mk(t,tp,h,'user',null,ind,co));
+  mk('某咖啡品牌：下午三点第二杯半价','fun',11,'brand','品牌');
+  mk('Codex：这类调整通常先动 title 再动薪级','biz',8,'bot','Codex','互联网');
+  // 资讯库先放三条，说明它是流下来的沉淀，不是另一套抓取
+  S.lib.push(
+    {text:'两家中厂同时把 HC 冻到 Q4，招聘页只留实习',ind:'互联网',type:'biz',peak:41,t:stamp()},
+    {text:'行业年中薪酬报告：产品岗中位数持平，技术岗微降 3%',ind:'互联网',type:'salary',peak:33,t:stamp()},
+    {text:'某国企下属公司启动人员盘点，涉及两条业务线',ind:'金融',type:'biz',peak:28,t:stamp()}
+  );
+  filtRender(); libRender();
+  go('home'); sync(); requestAnimationFrame(loop);
+  setInterval(()=>{ if(S.bubbles.length < 16 && !maskOn) feedRandom(); }, 9000);
+}
+window.addEventListener('resize', size);
+boot();
+
+/* A1 */
+const DREAM_PLAYS = [
+  {title:'内推的那位', cast:{Codex:'猎头 Anna', '小龙虾':'前同事老王', '菠萝':'HR 小林','如镜':'表哥'}, liar:'Codex', lines:[
+    {who:'如镜',tx:'大家先说说，最近有没有靠谱岗位？'},
+    {who:'小龙虾',tx:'我前同事那边正缺一个产品负责人。'},
+    {who:'菠萝',tx:'我们 HR 只看公开流程，不收任何费用。'},
+    {who:'Codex',tx:'我手里有个年薪翻倍的坑，今天就能安排面试。',tell:'典型话术：先给远超市场价的数字制造稀缺感。'},
+    {who:'小龙虾',tx:'不用急，先把 JD 和公司全名发出来。'},
+    {who:'Codex',tx:'公司暂时保密，签了保密协议才能透露。',tell:'典型话术：用保密为由回避公司与职位信息。'},
+    {who:'菠萝',tx:'候选人不需要先交培训费或押金。'},
+    {who:'如镜',tx:'那就走招聘官网投递，别走私人链接。'},
+    {who:'Codex',tx:'流程费 399 元，入职后全额返还，很快的。',tell:'典型话术：以可退费用为名索取转账。'},
+    {who:'小龙虾',tx:'正规面试不会把钱作为门槛。'},
+    {who:'菠萝',tx:'我查到官网没有这个岗位，大家留意。',tell:'破绽核验：公开渠道查不到职位。'},
+    {who:'如镜',tx:'看来答案已经很明显了。'}
+  ]},
+  {title:'表哥的项目', cast:{Codex:'研发同事', '小龙虾':'老同学','菠萝':'HR 背调员','如镜':'投资表哥'}, liar:'如镜', lines:[
+    {who:'Codex',tx:'最近有人拉我做副业，说是内部项目。'},
+    {who:'小龙虾',tx:'先问清楚合同主体和退出方式。'},
+    {who:'菠萝',tx:'背调只会通过正式邮箱联系，不在群里收资料。'},
+    {who:'如镜',tx:'我这项目稳赚，内部名额只剩两个。',tell:'典型话术：承诺稳赚并制造名额紧张。'},
+    {who:'Codex',tx:'能给一份工商信息和风险说明吗？'},
+    {who:'如镜',tx:'先转 2000 元锁定席位，资料随后发。',tell:'典型话术：先转账再给材料，顺序反常。'},
+    {who:'小龙虾',tx:'投资不该用个人收款码，也不会催你马上决定。'},
+    {who:'菠萝',tx:'背调环节更不会让候选人替公司垫款。'},
+    {who:'如镜',tx:'你们不信我？这是亲戚才给的渠道。',tell:'典型话术：用亲情和信任替代可验证信息。'},
+    {who:'Codex',tx:'那就把项目名放到公开渠道核验。'},
+    {who:'小龙虾',tx:'查不到主体就先停手，别被情绪推着走。'},
+    {who:'菠萝',tx:'我的结论：不付款、不提供身份证原件。'}
+  ]}
+];
+let dreamIndex=0, dreamTimer=null, dreamShown=0, dreamBet='', dreamBetAsked=false, dreamPaused=false;
+function dreamRender(){
+  const p=DREAM_PLAYS[dreamIndex], rows=p.lines.slice(0,dreamShown);
+  let h='<div class="muted">脚本模拟 · '+esc(p.title)+' · 身份：'+Object.entries(p.cast).map(x=>esc(x[0])+'='+esc(x[1])).join('，')+'</div>';
+  h+='<div id="dreamLines" style="max-height:300px;overflow:auto;margin-top:7px">'+rows.map((l,i)=>'<div class="cmt"><div class="who"><b>'+esc(l.who)+'</b> · '+esc(p.cast[l.who])+'</div>'+esc(l.tx)+(dreamShown>=p.lines.length&&l.tell?'<div class="muted">'+esc(l.tell)+'</div>':'')+'</div>').join('')+'</div>';
+  if(dreamBetAsked&&!dreamBet) h+='<div style="margin-top:7px"><b>押注谁是骗子？</b> '+Object.keys(p.cast).map(k=>'<button class="rbtn" data-dream-bet="'+esc(k)+'">'+esc(k)+'</button>').join(' ')+'</div>';
+  if(dreamShown>=p.lines.length){ h+='<div class="cmt" style="margin-top:7px"><b>揭底：'+esc(p.liar)+'</b> · '+(dreamBet?(dreamBet===p.liar?'押中':'没押中'):'未押注')+'</div><button class="rbtn pri" data-dream-restart style="margin-top:7px">再来一局</button>'; }
+  else if(dreamPaused&&!dreamBet) h+='<div class="muted" style="margin-top:7px">押注后继续播放</div>';
+  else if(!dreamTimer&&!dreamPaused) h+='<button class="rbtn pri" data-dream-start style="margin-top:7px">开局</button>';
+  $('#dreamGame').innerHTML=h;
+  const box=$('#dreamLines'); if(box) box.scrollTop=box.scrollHeight;
+}
+function dreamSchedule(){ dreamTimer=setInterval(()=>{ dreamShown++; const halfway=Math.ceil(DREAM_PLAYS[dreamIndex].lines.length/2); if(dreamShown===halfway){ clearInterval(dreamTimer); dreamTimer=null; dreamPaused=true; dreamBetAsked=true; dreamRender(); return; } if(dreamShown>=DREAM_PLAYS[dreamIndex].lines.length){clearInterval(dreamTimer);dreamTimer=null;} dreamRender(); },900); }
+function dreamStart(){ if(dreamTimer) return; dreamShown=0; dreamBet=''; dreamBetAsked=false; dreamPaused=false; dreamRender(); dreamSchedule(); }
+$('#dreamGame').addEventListener('click',e=>{ if(e.target.dataset.dreamStart!=null) dreamStart(); if(e.target.dataset.dreamBet){ dreamBet=e.target.dataset.dreamBet; dreamBetAsked=false; dreamPaused=false; dreamRender(); dreamSchedule(); } if(e.target.dataset.dreamRestart!=null){ dreamIndex=(dreamIndex+1)%DREAM_PLAYS.length; dreamShown=0; dreamBet=''; dreamBetAsked=false; dreamPaused=false; dreamRender(); }});
+dreamRender();
+
+const WORKSHOP_DEFAULT={dna:'先确认事实，再谈立场。\n不拿情绪替代证据。\n优先保护长期职业信用。',framework:'情境-边界-选项\n记录关键对话\n成本与收益对照',flow:'先复述问题\n再指出风险\n给出两种可执行选项\n最后确认下一步',ban:'不承诺升职或赔偿\n不替公司做法律结论\n不索要隐私材料'};
+const KOL_ANSWERS={
+  '十年 HRD':['先问加班是否有明确安排和补偿，再用书面方式确认边界。','如果只是偶发节点，可以协商；如果长期无补偿，记录事实后再谈调岗或离开。'],
+  '外企转国企的人':['先把规则、流程和审批人问清楚，别用外企的默认授权去猜。','周末安排要看制度和部门惯例，先留痕，再选择合适的沟通场合。'],
+  '被裁两次的产品':['先算现金流能撑几个月，再决定拒绝还是换条件。','拒绝之前给自己留备选：调休、补偿、明确截止时间，别只争一口气。']
+};
+function workshopRender(){
+  const dna=$('#wsDna').value.split(/\n/).filter(Boolean), fw=$('#wsFw').value.split(/\n/).filter(Boolean), flow=$('#wsFlow').value.split(/\n/).filter(Boolean), ban=$('#wsBan').value.split(/\n/).filter(Boolean);
+  $('#wsPreview').innerHTML='<div class="muted">样例提问：领导让我周末加班，我该不该拒绝</div><div class="cmt"><b>机器人回答</b><br>先说事实：'+esc(dna[0]||'先确认事实')+'。<br>套用框架：'+esc(fw[0]||'情境-边界-选项')+'。<br>固定动作：'+esc(flow[0]||'先复述问题')+'，'+esc(flow[1]||'再指出风险')+'。<br>边界提醒：'+esc(ban[0]||'不承诺结果')+'。</div>';
+}
+$('#workshop').innerHTML='<div class="grid2"><div><div class="muted">十年 HRD · 四段式设定</div><textarea class="ta" id="wsDna" rows="3" placeholder="人格 DNA"></textarea><textarea class="ta" id="wsFw" rows="3" placeholder="框架库" style="margin-top:5px"></textarea><textarea class="ta" id="wsFlow" rows="3" placeholder="固定动作流程" style="margin-top:5px"></textarea><textarea class="ta" id="wsBan" rows="3" placeholder="禁区" style="margin-top:5px"></textarea></div><div id="wsPreview"></div></div><div class="muted" style="margin-top:7px">商业说明：免费 3 问 → 深度咨询付费 → 社区抽成。</div><div style="margin-top:8px"><b>内置博主机器人</b><div id="wsBots"></div><input class="ta" id="wsAsk" placeholder="点选博主后输入问题" style="margin-top:5px"><button class="rbtn pri" id="wsAskGo" style="margin-top:5px">提问</button><div id="wsAnswer" class="cmt" style="margin-top:6px"></div></div>';
+Object.entries(WORKSHOP_DEFAULT).forEach(([k,v])=>$('#ws'+({dna:'Dna',framework:'Fw',flow:'Flow',ban:'Ban'}[k])).value=v);
+['wsDna','wsFw','wsFlow','wsBan'].forEach(id=>$('#'+id).addEventListener('input',workshopRender));
+let wsBot='十年 HRD'; $('#wsBots').innerHTML=Object.keys(KOL_ANSWERS).map(k=>'<button class="rbtn" data-ws-bot="'+esc(k)+'">'+esc(k)+'</button>').join(' ');
+$('#wsBots').addEventListener('click',e=>{if(e.target.dataset.wsBot){wsBot=e.target.dataset.wsBot;$('#wsAsk').focus();}});
+$('#wsAskGo').onclick=()=>{const q=$('#wsAsk').value.trim();if(!q)return;const a=KOL_ANSWERS[wsBot];const idx=/钱|薪|补偿|加班/.test(q)?0:1;$('#wsAnswer').innerHTML='<b>'+esc(wsBot)+'</b> · 演示脚本<br>'+esc(a[idx]);};
+$('#kolList').innerHTML=Object.keys(KOL_ANSWERS).map(k=>'<div style="padding:5px 0;border-bottom:1px dotted #E1DFDD"><button class="rbtn" data-kol-open="'+esc(k)+'">'+esc(k)+'</button><br><span class="muted">演示机器人 · 免费 3 问</span></div>').join('');
+$('#kolList').addEventListener('click',e=>{if(e.target.dataset.kolOpen){wsBot=e.target.dataset.kolOpen;$('#wsAsk').focus();}});
+workshopRender();
+
+/* ---------- C1：织梦坊与运营后台 ---------- */
+const DRAW_TEMPLATES = [
+  {name:'鱼', cells:[[6,10],[6,11],[7,9],[7,12],[8,8],[8,13],[9,8],[9,14],[10,9],[10,13],[11,10],[11,11],[7,15],[8,16],[9,16],[10,15],[8,10]]},
+  {name:'蝴蝶', cells:[[6,9],[6,10],[6,13],[6,14],[7,8],[7,10],[7,13],[7,15],[8,9],[8,14],[9,10],[9,13],[10,11],[10,12],[11,11],[11,12]]},
+  {name:'咖啡杯', cells:[[6,9],[6,10],[6,11],[6,12],[6,13],[7,9],[7,13],[8,9],[8,13],[9,9],[9,10],[9,11],[9,12],[9,13],[10,10],[10,11],[10,12]]},
+  {name:'摸', cells:[[6,9],[6,10],[6,11],[6,12],[7,10],[8,10],[9,10],[10,10],[11,9],[11,10],[11,11],[11,12],[8,14],[8,15],[9,14],[9,15],[10,14],[10,15]]},
+  {name:'小龙虾', cells:[[7,10],[7,11],[8,9],[8,12],[9,8],[9,9],[9,12],[9,13],[10,9],[10,12],[11,10],[11,11],[6,8],[6,13],[8,7],[8,14],[10,7],[10,14]]}
+];
+const DRAW_GALLERY = [
+  {name:'午休的鱼', color:'#3F72A4', cells:DRAW_TEMPLATES[0].cells},
+  {name:'会飞的蝴蝶', color:'#7A6AA6', cells:DRAW_TEMPLATES[1].cells},
+  {name:'三点咖啡', color:'#C9962E', cells:DRAW_TEMPLATES[2].cells},
+  {name:'摸鱼二字', color:'#3E8F82', cells:DRAW_TEMPLATES[3].cells},
+  {name:'小龙虾出没', color:'#C0503F', cells:DRAW_TEMPLATES[4].cells}
+];
+let drawTemplateIndex=0, teamTimer=null, drawGalleryOpen=null;
+function drawCell(r,c){ return $(`#sheet .cell[data-i="${r*COLS+c}"]`); }
+function drawCount(){ return DRAW_TEMPLATES[drawTemplateIndex].cells.filter(([r,c])=>drawCell(r,c)?.style.background).length; }
+function drawProgress(){
+  const total = DRAW_TEMPLATES[drawTemplateIndex].cells.length, done = drawCount();
+  const el=$('#drawProgress'); if(el) el.textContent=`已填 ${done} / ${total} 格（${Math.round(done/total*100)}%）`;
+  const launch=$('#drawLaunch'); if(launch) launch.disabled=done!==total;
+}
+function drawPaint(coords, color){ coords.forEach(([r,c])=>{const el=drawCell(r,c);if(el)el.style.background=color;}); drawProgress(); }
+function applyDrawTemplate(i){
+  drawTemplateIndex=i; clearSheet();
+  drawPaint(DRAW_TEMPLATES[i].cells, PALETTE[(i+3)%PALETTE.length]);
+  drawRender();
+}
+function drawRender(){
+  const p=$('#drawOpsPanel'); if(!p)return;
+  p.innerHTML=`<div class="muted">模板库 · 点选后铺到左侧网格</div><div style="display:flex;gap:4px;flex-wrap:wrap;margin:6px 0">${DRAW_TEMPLATES.map((t,i)=>`<button class="rbtn${i===drawTemplateIndex?' pri':''}" data-draw-tpl="${i}">${esc(t.name)}</button>`).join('')}</div><div id="drawProgress" class="muted"></div><button class="rbtn pri" id="drawLaunch" style="margin-top:6px">投放为泡泡</button><div class="muted" style="margin-top:10px">作品广场 · 脚本模拟</div><div id="drawGallery" style="display:flex;gap:5px;overflow-x:auto;margin-top:5px">${DRAW_GALLERY.map((g,i)=>`<button class="rbtn" data-gallery="${i}" style="padding:3px"><span style="display:grid;grid-template-columns:repeat(18,3px);width:54px;height:42px;background:#fff">${Array.from({length:18*14},(_,n)=>{const r=Math.floor(n/18),c=n%18;const on=g.cells.some(x=>x[0]-6===r&&x[1]-7===c);return `<i style="width:3px;height:3px;background:${on?g.color:'#fff'}"></i>`}).join('')}</span></button>`).join('')}</div><div id="drawGalleryView" style="margin-top:7px"></div>`;
+  $('#drawProgress').textContent=`已填 ${drawCount()} / ${DRAW_TEMPLATES[drawTemplateIndex].cells.length} 格（${Math.round(drawCount()/DRAW_TEMPLATES[drawTemplateIndex].cells.length*100)}%）`;
+  $('#drawLaunch').disabled=drawCount()!==DRAW_TEMPLATES[drawTemplateIndex].cells.length;
+  p.querySelectorAll('[data-draw-tpl]').forEach(b=>b.onclick=()=>applyDrawTemplate(+b.dataset.drawTpl));
+  $('#drawLaunch').onclick=()=>{ mk(`拼了一张${DRAW_TEMPLATES[drawTemplateIndex].name}，来看`,'fun',8,'user'); sync(); };
+  p.querySelectorAll('[data-gallery]').forEach(b=>b.onclick=()=>{const g=DRAW_GALLERY[+b.dataset.gallery];$('#drawGalleryView').innerHTML=`<div class="muted">${esc(g.name)}</div><div style="display:grid;grid-template-columns:repeat(18,8px);margin-top:3px">${Array.from({length:18*14},(_,n)=>{const r=Math.floor(n/18),c=n%18;const on=g.cells.some(x=>x[0]-6===r&&x[1]-7===c);return `<i style="width:8px;height:8px;border:1px solid var(--rule);background:${on?g.color:'#fff'}"></i>`}).join('')}</div>`;});
+}
+function drawFloat(label, cell){
+  const r=cell.getBoundingClientRect(), el=document.createElement('span'); el.textContent=label; el.style.cssText=`position:fixed;left:${r.left}px;top:${r.top-14}px;color:var(--word-blue);font-size:10px;z-index:20;pointer-events:none`; document.body.appendChild(el); setTimeout(()=>el.remove(),1000);
+}
+function stopTeam(){if(teamTimer){clearInterval(teamTimer);teamTimer=null;} const b=$('#teamBtn');if(b)b.textContent='组团';}
+function startTeam(){
+  stopTeam(); const names=['小龙虾','菠萝','如镜'], colors=[PALETTE[4],PALETTE[6],PALETTE[7]];
+  const target=DRAW_TEMPLATES[drawTemplateIndex].cells;
+  if(target.length && target.every(([r,c])=>drawCell(r,c)?.style.background)){ target.forEach(([r,c])=>{const el=drawCell(r,c);if(el)el.style.background='';}); drawProgress(); }
+  $('#mateState').textContent='组团中：3 人 · 脚本模拟'; $('#teamBtn').textContent='停止组团';
+  teamTimer=setInterval(()=>{const pending=DRAW_TEMPLATES[drawTemplateIndex].cells.filter(([r,c])=>!drawCell(r,c)?.style.background);if(!pending.length){stopTeam();$('#mateState').textContent='已完成：搭子都填好了';return;}const [r,c]=pending[(Math.random()*pending.length)|0],cell=drawCell(r,c),i=(Math.random()*names.length)|0;cell.style.background=colors[i];drawFloat(names[i],cell);drawProgress();},700);
+}
+function fillDemo(){ applyDrawTemplate(0); }
+const drawSheetObserver=new MutationObserver(drawProgress); drawSheetObserver.observe($('#sheet'),{subtree:true,attributes:true,attributeFilter:['style']});
+$('#teamBtn').onclick=()=>teamTimer?stopTeam():startTeam();
+drawRender(); drawProgress();
+
+const OPS_SEEDS=['年终系数要不要下调','午休时间改成弹性制','新总监的第一条规定','听说研发要换工位','绩效面谈排到下个月','食堂三楼今天有小龙虾','下半年招聘会冻结吗','同组有人准备转岗','周报模板又改了','加班餐取消通知','会议室被长期占用','新 KPI 口径流出','团建预算砍了一半','谁拿到了隐藏 HC','前台捡到一部手机'];
+const OPS_BOTS=[['菠萝','HR 话术观察'],['如镜','组织变化分析'],['Codex','技术岗位风向'],['小龙虾','办公室见闻']];
+let seedTimer=null, seedNext=0, seedInterval=9, botLast={};
+function opsPeriod(){const h=new Date().getHours();return h<11?'上午':h<14?'午休':h<17?'下午':'下班前';}
+function opsRender(){
+  const p=$('#opsPanel'); if(!p)return;
+  p.innerHTML=`<div style="border-bottom:1px solid var(--rule);padding-bottom:8px;margin-bottom:8px"><b>种子泡泡定时释放 · 留存线</b><div style="margin-top:5px"><label><input type="checkbox" id="seedOn"> 开启脚本投放</label><input type="range" id="seedGap" min="3" max="30" value="9" style="width:100%;margin-top:6px"><div class="muted" id="seedState">已关闭</div></div></div><div style="border-bottom:1px solid var(--rule);padding-bottom:8px;margin-bottom:8px"><b>机器人排班 · 留存线</b><div id="botSchedule" style="margin-top:5px"></div></div><div><b>博主机器人审核 · 收入线三：抽成 30%</b><div id="kolReview" style="margin-top:5px"></div></div>`;
+  $('#seedOn').onchange=e=>{if(e.target.checked){seedNext=seedInterval;seedTimer=setInterval(()=>{seedNext--;if(seedNext<=0){const text=OPS_SEEDS[(Math.random()*OPS_SEEDS.length)|0];mk(text,'peer',8,'bot','种子机器人');sync();seedNext=seedInterval;}$('#seedState').textContent=`下一条 ${seedNext} 秒后 · 脚本模拟`;},1000);}else{if(seedTimer)clearInterval(seedTimer);seedTimer=null;$('#seedState').textContent='已关闭';}};
+  $('#seedGap').oninput=e=>{seedInterval=+e.target.value;seedNext=seedInterval;$('#seedState').textContent=`间隔 ${seedInterval} 秒 · 脚本模拟`;};
+   const period=opsPeriod();
+   $('#botSchedule').innerHTML=OPS_BOTS.map((b,i)=>`<div data-bot-row="${i}" style="display:flex;align-items:center;gap:4px;padding:4px 0;border-bottom:1px dotted var(--rule)"><b style="width:58px">${b[0]}</b><select class="ta" data-bot-f="${i}" data-bot-id="${i}" style="padding:3px;width:58px"><option value="low" selected>低</option><option value="mid">中</option><option value="high">高</option></select><select class="ta" data-bot-s="${i}" data-bot-id="${i}" style="padding:3px;flex:1"><option${period==='上午'?' selected':''}>上午</option><option${period==='午休'?' selected':''}>午休</option><option${period==='下午'?' selected':''}>下午</option><option${period==='下班前'?' selected':''}>下班前</option></select></div>`).join('')+`<div class="muted" style="margin-top:5px">当前脚本时段：${period} · 修改后立即生效 · 脚本模拟</div>`;
+   p.querySelectorAll('[data-bot-f],[data-bot-s]').forEach(x=>x.onchange=()=>{botLast[+x.dataset.botId]=0;});
+  const apps=[['林檎','招聘谈薪','先看证据，再谈边界'],['周野','裁员求职','不鼓励裸辞，先算现金流'],['沈青','向上管理','只谈事实、风险和交付']];
+  $('#kolReview').innerHTML=apps.map((a,i)=>`<div style="padding:4px 0;border-bottom:1px dotted var(--rule)" data-app="${i}"><b>${a[0]}</b> · ${a[1]}<br><span class="muted">DNA：${a[2]}</span><br><button class="rbtn" data-app-ok="${i}">通过</button> <button class="rbtn" data-app-no="${i}">驳回</button></div>`).join('');
+   p.querySelectorAll('[data-app-ok]').forEach(b=>b.onclick=()=>{const row=b.closest('[data-app]');row.innerHTML='<span class="muted">已通过并加入博主列表</span>';const name=apps[+b.dataset.appOk][0];KOL_ANSWERS[name]=['先把问题拆成事实、边界和选项，再决定是否接受。','先记录已确认的信息，再约一个具体时间点复盘。'];$('#kolList').insertAdjacentHTML('beforeend',`<div style="padding:5px 0;border-bottom:1px dotted #E1DFDD"><button class="rbtn" data-kol-open="${esc(name)}">${esc(name)}</button><br><span class="muted">审核通过 · 免费 3 问</span></div>`);});
+  p.querySelectorAll('[data-app-no]').forEach(b=>b.onclick=()=>{b.closest('[data-app]').innerHTML='<span class="muted">已驳回</span>';});
+}
+setInterval(()=>{$$('#botSchedule [data-bot-f]').forEach((sel,i)=>{const row=sel.closest('[data-bot-row]'), slot=row?.querySelector('[data-bot-s]')?.value;if(slot!==opsPeriod()){botLast[i]=0;return;}const wait={low:45,mid:20,high:7}[sel.value];botLast[i]=(botLast[i]||0)+1;if(botLast[i]>=wait){botLast[i]=0;mk(`${OPS_BOTS[i][1]}：今天有新观察`,'peer',7,'bot',OPS_BOTS[i][0]);sync();}});},1000);
+opsRender();
+
+/* ============================================================
+   HOOKS — 给 Codex 的挂载点
+   mk(text, type, heat, kind, author, ind, co)  新建泡泡；type ∈ TYPES；kind ∈ user/bot/brand/job/news
+   blow(b, n, byBot)  吹气 n 口；byBot=true 只算预热，不计入今日最大泡
+   burst(b) 爆泡     pop(b,'poke') 戳破
+   S.bubbles / S.sunk / S.hall / S.arb / S.lib   五个数据池（lib = 行业资讯库）
+   b.manHeat / b.botHeat  人吹的气 / 机器人吹的气，今日最大泡只看前者
+   b.ind / b.co / b.tag   行业 / 公司 / 花名粗标签
+   FT / filtRender() / matchF(b)  筛选；筛选只改物理，不刷新列表
+   libRender()  行业资讯库；行业类泡泡凉了走 sink() 自动进 S.lib
+   F / farmRender() / harvest(i)  放养收菜：F.ripe 是待收列表
+   sync()  刷新所有右栏面板，改完数据调一次
+   go('home'|'insert'|'draw'|'ref'|'review'|'ops')  切页
+   RIBBONS  每页顶部功能区 HTML
+   ============================================================ */
+</script>
+</body>
+</html>

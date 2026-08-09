@@ -1,0 +1,18 @@
+{
+  "name": "2026年度第三季度工作述职报告.docx",
+  "short_name": "述职报告",
+  "description": "Microsoft Word 文档",
+  "start_url": "./app.html",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#2B579A",
+  "theme_color": "#2B579A",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
