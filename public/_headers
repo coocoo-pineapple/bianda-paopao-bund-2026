@@ -17,5 +17,4 @@
 /pitch/*
   Cache-Control: public, max-age=604800
 
-/media/*
-  Cache-Control: public, max-age=604800
+# /media/* 不在这儿 —— 它不是静态资源，走 R2，响应头由 src/media.js 设。

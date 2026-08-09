@@ -1,0 +1,6 @@
+# 不上传到 Workers Static Assets 的东西（.gitignore 语法）
+#
+# media/ 里是宣传片，39.7 MB，超过单文件 25 MiB 上限，传不上去。
+# 它走 R2，由 src/media.js 伺候，URL 还是 /media/宣传片.mp4。
+# 文件本身留在仓库里不动 —— server/index.js 那条 Express 路线还要从磁盘读它。
+media/

@@ -7,10 +7,12 @@
    ============================================================ */
 import { ask, hasKey, model } from './ai.js';
 import { GATE_SINGLETON } from './ai-gate.js';
+import { serveMedia } from './media.js';
 
 export { AiGate } from './ai-gate.js';
 
 const ENTRY_HTML = '/app.html';        // public/ 里没有 index.html，入口是 app.html
+const MEDIA_PREFIX = '/media/';        // 超过 25 MiB 的大文件，走 R2 不走静态资源
 const MAX_BODY = 64 * 1024;            // 对齐 express.json({ limit: '64kb' })
 const MAX_SYSTEM = 2000;
 const MAX_QUESTION = 500;
@@ -25,6 +27,11 @@ export default {
 
     if (url.pathname === '/api/health') return health(request, env);
     if (url.pathname === '/api/ask') return handleAsk(request, env);
+
+    if (url.pathname.startsWith(MEDIA_PREFIX)) {
+      const fromR2 = await serveMedia(request, env);
+      if (fromR2) return fromR2;       // R2 没有就往下走，静态资源里还有就还能顶上
+    }
 
     if (url.pathname === '/') {
       return env.ASSETS.fetch(new URL(ENTRY_HTML, url));

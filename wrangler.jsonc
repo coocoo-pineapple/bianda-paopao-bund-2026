@@ -11,6 +11,12 @@
     "binding": "ASSETS"
   },
 
+  // 宣传片 39.7 MB，超过静态资源单文件 25 MiB 上限，只能放 R2。
+  // public/.assetsignore 把 media/ 排除，由 src/media.js 从这里读回来。
+  "r2_buckets": [
+    { "binding": "MEDIA", "bucket_name": "bianda-paopao-media" }
+  ],
+
   // AI 熔断计数的唯一归属地，见 src/ai-gate.js
   "durable_objects": {
     "bindings": [{ "name": "AI_GATE", "class_name": "AiGate" }]

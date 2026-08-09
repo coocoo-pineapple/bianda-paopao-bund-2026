@@ -11,6 +11,7 @@
     "cf:dev": "wrangler dev",
     "cf:deploy": "wrangler deploy",
     "cf:secret": "wrangler secret put AI_API_KEY",
+    "cf:media": "wrangler r2 object put bianda-paopao-media/media/宣传片.mp4 --file public/media/宣传片.mp4 --content-type video/mp4 --remote",
     "cf:tail": "wrangler tail"
   },
   "dependencies": {
