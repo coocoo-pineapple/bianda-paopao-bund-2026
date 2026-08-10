@@ -532,21 +532,22 @@ function buildBI() {
 /* ---------- 游戏工坊：趣味区是玩家的游戏平台，不是官方游戏合集 ----------
    官方带头做几个，玩家自己上传，别人玩了可以打赏 —— 趣味区自己就能变现。 */
 const GAMES = [
-  { nm: '爽文背单词',  by: '官方',            tip: 128, go: 'wordgame' },
-  { nm: '捡手机文学',  by: '玩家 · 鼓盆而歌', tip: 86,  go: 'phone' },
-  { nm: '职场五子棋',  by: '玩家 · 井底之蛙', tip: 28,  go: 'gomoku' },
-  { nm: '工位躲猫猫',  by: '玩家 · 呆若木鸡', tip: 12,  go: 'hide' }
+  { nm: '爽文背单词',  by: '官方',            tip: 128, go: 'wordgame', ic: 'it-word' },
+  { nm: '捡手机文学',  by: '玩家 · 鼓盆而歌', tip: 86,  go: 'phone',    ic: 'it-phone' },
+  { nm: '职场五子棋',  by: '玩家 · 井底之蛙', tip: 28,  go: 'gomoku',   ic: 'it-gomoku' },
+  { nm: '工位躲猫猫',  by: '玩家 · 呆若木鸡', tip: 12,  go: 'hide',     ic: 'it-hide' }
 ];
 
 function buildGameHall() {
   const el = $('#gameHall');
   if (!el || el.dataset.built) return;
   el.innerHTML = GAMES.map((g, i) => `
-    <div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--rule)">
-      <div style="flex:1;min-width:0"><b style="font-size:12px">${esc(g.nm)}</b>
+    <div class="ghrow">
+      <span class="ghic" style="background-image:url(assets/icons/${g.ic}.png)"></span>
+      <div style="flex:1;min-width:0"><b style="font-size:12.5px">${esc(g.nm)}</b>
         <div class="muted" style="font-size:10.5px">${esc(g.by)} · 已获打赏 ¥<span data-tipn="${i}">${g.tip}</span></div></div>
-      ${g.go ? `<button class="rbtn" data-play="${g.go}" style="padding:3px 8px;font-size:11px">去玩</button>` : ''}
-      <button class="rbtn" data-tip="${i}" style="padding:3px 8px;font-size:11px">赏 ¥1</button>
+      ${g.go ? `<button class="rbtn pri" data-play="${g.go}" style="padding:4px 10px;font-size:11px">去玩</button>` : ''}
+      <button class="rbtn" data-tip="${i}" style="padding:4px 8px;font-size:11px">赏 ¥1</button>
     </div>`).join('') +
     '<div class="muted" style="margin-top:6px;font-size:10.5px">小游戏、皮肤、小工具。谁的点子有人玩，谁收钱。九成归他，一成归平台——平台也要吃饭。</div>';
   el.addEventListener('click', e => {
@@ -575,19 +576,22 @@ function buildSkinShop() {
   const el = $('#skinShop');
   if (!el || el.dataset.built) return;
   el.innerHTML = SKINS.map((k, i) => `
-    <div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--rule)">
-      <div style="flex:1;min-width:0"><b style="font-size:12px">${esc(k.nm)}</b>
+    <div class="ghrow">
+      <span class="skprev" style="filter:${k.f || 'none'}"></span>
+      <div style="flex:1;min-width:0"><b style="font-size:12.5px">${esc(k.nm)}</b>
         <div class="muted" style="font-size:10.5px">${esc(k.by)}${k.price ? ` · ¥${k.price} · 已售 <span data-soldn="${i}">${k.sold}</span> 份` : ' · 免费'}</div></div>
-      <button class="rbtn" data-wear="${i}" style="padding:3px 8px;font-size:11px">试穿</button>
-      ${k.price ? `<button class="rbtn" data-buy="${i}" style="padding:3px 8px;font-size:11px">买</button>` : ''}
+      <button class="rbtn" data-wear="${i}" style="padding:4px 10px;font-size:11px">试穿</button>
+      ${k.price ? `<button class="rbtn" data-buy="${i}" style="padding:4px 8px;font-size:11px">买</button>` : ''}
     </div>`).join('') +
-    '<div class="muted" style="margin-top:6px;font-size:10.5px">你调的色，别人穿在自己那片水上。皮肤跟马甲走，不跟人走。</div>';
+    '<div class="muted" id="skinTip" style="margin-top:6px;font-size:10.5px">你调的色，别人穿在自己那片水上。皮肤跟马甲走，不跟人走。</div>';
   el.addEventListener('click', e => {
     const w = e.target.closest('[data-wear]'), b = e.target.closest('[data-buy]');
     if (!w && !b) return;
     const i = +(w || b).dataset[w ? 'wear' : 'buy'];
     if (b) { SKINS[i].sold += 1; $(`[data-soldn="${i}"]`).textContent = SKINS[i].sold; }
     $('#stage').style.filter = SKINS[i].f;   // 桌面水面立刻换肤，不用跳转
+    const tip = $('#skinTip');
+    if (tip) tip.textContent = `「${SKINS[i].nm}」已套在整片水面上 · 缩小窗口看效果`;
   });
   el.dataset.built = '1';
 }

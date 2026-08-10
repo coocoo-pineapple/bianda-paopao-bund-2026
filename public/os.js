@@ -2530,9 +2530,9 @@ const BAR_PREV = {
    图在 → 窗口加 has* 类换上生图皮；图 404 → 保持 CSS 兜底。
    ============================================================ */
 (function polishAssets() {
-  [['assets/wordgame-bg.png', 'winWordGame', 'haswg'],
-   ['assets/gomoku-wood.png', 'winGomoku', 'haswood'],
-   ['assets/hide-office.png', 'winHide', 'hasoffice']].forEach(([src, winId, cls]) => {
+  [['assets/wordgame-bg.jpg', 'winWordGame', 'haswg'],
+   ['assets/gomoku-wood.jpg', 'winGomoku', 'haswood'],
+   ['assets/hide-office.jpg', 'winHide', 'hasoffice']].forEach(([src, winId, cls]) => {
     const im = new Image();
     im.onload = () => { const w = $('#' + winId); if (w) w.classList.add(cls); };
     im.src = src;
@@ -2541,10 +2541,10 @@ const BAR_PREV = {
   const pw = new Image();
   pw.onload = () => {
     const st = document.createElement('style');
-    st.textContent = '#phoneLog{background:linear-gradient(rgba(237,237,237,.86),rgba(237,237,237,.86)),url(assets/phone-wall.png) center/cover}';
+    st.textContent = '#phoneLog{background:linear-gradient(rgba(237,237,237,.86),rgba(237,237,237,.86)),url(assets/phone-wall.jpg) center/cover}';
     document.head.appendChild(st);
   };
-  pw.src = 'assets/phone-wall.png';
+  pw.src = 'assets/phone-wall.jpg';
   // 手机时钟走真实时间
   const pc = $('#pClk');
   if (pc) setInterval(() => {

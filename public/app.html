@@ -1032,6 +1032,10 @@ body.nobub #stage,body.nobub > #filt{display:none!important}
   text-shadow:0 1px 2px rgba(4,10,20,.35)}
 .dwin .fgi em{font-style:normal;display:block;font-size:11px;color:var(--ink);margin-top:6px;line-height:1.35}
 .dwin .fgi .sub{font-size:9.5px;color:var(--ink-3);margin-top:1px}
+/* 全局点击手感：按下有回弹，网页不发闷 */
+.rbtn:active,.dwin .fgi:active,.dski:active,#osbar .app:active,#barPrev .bpi:active,
+#deskNote .nf b:active,.zic:active{transform:scale(.955);transition:transform .06s}
+.rbtn,.dwin .fgi,.dski,#osbar .app{transition:transform .12s ease-out}
 /* 条目生成图标：探测到图就藏字母、去底色 */
 .dwin .fgi i.pic{background-color:transparent!important;background-position:center;background-size:contain;
   background-repeat:no-repeat;box-shadow:none;color:transparent;text-shadow:none;width:50px;height:50px;
@@ -1064,7 +1068,7 @@ body.nobub #stage,body.nobub > #filt{display:none!important}
 /* 爽文背单词：玄幻卷轴场景 */
 #winWordGame .dwb{background:#171B26;padding:10px;overflow:auto}
 #winWordGame.haswg .dwb{background:linear-gradient(rgba(18,20,30,.45),rgba(14,16,24,.72)),
-  url(assets/wordgame-bg.png) center/cover no-repeat #171B26}
+  url(assets/wordgame-bg.jpg) center/cover no-repeat #171B26}
 #winWordGame .card{background:rgba(28,26,38,.55);border:1px solid rgba(214,178,106,.28);backdrop-filter:blur(3px)}
 #winWordGame .card h4{background:rgba(214,178,106,.12);border-color:rgba(214,178,106,.22);color:#E8D9B0;
   font-family:var(--serif);letter-spacing:1px}
@@ -1130,7 +1134,7 @@ body.nobub #stage,body.nobub > #filt{display:none!important}
 .phdone{display:flex;gap:8px;justify-content:center;padding:6px 0;background:#F7F7F7;flex:0 0 auto}
 
 /* 五子棋：木纹 + 星位 + 最后一手 */
-#winGomoku.haswood .gmk .gbd{background:url(assets/gomoku-wood.png) center/cover no-repeat,#D9B278}
+#winGomoku.haswood .gmk .gbd{background:url(assets/gomoku-wood.jpg) center/cover no-repeat,#D9B278}
 .gmk .gbd span.star::after{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
   width:4px;height:4px;border-radius:50%;background:#6B5230}
 .gmk .gbd span[data-s]::before{box-shadow:0 2px 4px rgba(0,0,0,.5),inset 0 -2px 3px rgba(0,0,0,.25)}
@@ -1139,7 +1143,7 @@ body.nobub #stage,body.nobub > #filt{display:none!important}
 
 /* 躲猫猫：纸雕办公室 + 磨砂工位卡 */
 #winHide.hasoffice .dwb{background:linear-gradient(rgba(20,24,34,.35),rgba(16,20,30,.55)),
-  url(assets/hide-office.png) center/cover no-repeat #2A2E38}
+  url(assets/hide-office.jpg) center/cover no-repeat #2A2E38}
 #winHide.hasoffice .gst{color:#EDE6D6;text-shadow:0 1px 3px rgba(0,0,0,.6)}
 #winHide.hasoffice .hgd>div{background:rgba(255,255,255,.82);backdrop-filter:blur(3px);
   border-color:rgba(255,255,255,.5);box-shadow:0 2px 8px rgba(4,10,20,.3)}
@@ -1150,6 +1154,15 @@ body.nobub #stage,body.nobub > #filt{display:none!important}
   background:repeating-linear-gradient(90deg,#B9C3CE 0 8px,#CBD4DD 8px 16px)}
 .hnk .hgd>div.found{animation:hkfound 1s ease;outline:2px solid var(--glow);outline-offset:-2px}
 @keyframes hkfound{0%,60%{box-shadow:0 0 18px rgba(245,197,107,.9)}100%{box-shadow:0 2px 8px rgba(4,10,20,.3)}}
+
+/* 点子集市 / 皮肤商城：行卡片化 + 缩略图 */
+.ghrow{display:flex;align-items:center;gap:9px;padding:8px;margin:5px 0;background:#FAFBFC;
+  border:1px solid #E8EBEF;border-radius:6px}
+.ghrow:hover{background:#F2F7FC;border-color:#C9DCEF}
+.ghic{flex:0 0 auto;width:38px;height:38px;background-position:center;background-size:contain;
+  background-repeat:no-repeat;filter:drop-shadow(0 1px 3px rgba(4,10,20,.2))}
+.skprev{flex:0 0 auto;width:52px;height:36px;border-radius:4px;border:1px solid rgba(0,0,0,.12);
+  background:url(assets/cover-fish2.webp) center/cover no-repeat,#1B3A57;box-shadow:inset 0 0 6px rgba(0,0,0,.25)}
 .hnk{flex:1;display:flex;flex-direction:column;padding:10px;min-height:0}
 .hnk .hgd{flex:1;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(3,1fr);gap:8px}
 .hnk .hgd>div{background:#FFF;border:1px solid #D8DCE2;border-radius:5px;cursor:pointer;
@@ -1326,7 +1339,7 @@ body:not(.os) #deskNote{display:none}
 #winChat #v-chat{overflow:auto;background:#F5F6F7;padding:12px 14px}
 #winChat #imBar{position:static;display:flex;height:auto;border-top:1px solid #E5E6E8}
 #winBI .dwb{display:grid;grid-template-columns:140px 1fr;overflow:hidden;
-  background:#0F1B2D url(assets/bi-bg.png) center/cover no-repeat}
+  background:#0F1B2D url(assets/bi-bg.jpg) center/cover no-repeat}
 #winBI #biNav{position:static;display:flex;width:auto;overflow:auto;background:rgba(10,18,31,.62);
   border-right:1px solid rgba(214,178,106,.16);backdrop-filter:blur(4px)}
 #winBI #biNav .gp{color:rgba(214,178,106,.62);letter-spacing:2px;font-family:var(--serif)}
@@ -1670,11 +1683,11 @@ body:not(.os) #deskNote{display:none}
 .dlog .dli b{color:rgba(245,197,107,.72);font-weight:400;margin-right:5px}
 
 /* ---- AI 梦蝶局：自定义场景开局（B2 定帧：四只蝶翼人围牌桌） ---- */
-/* 牌桌舞台：AI 生成的 B2 同源空桌图打底（assets/dream-table.png），
+/* 牌桌舞台：AI 生成的 B2 同源空桌图打底（assets/dream-table.jpg），
    下面留一套纯 CSS 漩涡+光池兜底 —— 单机版图挂了也不塌 */
 #dreamGame{position:relative;border-radius:6px;padding:44px 14px 14px;overflow:hidden;
   background:
-    url(assets/dream-table.png) center 38%/cover no-repeat,
+    url(assets/dream-table.jpg) center 38%/cover no-repeat,
     radial-gradient(ellipse 64% 50% at 50% 34%,rgba(245,197,107,.22) 0%,rgba(245,197,107,.07) 40%,transparent 64%),
     repeating-radial-gradient(ellipse 130% 100% at 50% 42%,rgba(120,168,208,.10) 0 1.5px,transparent 1.5px 34px),
     repeating-radial-gradient(ellipse 120% 92% at 50% 42%,#16334F 0 30px,#0F2338 30px 62px,#1B4059 62px 64px),
@@ -3708,5 +3721,8 @@ opsRender();
 </script>
 <script src="shells.js"></script>
 <script src="os.js"></script>
+<script src="games/gomoku.js" defer></script>
+<script src="games/hide.js" defer></script>
+<script src="games/word.js" defer></script>
 </body>
 </html>
