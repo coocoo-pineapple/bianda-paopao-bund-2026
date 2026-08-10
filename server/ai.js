@@ -6,9 +6,9 @@
 'use strict';
 
 const KEY = process.env.AI_API_KEY || '';
-const STYLE = (process.env.AI_STYLE || 'anthropic').toLowerCase();
-const BASE = (process.env.AI_BASE_URL || 'https://api.anthropic.com').replace(/\/$/, '');
-const MODEL = process.env.AI_MODEL || 'claude-sonnet-5';
+const STYLE = (process.env.AI_STYLE || 'openai').toLowerCase();
+const BASE = (process.env.AI_BASE_URL || 'https://dashscope.aliyuncs.com/compatible-mode').replace(/\/$/, '');
+const MODEL = process.env.AI_MODEL || 'qwen3.8-max';
 const DAILY = +(process.env.AI_DAILY_LIMIT || 300);
 const HOURLY = +(process.env.AI_PER_HOUR || 20);
 
@@ -28,7 +28,23 @@ function gate(ip) {
   return null;
 }
 
-async function ask(system, user) {
+function tokenCount(value) {
+  return Number.isFinite(value) ? value : null;
+}
+
+function normalizeUsage(raw, style) {
+  const inputTokens = tokenCount(style === 'openai'
+    ? raw.prompt_tokens ?? raw.input_tokens
+    : raw.input_tokens ?? raw.prompt_tokens);
+  const outputTokens = tokenCount(style === 'openai'
+    ? raw.completion_tokens ?? raw.output_tokens
+    : raw.output_tokens ?? raw.completion_tokens);
+  const totalTokens = tokenCount(raw.total_tokens) ??
+    (inputTokens !== null && outputTokens !== null ? inputTokens + outputTokens : null);
+  return { inputTokens, outputTokens, totalTokens };
+}
+
+async function askWithUsage(system, user) {
   const ac = AbortSignal.timeout(15000);
   if (STYLE === 'openai') {
     const res = await fetch(BASE + '/v1/chat/completions', {
@@ -42,7 +58,10 @@ async function ask(system, user) {
     });
     if (!res.ok) throw new Error('upstream ' + res.status);
     const j = await res.json();
-    return ((j.choices || [])[0] || {}).message?.content || '';
+    return {
+      text: ((j.choices || [])[0] || {}).message?.content || '',
+      usage: normalizeUsage(j.usage || {}, 'openai')
+    };
   }
   // anthropic 风格
   const res = await fetch(BASE + '/v1/messages', {
@@ -56,7 +75,21 @@ async function ask(system, user) {
   });
   if (!res.ok) throw new Error('upstream ' + res.status);
   const j = await res.json();
-  return (j.content || []).map(c => c.text || '').join('');
+  return {
+    text: (j.content || []).map(c => c.text || '').join(''),
+    usage: normalizeUsage(j.usage || {}, 'anthropic')
+  };
 }
 
-module.exports = { hasKey: () => !!KEY, gate, ask, MODEL };
+async function ask(system, user) {
+  return (await askWithUsage(system, user)).text;
+}
+
+module.exports = {
+  hasKey: () => !!KEY,
+  isQwen: () => /^qwen/i.test(MODEL),
+  gate,
+  ask,
+  askWithUsage,
+  MODEL
+};
