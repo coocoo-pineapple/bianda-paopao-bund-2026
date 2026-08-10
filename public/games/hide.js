@@ -47,6 +47,7 @@
     '#winHide .hcf{position:absolute;left:50%;top:50%;width:6px;height:6px;border-radius:1px;pointer-events:none;background:var(--c);animation:hkcf .7s ease-out forwards}' +
     '@keyframes hkcf{to{transform:translate(var(--dx),var(--dy)) rotate(540deg);opacity:0}}' +
     '#winHide .hd-ft{display:flex;justify-content:space-between;align-items:center;margin-top:8px}';
+  b.innerHTML = '';   // 清掉 os.js 里旧版占位游戏，接管整个窗体
   b.appendChild(css);
 
   /* ---------- 骨架 ---------- */

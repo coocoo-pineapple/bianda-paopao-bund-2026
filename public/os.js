@@ -67,7 +67,7 @@ bWord.parentNode.querySelector('.dwh').insertAdjacentHTML('afterend',
   '<button id="rptGo">生成今日述职</button><span id="rptState"></span></div>');
 // 空白文档：光标一闪一闪，领导的批注已经先到了 —— 压力具象化
 bWord.innerHTML = '<div class="wwrap"><div class="wpage" data-pg="- 1 -">' +
-  '<div id="rptBody"><p class="wblank">（空白文档）今天的活儿还没写。点上面「生成今日述职」，AI 替你把摸的鱼包装成干的活。</p></div>' +
+  '<div id="rptBody"><p class="wblank">（空白文档）今天的活儿还没写。点上面「生成今日述职」，把你今天对过的表、接过的单、翻过的资料，写成能交差的段落。</p></div>' +
   '<span id="wcaret"></span></div>' +
   '<div class="wside"><div class="cmt"><div class="who"><b>王慧</b> · 8月6日 14:22</div>日报呢？下班前要。</div>' +
   '<div class="cmt"><div class="who"><b>王总</b> · 8月6日 17:05</div>写实一点。上次那版全是形容词。</div><div id="cmtLive"></div></div></div>';
@@ -254,6 +254,8 @@ document.addEventListener('mousedown', e => {
   if (e.target.closest('[data-miniclose]')) {
     win.classList.remove('on', 'min', 'tvmini');
     if (win.dataset.rectMini) { win.setAttribute('style', win.dataset.rectMini); delete win.dataset.rectMini; }
+    delete win.dataset.dock;
+    if (typeof seaBusy === 'function') seaBusy(false);
     if (typeof stopFilm === 'function') stopFilm();
     const fm = document.querySelector('#tvScr iframe'); if (fm) fm.removeAttribute('src');
     const vm = document.querySelector('#tvScr video'); if (vm) vm.pause();
@@ -261,6 +263,7 @@ document.addEventListener('mousedown', e => {
   }
   if (e.target.closest('[data-close]')) {
     win.classList.remove('on', 'min');
+    if (win.id === 'tvWin') { win.classList.remove('tvmini'); delete win.dataset.dock; if (typeof seaBusy === 'function') seaBusy(false); }
     if (win.id === 'tvWin' && typeof stopFilm === 'function') { stopFilm(); const f = document.querySelector('#tvScr iframe'); if (f) f.removeAttribute('src'); const vd = document.querySelector('#tvScr video'); if (vd) vd.pause(); }
     if (win.id === 'winPPT' && typeof dreamStop === 'function') dreamStop();
     markBar(); return;
@@ -421,6 +424,25 @@ document.addEventListener('click', e => {
   document.addEventListener('click', e => { if (!e.target.closest('#deskFilm')) el.classList.remove('sel'); });
 })();
 
+/* ---------- 新游戏注册口：一次调用同时进 OS_GO + 趣味游戏文件夹 + 点子集市 + 建窗 ----------
+   新游戏一律走 registerGame，不再手写 mkWin / OS_GO / GAME_ITEMS 三处。 */
+const FOLDERS = {};
+function refreshFolder(id) { const f = FOLDERS[id]; if (f) f.render(); }
+function registerGame(def) {
+  const b = mkWin(def.id, def.app || 'plain', def.title, def.style);
+  OS_GO[def.go] = [def.id];
+  const f = FOLDERS[def.folder || 'winFolder'];
+  if (def.tile && f && !f.items.some(x => x[1] === def.tile[1])) {
+    f.items.push([def.tile[0], def.tile[1], def.tile[2], def.tile[3], () => goFeature(def.go), def.tile[4]]);
+    f.render();
+  }
+  if (def.hall && typeof GAMES !== 'undefined' && !GAMES.some(g => g.nm === def.hall.nm)) {
+    GAMES.push({ nm: def.hall.nm, by: def.hall.by, tip: def.hall.tip || 0, go: def.go, ic: def.hall.ic });
+    if (typeof rebuildGameHall === 'function') rebuildGameHall();
+  }
+  return b;
+}
+
 /* ---------- 桌面图标：三个文件夹 + 两份假文档 + 回收站 ----------
    桌面长成一台正常办公电脑：功能全收进文件夹（资源管理器窗口），
    趣味游戏=玩 / 技能集市=换钱 / 行业资料=干货，散落的只有述职报告和工资条。 */
@@ -436,31 +458,38 @@ document.addEventListener('click', e => {
     '</div>');
 
   // 文件夹 = 资源管理器窗口，同一套壳，只换内容；条目第 6 位是生成图标，探测到就换装
+  // items 按引用存进 FOLDERS，registerGame 往里 push 之后调 refreshFolder 就能重画
   function mkFolder(id, title, items, style) {
     const b = mkWin(id, 'plain', title, style);
     b.parentNode.querySelector('.dwh').insertAdjacentHTML('afterend',
-      '<div class="fbar2"><b>←　→</b><span>本机 › 桌面 › <b style="color:var(--ink)">' + title + '</b></span><b style="margin-left:auto">' + items.length + ' 个项目</b></div>');
-    b.innerHTML = '<div class="fgrid">' + items.map(([g, nm, sub, col], i) =>
-      `<div class="fgi" data-fg="${i}"><i style="background-color:${col}">${g}</i><em>${nm}</em><div class="sub">${sub}</div></div>`).join('') + '</div>';
+      '<div class="fbar2"><b>←　→</b><span>本机 › 桌面 › <b style="color:var(--ink)">' + title + '</b></span><b class="fcnt" style="margin-left:auto"></b></div>');
+    const cnt = b.parentNode.querySelector('.fcnt');
+    function render() {
+      cnt.textContent = items.length + ' 个项目';
+      b.innerHTML = '<div class="fgrid">' + items.map(([g, nm, sub, col], i) =>
+        `<div class="fgi" data-fg="${i}"><i style="background-color:${col}">${g}</i><em>${nm}</em><div class="sub">${sub}</div></div>`).join('') + '</div>';
+      items.forEach(([, , , , , img], i) => {
+        if (!img) return;
+        const probe = new Image();
+        probe.onload = () => {
+          const tile = b.querySelector(`[data-fg="${i}"] i`);
+          if (tile) { tile.classList.add('pic'); tile.style.backgroundImage = `url(assets/${img})`; }
+        };
+        probe.src = 'assets/' + img;
+      });
+    }
+    // 只绑一次：items 按引用读，重画不会重绑
     b.addEventListener('click', e => {
       const t = e.target.closest('[data-fg]');
       if (t) items[+t.dataset.fg][4]();
     });
-    items.forEach(([, , , , , img], i) => {
-      if (!img) return;
-      const probe = new Image();
-      probe.onload = () => {
-        const tile = b.querySelector(`[data-fg="${i}"] i`);
-        if (tile) { tile.classList.add('pic'); tile.style.backgroundImage = `url(assets/${img})`; }
-      };
-      probe.src = 'assets/' + img;
-    });
+    render();
+    FOLDERS[id] = { b, items, render };
     return b;
   }
 
   const GAME_ITEMS = [
     ['拼', '拼豆', '格子拼鱼', '#217346', () => goFeature('draw'), 'icons/it-draw.png'],
-    ['梦', '梦蝶局', '猜假猎头', '#C43E1C', () => goFeature('review'), 'icons/it-dream.png'],
     ['词', '爽文背单词', '装逼值 +1', '#7A5AA8', () => goFeature('wordgame'), 'icons/it-word.png'],
     ['机', '捡手机文学', '别人的人生', '#2A2A30', () => goFeature('phone'), 'icons/it-phone.png'],
     ['棋', '职场五子棋', '玩家自制 · 能玩', '#3E8F82', () => goFeature('gomoku'), 'icons/it-gomoku.png'],
@@ -662,6 +691,45 @@ $('#bubCard').addEventListener('click', e => {
 const filtEl = $('#filt');
 if (filtEl) document.body.appendChild(filtEl);
 
+/* ---------- AI 调用拦截层：所有 /api/ask 走这一个口 ----------
+   不在每个调用点埋点。掐表、记账、原样返回，调用方无感。
+   永不 throw —— 网络挂了也转成标准降级对象，调用方只判 j.ok。
+   服务端补上真实耗时与用量后（ms / usage），只改这一个函数。 */
+const AILOG = [];
+const AILOG_MAX = 60;
+
+function aiLogPush(rec) {
+  AILOG.unshift(rec);
+  if (AILOG.length > AILOG_MAX) AILOG.pop();
+  if (typeof aiLogRender === 'function') aiLogRender();
+}
+
+async function askAI(src, system, q) {
+  const t0 = performance.now();
+  let j;
+  try {
+    const r = await fetch('/api/ask', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ system, q })
+    });
+    j = await r.json();
+  } catch (e) {
+    j = { ok: false, mode: 'script', why: '本地演示，服务未启动' };
+  }
+  const d = new Date();
+  aiLogPush({
+    src,
+    at: [d.getHours(), d.getMinutes(), d.getSeconds()].map(n => String(n).padStart(2, '0')).join(':'),
+    mode: j.ok ? 'model' : 'script',
+    model: j.model || '',
+    net: Math.round(performance.now() - t0),   // 前端掐表：含网络往返，任何情况下都有
+    ms: j.ms || null,                          // 服务端真实耗时，接上就显示
+    usage: j.usage || null,                    // token 用量，接上就显示
+    why: j.ok ? '' : (j.why || '未接模型')
+  });
+  return j;
+}
+
 /* ---------- 统一问答引擎：真模型优先，四段式脚本兜底 ----------
    工坊里填的人格 DNA / 框架 / 动作 / 禁区，两条路都真的在用：
    有 key 时拼进 system prompt，没 key 时驱动脚本模板。改一句禁区，回答立刻变。 */
@@ -691,18 +759,10 @@ async function askBot(q, who, cb) {
     '，在一个跨公司匿名职场社区里答题。人格：' + p.dna + '。分析框架：' + p.fw +
     '。固定动作：' + p.flow + '。禁区：' + p.ban +
     '。用中文回答，120 字以内，口吻克制、具体、不鸡汤，禁用 emoji。';
-  try {
-    const r = await fetch('/api/ask', {
-      method: 'POST', headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ system: sys, q })
-    });
-    const j = await r.json();
-    if (j.ok && j.text) return cb(esc(j.text).replace(/\n/g, '<br>') +
-      '<br><span class="muted">真实模型生成 · ' + esc(j.model || '') + '</span>', 'model');
-    return cb(botScript(q, who) + '<br><span class="muted">脚本模拟（' + esc(j.why || '未接模型') + '）</span>', 'script');
-  } catch (e) {
-    return cb(botScript(q, who) + '<br><span class="muted">脚本模拟 · 未调用模型</span>', 'script');
-  }
+  const j = await askAI('群聊分身', sys, q);
+  if (j.ok && j.text) return cb(esc(j.text).replace(/\n/g, '<br>') +
+    '<br><span class="muted">真实模型生成 · ' + esc(j.model || '') + '</span>', 'model');
+  return cb(botScript(q, who) + '<br><span class="muted">脚本模拟（' + esc(j.why || '未接模型') + '）</span>', 'script');
 }
 
 /* ---------- 群聊发送 ---------- */
@@ -1224,12 +1284,22 @@ document.addEventListener('click', e => {
   if (!bar) return;
   bar.insertAdjacentHTML('beforeend', '<button id="tvMiniBtn">迷你</button>');
   $('#tvWin').insertAdjacentHTML('afterbegin', '<div class="tvminiclose" data-miniclose title="关闭"></div><div class="tvresize" title="拉伸"></div>');
+  // 银幕被视频占了就让位：热区不再拦鼠标、不再冒「▶ 放映」
+  // —— 它和迷你窗同层，不让位的话视频虽然在放，鼠标却全被热区吃掉，拖不动也拉不动
+  window.seaBusy = function (on) {
+    const scr = $('#seaScreen');
+    if (!scr) return;
+    scr.style.pointerEvents = on ? 'none' : '';
+    const sp = scr.querySelector('span');
+    if (sp) sp.style.display = on ? 'none' : '';
+  };
   // 右下角拉伸：画面（inset:0）自动跟窗口走
   $('#tvWin .tvresize').addEventListener('mousedown', e => {
     e.stopPropagation(); e.preventDefault();
     const w = $('#tvWin'), r = w.getBoundingClientRect();
     w.style.left = r.left + 'px'; w.style.top = r.top + 'px';
     w.style.right = 'auto'; w.style.bottom = 'auto';
+    delete w.dataset.dock;   // 手动拉过就不再跟着银幕走，否则一改浏览器尺寸就被弹回去
     const move = ev => {
       w.style.width = Math.max(160, ev.clientX - r.left + 6) + 'px';
       w.style.height = Math.max(100, ev.clientY - r.top + 6) + 'px';
@@ -1248,15 +1318,19 @@ document.addEventListener('click', e => {
       if (scr && scr.style.display !== 'none' && scr.offsetWidth > 60) {
         const r = scr.getBoundingClientRect();
         w.dataset.dock = 'screen';
-        w.setAttribute('style', 'left:' + r.left + 'px;top:' + r.top + 'px;width:' + r.width + 'px;height:' + r.height + 'px;right:auto;bottom:auto;z-index:2');
+        // z-index 要压过银幕热区（它也是 2），否则拖不动也拉不动
+        w.setAttribute('style', 'left:' + r.left + 'px;top:' + r.top + 'px;width:' + r.width + 'px;height:' + r.height + 'px;right:auto;bottom:auto;z-index:3');
+        seaBusy(true);
         if (typeof osToast === 'function') osToast('视频住进了海底影院 · 双击退出，拖走随意');
       } else {
         delete w.dataset.dock;
+        seaBusy(false);
         w.setAttribute('style', 'right:300px;bottom:54px;left:auto;top:auto;width:260px;height:170px;z-index:' + (++osZ));
       }
     } else {
       w.classList.remove('tvmini');
       delete w.dataset.dock;
+      seaBusy(false);
       if (w.dataset.rectMini) { w.setAttribute('style', w.dataset.rectMini); delete w.dataset.rectMini; }
       w.style.zIndex = ++osZ;
     }
@@ -1338,44 +1412,50 @@ buildMe();
 
 /* ---------- 产品介绍 PPT（评委版）：纸雕分镜 + 真实底稿 ---------- */
 const PITCH = [
-  { img: 'pitch/D9.jpg', tag: '变大泡泡 · 产品叙', t: '变大泡泡', cover: 1,
-    b: ['一个做给打工人的地方，藏在一台假 Windows 里', '子非鱼，安知鱼之乐'],
-    n: '开场白：在假 Windows 里，用假 PowerPoint，讲一个真产品。' },
-  { img: 'pitch/E1.jpg', tag: '壹 · 井', t: '我们都上过这样的班',
-    b: ['会的东西比岗位说明书多，被看见的只有周报那三行', '不是不想发光，是考核表上没有那一格', '做这个产品不是教人偷懒——是想让被浪费的那部分，有地方去'],
+  { img: 'pitch/D9.jpg', tag: '变大泡泡 · 产品叙', t: '一颗泡泡的一生', cover: 1,
+    b: ['一句没人听的真话，怎么变成一笔真实收入', '真的场景假装上班，假的场景真的赚钱'],
+    n: '开场：在假 Windows 里，用假 PowerPoint，讲一个真产品。接下来十五页只讲一件事——一颗泡泡的一生。' },
+  { img: 'pitch/E1.jpg', tag: '壹 · 井', t: '一句真话，没有落点',
+    b: ['谁的年终被砍、哪个项目黄了、这岗到底值多少钱', '实名说，怕；不说，这句话就没了', '不是没人想说，是没有一个说了还能安全落地的地方'],
     n: '庄子笑井蛙不可语海。我们不笑，我们就是那只蛙——所以想给井里的人修一条到海的路。' },
-  { img: 'pitch/P1-desktop.jpg', tag: '贰 · 壳', t: '为什么要做成假 Windows？',
-    b: ['因为白天说真话，需要一层壳', 'Word、Excel、钉钉，像素级仿真，经得起老板从身后走过', '这层看起来最没用的伪装，是所有功能的地基'],
-    n: '庄子讲无用之用。这台假电脑就是无用之用——诸位现在看到的，就是它本身。' },
-  { img: 'pitch/P2-bosskey.jpg', tag: '叁 · 键', t: '老板键，不是心虚，是边界',
-    b: ['Ctrl + 空格：一秒回到办公，上班演好上班', '一键述职：井下的收获，也能写进汇报里', '先有安全感，人才敢说真话'],
-    n: '庖丁的刀用了十九年，刃如新发——因为他只走缝隙。老板键就是那道缝隙。' },
-  { img: 'pitch/E2.jpg', tag: '肆 · 水面', t: '先让人玩起来，再谈别的',
-    b: ['上层是游戏、放映、拼豆——进来先图个乐', '下层是情报、技能、薪资、分身——留下是因为有用', '围观 → 参与 → 签名 → 交易，不催，等人自己往深处走'],
-    n: '鲦鱼出游从容，是鱼之乐也。先有乐，才有一切。' },
-  { img: 'pitch/B2.jpg', tag: '伍 · 梦蝶', t: '把你正在经历的困境，做成一局游戏',
-    b: ['四个 AI 演一局身份局，人心的破绽逐轮显形', '你在局外看得清清楚楚——因为局里演的就是你的处境', '在梦里栽跟头，醒来就免疫'],
-    n: '不知周之梦为胡蝶与，胡蝶之梦为周与。梦蝶局的名字，就从这里来。' },
-  { img: 'pitch/B3-txt.jpg', tag: '陆 · 真言', t: '匿名让人敢说，签名让话可信',
-    b: ['情报分三级：真、存疑、假——条条有人担保', '说错了掉信誉：化名保护人，签名保护真', '办公室里没人负责的话，在这里字字有主'],
-    n: '《渔父》里说：真者，精诚之至也；不精不诚，不能动人。这里的规矩只有一条——话要真。' },
-  { img: 'pitch/P4-skill.jpg', tag: '柒 · 集市', t: '你那些「没用」的本事，在这里有用',
-    b: ['卖技能、卖工具、发悬赏', '考核表量不到的能力，市场量得到'],
-    n: '人皆知有用之用，而莫知无用之用。集市干的就是这件事：给无用之用标个价。' },
-  { img: 'pitch/C1-txt.jpg', tag: '捌 · 对表', t: '谈薪那一刻的孤独，我们都经历过',
-    b: ['同岗薪资，三个同行签名互保，对出真实行情', '信息差是职场最重的一道税——这里退税'],
-    n: '相濡以沫，不如相忘于江湖。可要先相濡以沫过，才有力气游向江湖。' },
-  { img: 'pitch/A3.jpg', tag: '玖 · 分身', t: '你睡着了，分身替你醒着',
-    b: ['人格 DNA、框架库、禁区——三样东西，教出一个像你的分身', '它替你接单回答，收益归你'],
-    n: '分身是蝶还是周，不必辩。单子是真的，就好。' },
-  { img: 'pitch/A4-txt.jpg', tag: '拾 · 见证', t: '量尺已经造好',
-    b: ['转化漏斗看板：围观 → 参与 → 签名 → 交易，实时可查', '演示环境以模拟数据运行，未接入真实支付——这句也是真话', '先把量尺做好，等真实用户来刻度'],
-    n: '真诚也包括不夸大：数据是演示的，漏斗是真的。' },
-  { img: 'pitch/P3-truefake.jpg', tag: '拾壹 · 倒影', t: '究竟哪一边，是真的？',
-    b: ['办公室是真的，人人在演', '这里是假的——本事换到真钱，真话得到签名'],
-    n: '真地方演假戏，假地方来真的。全篇题眼，请放慢。' },
-  { img: 'pitch/E3.jpg', tag: '终 · 梦醒', t: '梦醒了，手里的东西还在',
-    b: ['子非鱼，安知鱼之乐', '请按 Ctrl + 空格，亲手试一次老板键'],
+  { img: 'pitch/A4-txt.jpg', tag: '贰 · 唯一机制', t: '一颗泡泡的一生',
+    b: ['吹出来 → 浮起来 → 被验证 → 变成钱 → 沉底可捞', '图上四层是它的量化：1284 围观 → 312 参与 → 96 签名 → 14 成交', '热度是浮力，认可是氧气；签名是中间那座桥'],
+    n: '整个产品就是这一个过程的展开，五段一段都不多。被看见靠浮沉，变成钱靠集市，签名是中间那座桥——没有签名，两头之间就没有路。' },
+  { img: 'pitch/D0.jpg', tag: '叁 · 吹出来', t: '匿名说一句真话，只挂今日马甲',
+    b: ['身份每天一换：说过的话留下，人不留下', '吐槽、情报、技能、游戏点子——每条内容都是一颗泡泡', '门槛低到一句话，先让真话说得出口'],
+    n: '第一段。不先解决「敢不敢说」，后面四段全都不成立。' },
+  { img: 'pitch/E2.jpg', tag: '肆 · 浮起来', t: '别人吹一口气，它就变大',
+    b: ['觉得有价值就吹一口气，浮得更久；没人理就沉底', '一颗泡泡的大小，就是一次微型的集体投票', '产品名说的就是这件事：让考核表看不见的价值被吹大'],
+    n: '鲦鱼出游从容，是鱼之乐也。热度是浮力，认可是氧气——泡泡广场上飘的就是最新鲜的行业风声。' },
+  { img: 'pitch/B3-txt.jpg', tag: '伍 · 被验证 · 人', t: '真话要签名，吹牛绕道',
+    b: ['情报分「真 / 存疑 / 假」三级，发言签名担保，说错掉信誉', '工资别猜：同岗薪资由多位同行签名互保，对出真实行情', '人气 32 · 机器人预热 12（不计入）——机器人的热度不进人气池'],
+    n: '《渔父》：真者，精诚之至也。匿名让人敢说，签名让话可信。机器人可以暖场，但暖场不算数——这行小字是认真的。' },
+  { img: 'pitch/B2.jpg', tag: '陆 · 被验证 · AI', t: '梦蝶局：AI 的信誉考场',
+    b: ['局里每个角色只知道自己的身份，看不见别人的底牌', '一局三轮就是十二次独立调用，「AI 调用记录」里能一条条数出来', '人靠签名互保建立信誉，AI 靠梦蝶局建立信誉'],
+    n: '不知周之梦为胡蝶与。同一套规则，两种居民——这是最想让人记住的一句。玩家上传的是人格不是剧本，身份每局随机，战绩就是它的简历。' },
+  { img: 'pitch/P3-truefake.jpg', tag: '柒 · 飞行模拟器', t: '职场的坑，在这儿先摔一遍',
+    b: ['PUA 话术、假内推、画饼、背锅——不是知识题，是识别题', '坑早晚要踩，区别只在于是在会议室里踩，还是在这儿', '每局生成案例卷宗进资讯库——卷宗本身就是一颗泡泡'],
+    n: '卷宗记场景、身份、谁在撒谎、关键破绽、一句教训，能被吹大、能被后来的人翻到。一个人踩过的坑，变成所有人的地图。' },
+  { img: 'pitch/P4-skill.jpg', tag: '捌 · 变成钱', t: '你随手会的那点事，真有人买',
+    b: ['卖技能、发悬赏、接咨询：¥99 机器人先答，¥599 真人深度复核', '接不住的转真人，别自己白答；分身在工坊替你接单', '月底一张工资条结算——明写「演示数据 · 未接入真实支付」'],
+    n: '你睡觉的时候，你的分身在梦蝶局里上班。造分身 → 对局攒信誉 → 接单赚钱 → 钱进工资条，闭环到这里才真正闭上。' },
+  { img: 'pitch/E2.jpg', tag: '玖 · 沉底可捞', t: '沉底不是删除',
+    b: ['凉掉的泡泡转进行业资讯库，谁想翻随时捞得回来', '水面留给新鲜的，水下攒的是家底', '一个人踩过的坑，变成所有人的地图'],
+    n: '同一片水，浮起来和沉下去是同一条规则的两头。内容不消失，只是换个深度。' },
+  { img: 'pitch/A3.jpg', tag: '拾 · 一套规则', t: '四种载体，同一套规则',
+    b: ['泡泡内容 · AI 人格 · 小游戏 · 技能服务，走的是同一条路', '职场五子棋、工位躲猫猫都来自玩家，游戏创意本身也能标价成交', '九成归作者，一成留给社区'],
+    n: '没有图标的自制游戏自动退回首字色块——规则一视同仁，不给谁开小灶。' },
+  { img: 'pitch/P1-desktop.jpg', tag: '拾壹 · 壳', t: '一层假 Windows，一片真水域',
+    b: ['Word、Excel、钉钉全是伪装，老板走过看到的是述职报告', '这层壳不是欺骗工具，是场景准入证', '脉脉不能在工位上打开，我们可以'],
+    n: '人皆知有用之用，而莫知无用之用。这层看起来最没用的伪装，是所有功能的地基。' },
+  { img: 'pitch/P2-bosskey.jpg', tag: '拾贰 · 老板键', t: 'Ctrl + 空格',
+    b: ['按一下，整台机器一秒变回普通 Windows', '反向阀门是一键述职：对过的表、接过的单、翻过的资料，写成能交差的段落', '因为这一切，本来就发生在上班时间'],
+    n: '庖丁的刀用了十九年，刃如新发——因为他只走缝隙。老板键就是那道缝隙。放在收尾，不放在开场。' },
+  { img: 'pitch/C1-txt.jpg', tag: '拾叁 · 诚实纪律', t: '量尺已经造好',
+    b: ['模型不可用、超时或超额，界面明确标注降级——不拿脚本冒充调用', '任务栏「AI 调用记录」摊开每次调用：来源、模型、耗时、走的哪条路', '拿掉 AI：水面空、情报没人核、咨询接不住、梦蝶局不存在'],
+    n: '不是「用 AI 会更好」，是「没有 AI 就不成立」。降级当面触发不是事故，是我们选择在你面前说实话。' },
+  { img: 'pitch/E3.jpg', tag: '终 · 梦醒', t: '子非鱼，安知鱼之乐',
+    b: ['他们做的是 AI 工具，一个人用；我们做的是有 AI 居民的社区', '现在就试：Ctrl + 空格，按一下老板键'],
     n: '到底哪一边才是梦？停一拍，不必作答。' }
 ];
 const bPw = mkWin('winPitch', 'ppt', '变大泡泡·产品介绍.pptx - PowerPoint', 'left:200px;top:50px;width:960px;height:620px');
@@ -1576,6 +1656,7 @@ $('#tvScr').addEventListener('click', e => { if (!e.target.closest('video')) tvP
     '<div class="row" style="border-top:0"><span>关掉泡泡</span><i class="sw" data-k="nobub"></i></div>' +
     '<div class="row"><span>泡泡文字颜色</span><input type="color" id="dInk" value="#F4FAFF"></div>' +
     '<div class="row"><span>关掉桌面弹窗</span><i class="sw" data-k="notoast"></i></div>' +
+    '<div class="row"><span>关掉游戏音效</span><i class="sw" data-k="nosfx"></i></div>' +
     '<div class="row"><span>换个屏保</span><button id="dWall" class="rbtn" style="padding:2px 10px;font-size:11px">海底影院</button></div>' +
     '<div class="row"><span>迷你窗边框</span><input type="color" id="dMbd" value="#D8A94E"></div>' +
     '<div class="foot">改完还不满意？井底见——那就是产品要改了</div></div></div>');
@@ -1589,6 +1670,7 @@ $('#tvScr').addEventListener('click', e => { if (!e.target.closest('video')) tvP
   function apply() {
     document.body.classList.toggle('nobub', !!SET.nobub);
     document.body.classList.toggle('notoast', !!SET.notoast);
+    document.body.classList.toggle('nosfx', !!SET.nosfx);   // BPKit 订阅这个 class 做静音
     if (SET.ink) { document.documentElement.style.setProperty('--bubink', SET.ink); $('#dInk').value = SET.ink; }
     if (SET.mbd) { document.documentElement.style.setProperty('--minibd', SET.mbd); $('#dMbd').value = SET.mbd; }
     const w = WALLS[SET.wall || 0];
@@ -1726,8 +1808,8 @@ $('#tvScr').addEventListener('click', e => { if (!e.target.closest('video')) tvP
 
 /* ============================================================
    AI 一键述职 —— 空白 Word + 风格/细节可选
-   数据源是你今天真实的摸鱼痕迹（吹气/泡泡/分身代答/拼豆格子），
-   AI 把它们翻译成正经工作汇报；没配 key 或超额就走脚本降级，
+   数据源是你今天在社区里真实留下的痕迹（吹气/泡泡/分身代答/拼豆格子），
+   AI 把它们写成能交差的汇报；没配 key 或超额就走脚本降级，
    页脚如实标注是模型写的还是脚本装的。
    ============================================================ */
 (function rptGen() {
@@ -1862,7 +1944,7 @@ $('#tvScr').addEventListener('click', e => { if (!e.target.closest('video')) tvP
     const lv = LEVELS[$('#rptLevel').value];
     const f = todayFacts();
     btn.disabled = true;
-    $('#rptState').textContent = '正在翻你今天摸鱼的痕迹…';
+    $('#rptState').textContent = '正在翻你今天留下的痕迹…';
     osOpen('winWord');
 
     const facts = [
@@ -1874,25 +1956,17 @@ $('#tvScr').addEventListener('click', e => { if (!e.target.closest('video')) tvP
       `下午看了一场「新员工入职培训」视频（其实是产品宣传片）`
     ];
     const sys = `你是替打工人代写「当日工作日报」的枪手。风格要求：${st.sys} 篇幅要求：${lv.hint}。` +
-      `任务：把用户给的摸鱼活动翻译成一份看起来正经的工作日报，不点破、不自嘲、不加免责声明，直接输出正文，段落之间用换行分隔，不要标题。`;
+      `任务：把用户给的当日实际行为整理成一份能交差的工作日报，不点破、不自嘲、不加免责声明，直接输出正文，段落之间用换行分隔，不要标题。`;
     const q = `今天实际干的事：${facts.join('；')}。今天日期：${new Date().toLocaleDateString('zh-CN')}`;
 
     let paras = null, meta = '';
-    try {
-      $('#rptState').textContent = 'AI 组稿中…';
-      const r = await fetch('/api/ask', {
-        method: 'POST', headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ system: sys, q })
-      });
-      const j = await r.json();
-      if (j.ok && j.text) {
-        paras = j.text.split(/\n+/).map(s => s.trim()).filter(Boolean);
-        meta = `本报告由 AI 生成（模型 ${esc(j.model || '未知')}）· 风格「${st.nm}」· 细节「${lv.nm}」· 演示内容，请勿呈交真领导`;
-      } else {
-        meta = `脚本模拟生成（${esc(j.why || '模型不在岗')}）· 风格「${st.nm}」· 细节「${lv.nm}」· 演示内容，请勿呈交真领导`;
-      }
-    } catch (e) {
-      meta = `脚本模拟生成（本地演示，服务未启动）· 风格「${st.nm}」· 细节「${lv.nm}」· 演示内容，请勿呈交真领导`;
+    $('#rptState').textContent = 'AI 组稿中…';
+    const j = await askAI('一键述职', sys, q);
+    if (j.ok && j.text) {
+      paras = j.text.split(/\n+/).map(s => s.trim()).filter(Boolean);
+      meta = `本报告由 AI 生成（模型 ${esc(j.model || '未知')}）· 风格「${st.nm}」· 细节「${lv.nm}」· 演示内容，请勿呈交真领导`;
+    } else {
+      meta = `脚本模拟生成（${esc(j.why || '模型不在岗')}）· 风格「${st.nm}」· 细节「${lv.nm}」· 演示内容，请勿呈交真领导`;
     }
     if (!paras) paras = asParas(scriptDraft($('#rptStyle').value, f), lv);
     typeParas(paras, meta);
@@ -1906,7 +1980,7 @@ $('#tvScr').addEventListener('click', e => { if (!e.target.closest('video')) tvP
    ============================================================ */
 const BAR_PREV = {
   report: [
-    ['述职报告_v7_真的最终版.docx', 'AI 一键述职 · 摸的鱼变干的活', 'report'],
+    ['述职报告_v7_真的最终版.docx', 'AI 一键述职 · 社区里的收获写成汇报', 'report'],
     ['摸鱼日报_第212期.docx', '干货区 · 行业资讯与技能市场', 'ref']
   ],
   draw: [
@@ -1994,10 +2068,32 @@ const BAR_PREV = {
    没看过的文件金光呼吸，进场后 toast 依次指路，点过即安静。 */
 (function onboard() {
   // 1) 产品介绍立在放映图标旁边：两份新人文件并排在银幕上方
+  //    梦蝶局是评委必看模块，从「趣味游戏」文件夹里挪到桌面 C 位，名字继续伪装成一份复盘 PPT
   const di = $('#deskIcons');
   document.body.insertAdjacentHTML('beforeend',
+    '<div id="deskDream" class="dski"><span class="ic page" data-x="P" style="--tag:#C43E1C"></span><em>Q3复盘汇报.pptx</em></div>' +
     '<div id="deskPitch" class="dski"><span class="ic page" data-x="P" style="--tag:#C43E1C"></span><em>新员工手册_看完就懂.pptx</em></div>');
   $('#deskPitch').addEventListener('click', () => { goFeature('pitch'); seen('pitch'); });
+  // 直接落在「AI 开局」那一页：剧本局是脚本兜底版，评委第一眼要看到真调用的那个
+  $('#deskDream').addEventListener('click', () => {
+    goFeature('review'); seen('dream');
+    setTimeout(() => {
+      if (typeof dreamRender !== 'function') return;
+      window.dreamMode = 'ai';
+      dreamRender();
+    }, 260);
+  });
+  // 生成图标就位即换装，没图就继续用 CSS 画的那张纸
+  //  用的是幻灯片+蓝蝶那张：文件名伪装成 pptx，图标也得是份文件，
+  //  但角上停只蝶，跟隔壁那份新人手册一眼分得开
+  (function () {
+    const im = new Image();
+    im.onload = () => {
+      const el = document.querySelector('#deskDream .ic');
+      if (el) { el.className = 'ic pic'; el.removeAttribute('data-x'); el.style.backgroundImage = 'url(assets/icons/it-dream-doc.png)'; }
+    };
+    im.src = 'assets/icons/it-dream-doc.png';
+  })();
   // 2) 金光呼吸：没点过的两份文件一直轻轻发光
   let S = {};
   try { S = JSON.parse(localStorage.getItem('ppSeen') || '{}'); } catch (e) {}
@@ -2009,6 +2105,7 @@ const BAR_PREV = {
   function mark() {
     const f = $('#deskFilm'); if (f) f.classList.toggle('fresh', !S.film);
     const p = $('#deskPitch'); if (p) p.classList.toggle('fresh', !S.pitch);
+    const d = $('#deskDream'); if (d) d.classList.toggle('fresh', !S.dream);
     const bf = document.querySelector('#osbar .app[data-go="desk"]'); if (bf) bf.classList.toggle('fresh', !S.film);
     const bp = document.querySelector('#osbar .app[data-go="pitch"]'); if (bp) bp.classList.toggle('fresh', !S.pitch);
   }
@@ -2513,7 +2610,7 @@ const BAR_PREV = {
   });
 
   // 3) 状态栏：填了多少格，实时涨 —— 老板走过来看到的是"就绪"
-  win.parentNode.insertAdjacentHTML('beforeend',
+  win.insertAdjacentHTML('beforeend',
     '<div class="dwf" id="xlFoot">就绪　<b id="xlCnt">计数: 0</b><span style="margin-left:auto">' +
     '<i class="zoomseg">普通</i><i class="zoomseg">分页预览</i>　100% <i class="zoombar"><s></s></i></span></div>');
   function updCnt() {
@@ -2558,3 +2655,68 @@ const BAR_PREV = {
     if (h) h.firstChild.textContent = `爽文背单词 - 当前境界·${['练气','筑基','金丹','元婴','化神'][Math.min(4, (swagger / 10) | 0)]}`;
   }
 })();
+
+/* ============================================================
+   AI 调用记录面板 —— 把「真的在调模型」摊开给人看
+   每次调用都记：来源、模型、耗时、走的是模型还是脚本。
+   降级不藏着：写清原因，用橙丝带标注，不用报错红。
+   页脚一行小字容易被读成"跑的是假的"，这张表是它的反面。
+   ============================================================ */
+(function aiLogPanel() {
+  const bAI = mkWin('winAILog', 'plain', 'AI 调用记录 - 系统', 'left:300px;top:110px;width:640px;height:470px');
+  const win = bAI.parentNode;
+  win.querySelector('.dwh').insertAdjacentHTML('afterend',
+    '<div class="dwt allead">这台机器每一次找 AI 说话都记在这里 —— 成功的记，降级的也记。</div>');
+  bAI.id = 'aiLogList';
+  win.insertAdjacentHTML('beforeend', '<div class="dwf" id="aiLogFoot"></div>');
+
+  // 任务栏入口：纯 append，不动 buildBar —— 明标，评委三秒能找到
+  const bar = $('#osbar');
+  const tray = document.createElement('span');
+  tray.className = 'app trayai';
+  tray.title = 'AI 调用记录 · 每次调用都记在案';
+  tray.innerHTML = '<i>AI</i>AI 调用记录 <b id="aiLogN">0</b>';
+  bar.insertBefore(tray, bar.querySelector('.me') || bar.querySelector('.clk'));
+  tray.addEventListener('click', () => { osOpen('winAILog'); aiLogRender(); });
+
+  // 已打开的下划线：包一层 markBar，托盘没有 data-go 扫不到
+  const _markBar = markBar;
+  markBar = function () {
+    _markBar();
+    tray.classList.toggle('on', win.classList.contains('on'));
+  };
+
+  window.aiLogRender = function aiLogRender() {
+    const dg = AILOG.filter(r => r.mode === 'script').length;
+    const ok = AILOG.length - dg;
+
+    $('#aiLogN').textContent = AILOG.length;
+    tray.classList.toggle('dg', dg > 0);
+
+    $('#aiLogList').innerHTML = AILOG.length ? AILOG.map(r => {
+      const time = r.mode === 'script'
+        ? `往返 ${r.net}ms`
+        : (r.ms ? `模型 ${r.ms}ms · 往返 ${r.net}ms` : `往返 ${r.net}ms`);
+      const u = r.usage || null;
+      const tokN = u ? (u.totalTokens ?? u.total ?? null) : null;
+      const tok = tokN ? ` · ${esc(String(tokN))} tok` : '';
+      const note = r.mode === 'script'
+        ? `<div class="alw">模型不在岗（${esc(r.why)}）· 本条由脚本生成 —— 我们不拿脚本冒充调用</div>`
+        : '';
+      return `<div class="alr ${r.mode}">` +
+        `<span class="alt">${esc(r.at)}</span>` +
+        `<span class="als">${esc(r.src)}</span>` +
+        `<span class="altag">${r.mode === 'script' ? '降级' : '真调用'}</span>` +
+        `<span class="alm">${esc(r.model || '—')}</span>` +
+        `<span class="alms">${esc(time)}${tok}</span>` +
+        note + '</div>';
+    }).join('') :
+      '<div class="alempty">还没有调用记录。<br>去点一次「生成今日述职」，或者在群聊里问老庖一句。</div>';
+
+    $('#aiLogFoot').innerHTML =
+      `共 <b>${AILOG.length}</b> 次 · 真模型 <b>${ok}</b> · 脚本降级 <b>${dg}</b>` +
+      '<span style="margin-left:auto">降级不是故障，是我们选择在你面前说实话</span>';
+  };
+  aiLogRender();
+})();
+

@@ -278,7 +278,7 @@ const SLIDES = [
   { t: '博主机器人 · 框架库', n: '他遇事先掏哪把尺子。没有尺子的人，答什么都像安慰。' },
   { t: '博主机器人 · 固定动作', n: '先复述、再判断、最后给一个今天就能做的动作。少一步就变鸡汤。' },
   { t: '博主机器人 · 禁区', n: '不承诺结果、不做投资建议、不替你决定。写清楚了他才敢说话。' },
-  { t: '收菜 · 一键 Word', n: '把这一局的收获导出成述职报告的一段。摸鱼的产出也是产出。' }
+  { t: '收菜 · 一键 Word', n: '把这一局的收获导出成述职报告的一段。玩出来的东西，也是产出。' }
 ];
 
 function buildRail() {
@@ -540,36 +540,42 @@ const GAMES = [
 
 function buildGameHall() {
   const el = $('#gameHall');
-  if (!el || el.dataset.built) return;
+  if (!el) return;
   el.innerHTML = GAMES.map((g, i) => `
     <div class="ghrow">
       <span class="ghic" style="background-image:url(assets/icons/${g.ic}.png)"></span>
       <div style="flex:1;min-width:0"><b style="font-size:12.5px">${esc(g.nm)}</b>
-        <div class="muted" style="font-size:10.5px">${esc(g.by)} · 已获打赏 ¥<span data-tipn="${i}">${g.tip}</span></div></div>
+        <div class="muted" style="font-size:10.5px">${esc(g.by)} · 已获打赏 ¥<span data-tipn="${i}">${tipOf(g)}</span></div></div>
       ${g.go ? `<button class="rbtn pri" data-play="${g.go}" style="padding:4px 10px;font-size:11px">去玩</button>` : ''}
       <button class="rbtn" data-tip="${i}" style="padding:4px 8px;font-size:11px">赏 ¥1</button>
     </div>`).join('') +
     '<div class="muted" style="margin-top:6px;font-size:10.5px">小游戏、皮肤、小工具。谁的点子有人玩，谁收钱。九成归他，一成归平台——平台也要吃饭。</div>';
-  el.addEventListener('click', e => {
-    const p = e.target.closest('[data-play]');
-    if (p) return goFeature(p.dataset.play);
-    const t = e.target.closest('[data-tip]');
-    if (t) {
-      const i = +t.dataset.tip;
-      GAMES[i].tip += 1;
-      $(`[data-tipn="${i}"]`).textContent = GAMES[i].tip;
-    }
-  });
-  el.dataset.built = '1';
+  // 监听只绑一次，重画不重绑（dataset.built 以前把监听和渲染绑在一起，重画就双触发）
+  if (!el.dataset.built) {
+    el.addEventListener('click', e => {
+      const p = e.target.closest('[data-play]');
+      if (p) return goFeature(p.dataset.play);
+      const t = e.target.closest('[data-tip]');
+      if (t) {
+        const g = GAMES[+t.dataset.tip];
+        if (window.BPKit) BPKit.tip.add(g.go, 1); else g.tip += 1;
+        $(`[data-tipn="${t.dataset.tip}"]`).textContent = tipOf(g);
+      }
+    });
+    el.dataset.built = '1';
+  }
 }
+// 打赏数字唯一真源：初始值 + 本地累计。各游戏窗底栏读同一个函数，不再各写各的
+function tipOf(g) { return window.BPKit ? BPKit.tip.total(g.go, g.tip) : g.tip; }
+function rebuildGameHall() { buildGameHall(); }
 
 /* ---------- 皮肤商城：玩家做皮肤卖，试穿立即生效 ----------
    皮肤是套在水面上的滤镜，买完直接跳回广场看效果。 */
 const SKINS = [
   { nm: '默认水色', by: '官方',            price: 0, sold: '—', f: '' },
-  { nm: '深海',     by: '玩家 · 望洋兴叹', price: 6, sold: 214, f: 'hue-rotate(35deg) saturate(1.15)' },
-  { nm: '凌晨两点',     by: '玩家 · 井底之蛙', price: 6, sold: 167, f: 'hue-rotate(160deg) saturate(1.3)' },
-  { nm: '黄昏',     by: '玩家 · 守株待兔', price: 3, sold: 98,  f: 'hue-rotate(-45deg) saturate(1.1)' }
+  { nm: '深海',     by: '玩家 · 望洋兴叹', price: 6, sold: 214, f: 'hue-rotate(185deg) saturate(1.35) brightness(.82)' },
+  { nm: '凌晨两点',     by: '玩家 · 井底之蛙', price: 6, sold: 167, f: 'hue-rotate(205deg) saturate(.5) brightness(.6)' },
+  { nm: '黄昏',     by: '玩家 · 守株待兔', price: 3, sold: 98,  f: 'hue-rotate(-20deg) saturate(1.45) brightness(1.08)' }
 ];
 
 function buildSkinShop() {
@@ -762,7 +768,7 @@ function tvMsg(html) {
   });
 })();
 
-/* ---------- 一键 Word：摸鱼翻译成述职 ----------
+/* ---------- 一键 Word：社区里的收获写回述职 ----------
    闭环：开头是述职报告，结尾写回述职报告。数据全部取自真实 S 状态，
    翻译得越正经越好笑。重复点击是重新生成，不是追加。 */
 
@@ -869,7 +875,7 @@ const TOUR = [
   { t: '16:45', h: '转化的收据', v: 'ops', k: '证据',
     tx: '一千二百八十四个人围观，三百一十二个玩起来，九十六个学到东西，十四个真掏了钱。看板上这排收窄的数字，去邮箱翻结算单，一分不差。' },
   { t: '18:00', h: '下班前，一键述职', v: 'home', k: '闭环', act: () => harvestToWord(),
-    tx: '按一下。今天摸的鱼，全部换算成「跨部门信息同步 1,284 次」。字数真的涨了。你以为他在写述职报告——他真的在写述职报告。' }
+    tx: '按一下。今天攒下的对表、接单、翻资料，全部换算成「跨部门信息同步 1,284 次」。字数真的涨了。你以为他在写述职报告——他真的在写述职报告。' }
 ];
 
 let tourIx = -1;
