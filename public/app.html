@@ -1752,6 +1752,10 @@ body:not(.os) #deskNote{display:none}
 .adrow input:focus{border-color:#E0A08E}
 .adrow .anm{width:96px;flex:0 0 auto}
 .adrow .aid{flex:1}
+/* 身份栏不再是输入框：维度是机制，写死在牌面上，顺便省掉一列 */
+.adrow .adim{flex:1;min-width:0;font-size:9.5px;line-height:1.35;color:#8A6B42;align-self:center;
+  border-left:3px solid var(--dc,#8A6B42);padding-left:5px;overflow:hidden}
+.adrow .adim b{display:block;font-size:11px;color:#4A3A22;font-family:var(--serif)}
 /* 组局页要塞进 16:9 幻灯片的可视区（约 417px），行距整体收紧 */
 .adform.tight{padding:6px 11px}
 .adform.tight .muted{font-size:10.5px;line-height:1.5}
@@ -1821,25 +1825,23 @@ body.dreamai .dlog{max-height:46px}
    桌游的六个分区全部落在办公控件上：手牌进 PPT 备注区（本来就是「只有讲者
    看得见」），费用是会议分钟，牌库在 Excel 薪资表，密语走钉钉。
    这里只管样式；回合逻辑在文件末尾的卡牌引擎里。 */
-/* 破绽槽：贴在身份牌底边，三格 = 时间 / 数字 / 立场。只有对色的质询牌点得亮 */
-.idcard .dslot{position:absolute;left:5px;right:5px;bottom:2px;display:flex;gap:2px;z-index:2}
-.idcard .dslot i{flex:1;height:4px;border-radius:1px;font-style:normal;background:rgba(122,90,46,.2);
+/* 代价格：贴在身份牌底边，三格 = 这一维已经收到几条代价。
+   浅色 = 只有他自己说的那条；深色 = 有别的 agent 交叉评过，这一格才算硬 */
+.idcard .dcost{position:absolute;left:5px;right:5px;bottom:2px;display:flex;gap:2px;z-index:2}
+.idcard .dcost i{flex:1;height:4px;border-radius:1px;font-style:normal;background:rgba(122,90,46,.2);
   box-shadow:inset 0 0 0 .5px rgba(122,90,46,.4);transition:background .4s,box-shadow .4s}
-.idcard .dslot i.on{box-shadow:inset 0 0 0 .5px rgba(255,255,255,.55),0 0 8px var(--sc);animation:slotin .5s ease-out}
-.idcard .dslot i.t.on{background:#3F8F88;--sc:rgba(79,168,160,.9)}
-.idcard .dslot i.n.on{background:#C75B2A;--sc:rgba(199,91,42,.9)}
-.idcard .dslot i.f.on{background:#7B5FB0;--sc:rgba(139,111,192,.9)}
+.idcard .dcost i.on{background:var(--dc,#8A6B42);opacity:.42;animation:slotin .5s ease-out}
+.idcard .dcost i.on.hard{opacity:1;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.55),0 0 8px var(--dc,#8A6B42)}
 @keyframes slotin{0%{transform:scaleY(3.4);opacity:.2}100%{transform:scaleY(1);opacity:1}}
-/* 三格全亮 = 锤穿，牌面镶红边 */
-.idcard.nailed .cface{box-shadow:0 6px 16px rgba(4,10,20,.5),0 0 0 2px #C0503F,0 0 18px rgba(192,80,63,.5),inset 0 1px 0 rgba(255,255,255,.5)}
-/* 选好了牌，正在挑打谁 */
+/* 这一维被别人交叉评过 = 硬，牌面镶一圈 */
+.idcard.hard .cface{box-shadow:0 6px 16px rgba(4,10,20,.5),0 0 0 2px #3F8F88,0 0 18px rgba(63,143,136,.45),inset 0 1px 0 rgba(255,255,255,.5)}
+/* 选好了发起人，正在挑质问谁 */
 .idcard[data-aim]{cursor:pointer}
 .idcard[data-aim]:hover{transform:translateY(-7px) rotate(-1.2deg)}
 .idcard[data-aim]:hover .cface{box-shadow:0 10px 22px rgba(4,10,20,.5),0 0 0 2px rgba(245,197,107,.9),0 0 18px rgba(245,197,107,.55)}
-/* 被闭麦：这一轮他不说话 */
-.idcard.gagged .cface{filter:grayscale(.7) brightness(.72)}
-.idcard.gagged .cface::after{content:'闭麦';position:absolute;top:4px;right:4px;font-size:8px;color:#fff;
-  background:#5A5A62;border-radius:2px;padding:0 3px;z-index:2}
+/* 常驻调用计数：多智能体架构的展示位，评委不用问，屏幕在替我们答 */
+.dhint .acount{display:inline-block;margin-left:7px;padding:0 6px;border-radius:8px;font-style:normal;
+  background:rgba(63,143,136,.92);color:#EAF6F4;font-size:9.5px;letter-spacing:.3px}
 /* 每张牌自己的诚实角标：这句是真模型说的，还是脚本兜的 */
 .idcard .csrc{position:absolute;top:4px;left:4px;font-size:7.5px;font-style:normal;line-height:1.5;
   border-radius:2px;padding:0 3px;z-index:2;background:rgba(122,90,46,.16);color:#7A5A2E}
@@ -3612,14 +3614,13 @@ function dreamCastHTML(roles, o){
   o = o || {};
   const cls = 'dcast' + (o.deal ? ' deal' : '') + (o.shuffling ? ' shuffling' : '');
   return '<div class="' + cls + '">' + roles.map((r, i) => {
-    const nm = r[0], role = r[1] || '', wc = DWC[i % 4];
+    const nm = r[0], dim = o.dims ? DIMOF[r[1]] : null, role = dim ? dim.nm : (r[1] || ''), wc = DWC[i % 4];
     const bet = o.canBet ? ' data-dream-bet="' + esc(nm) + '" title="押他是假猎头"' : '';
-    /* 卡牌局多出来的三件：可指向的目标 / 三色破绽槽 / 每张牌自己的诚实角标 */
-    const aim = o.aim ? ' data-aim="' + esc(nm) + '" title="把选中的质询牌打给他"' : '';
-    const sl = o.slots && o.slots[nm];
-    const nailed = sl && sl.t && sl.n && sl.f;
-    const c = (o.liar === nm ? ' liar' : '') + (o.bet === nm ? ' mybet' : '')
-      + (nailed ? ' nailed' : '') + (o.gag === nm ? ' gagged' : '');
+    /* 卡牌局多出来的三件：可指向的目标 / 底边四段代价条 / 每张牌自己的诚实角标 */
+    const aim = o.aim ? ' data-aim="' + esc(nm) + '" title="' + esc(o.aimTip || '把这一格交给他') + '"' : '';
+    const cs = o.slots && o.slots[r[1]];
+    const hard = cs && cs.some(x => x.by !== nm);
+    const c = (o.liar === nm ? ' liar' : '') + (o.bet === nm ? ' mybet' : '') + (hard ? ' hard' : '');
     const src = o.srcOf && o.srcOf[nm];
     return '<div class="cardw"><div class="idcard' + c + '" style="--dd:' + (i * .16).toFixed(2) + 's"' + bet + aim + '>'
       + '<div class="cback"></div><div class="cface">'
@@ -3630,9 +3631,10 @@ function dreamCastHTML(roles, o){
       + '<i class="fig"></i><b>' + esc(nm) + '</b><em>' + esc(role) + '</em>'
       + (o.liar === nm ? '<i class="stamp">' + esc(o.stamp || '假猎头') + '</i>' : '')
       + (o.bet === nm ? '<i class="mytag">我押他</i>' : '')
-      + (sl ? '<i class="dslot"><i class="t' + (sl.t ? ' on' : '') + '" title="时间对不上"></i>'
-          + '<i class="n' + (sl.n ? ' on' : '') + '" title="数字对不上"></i>'
-          + '<i class="f' + (sl.f ? ' on' : '') + '" title="立场对不上"></i></i>' : '')
+      + (cs ? '<i class="dcost" style="--dc:' + (dim ? dim.qc : '#8A6B42') + '" title="'
+          + esc(role + '这一格已收到 ' + cs.length + ' 条代价' + (hard ? '，别人交叉评过 = 硬' : '，只有他自己说的 = 软')) + '">'
+          + [0, 1, 2].map(j => '<i class="' + (cs[j] ? 'on' : '')
+              + (cs[j] && cs[j].by !== nm ? ' hard' : '') + '"></i>').join('') + '</i>' : '')
       + '</div></div></div>';
   }).join('') + '</div>';
 }
@@ -3707,44 +3709,55 @@ $('#dreamGame').addEventListener('click',e=>{ if(window.dreamMode!=='script') re
 document.addEventListener('click',e=>{ const t=e.target.closest('[data-wstoggle]'); if(t){ const c=document.getElementById('wsCard'); if(c) c.classList.toggle('collapsed'); }});
 dreamRender();
 
-/* ============ AI 梦蝶局 · 三轮质询的卡牌局 ============================
-   你不是第五个角色，是读局的人。
-   桌上四张身份牌，每张底边一条三色破绽槽（时间 / 数字 / 立场）；
-   你的手牌在 PPT 备注区——本来就是「只有讲者看得见」的地方；
-   费用是会议分钟，每轮 3 分钟，用不完作废。
-   锤穿一个人要 1+2+2=5 分钟，三轮 9 分钟只够锤穿一个：这就是取舍。
-   「亮证据」打不出去——得先切到 Excel 薪资表选一行真数据回来。
-   非骗子最多亮两格，三格全亮的只可能是一叶障目那一个。
-   四个角色各走各的 /api/ask，互相看不到底牌；哪张牌的台词来自真模型，
-   就在那张牌上单独标——诚实标注做到每张牌。 */
+/* ============ AI 梦蝶局 · 四片叶子，买代价 ============================
+   你不是第五个角色，是调度者。
+   你把自己真正的职场困境写上桌，四个 agent 各自只看得见一个维度——
+   只算钱 / 只算人 / 只算时机 / 只算最坏。他们说的都对，都是半张脸。
+   你要做的是指派一个 agent 去当面质问另一个 agent，
+   把对方那一维看不见的代价撬出来：这一格才从软变硬。
+   费用是会议分钟，每轮 3 分钟，用不完作废；九分钟买不齐八项代价，这就是取舍。
+   四个座位各走各的 /api/ask，system 里只有自己那一维，看不到别人的视角；
+   哪张牌的台词来自真模型，就在那张牌上单独标——诚实标注做到每张牌。 */
 /* 默认就落在卡牌局：三轮质询、手牌、跨窗口取证都在这一边，
    剧本局退成「看一遍别人怎么打」的样例，留在第二个页签 */
 window.dreamMode = 'ai';
 const ROUNDS = 3, SEAT_PRICE = '¥29', ADV_PRICE = '¥99';
-const QC = {
-  ask : { nm:'追问',   cost:1, slot:'n', qc:'#C75B2A', tip:'逼他给一个具体数字', act:'当面追问一个具体数字' },
-  old : { nm:'翻旧账', cost:2, slot:'t', qc:'#3F8F88', tip:'拿他先前的话对质',   act:'翻旧账，拿他前面说过的话当面对质' },
-  evi : { nm:'亮证据', cost:2, slot:'f', qc:'#7B5FB0', tip:'先去表里取一行数',   act:'当面甩出一行真实数据' },
-  mute: { nm:'闭麦',   cost:3, slot:'*', qc:'#8A6B42', tip:'让他这轮别说话',     act:'被要求这一轮不要发言' }
-};
-const SLOTN  = { t:'时间对不上', n:'数字对不上', f:'立场对不上' };
-const FLAWTX = { t:'你的时间线有一处对不上', n:'你给不出经得起查的数字', f:'你的立场和你嘴上说的不一致' };
-const WHYTX  = { t:'时间线一改再改，先后顺序对不上', n:'关键数字始终给不出，只给形容词', f:'嘴上一个立场，做的是另一个' };
-/* 军师：专长决定他擅长哪张牌（那张便宜 1 分钟），并且额外解锁「闭麦」 */
-const ADVISORS = [
-  ['气泡水','HR 话术观察','ask'], ['大鱼','组织变化分析','old'],
-  ['泡面','技术岗位风向','evi'], ['馍馍','办公室见闻','mute'],
-  ['十年 HRD','招聘话术','ask'], ['外企转国企的人','规则与流程','old'], ['被裁两次的产品','现金流与备选','evi']
+/* 四个维度是机制，不是角色设定——身份栏写死，改了局就散了 */
+const DIMS = [
+  { k:'money',  nm:'只算钱',   see:'数字、补偿、成本、系数', blind:'你难不难受、谁会记住你',
+    qc:'#C75B2A', ask:'这笔账，你只算了钱' },
+  { k:'people', nm:'只算人',   see:'关系、印象、谁记着谁',   blind:'划不划算',
+    qc:'#3F8F88', ask:'人情这一头，你替他算过吗' },
+  { k:'timing', nm:'只算时机', see:'时间窗口、先后顺序',     blind:'这么做对不对',
+    qc:'#7B5FB0', ask:'时机这一头，你压根没看' },
+  { k:'worst',  nm:'只算最坏', see:'兜底、现金流、退路',     blind:'这事概率有多小',
+    qc:'#8A6B42', ask:'最坏那一下，你兜得住吗' }
 ];
+const DIMOF = {}; DIMS.forEach(d => DIMOF[d.k] = d);
+/* 预置困境：不想现写的人直接选一条。第一条就是老剧本局那个场景 */
+const CASES = [
+  '内推的那位说包能翻倍，但要我先交三千块流程费，说走完流程就退',
+  '组里空降了一个新领导，第一天就找每个人单独聊，说是"随便聊聊"',
+  '公司要我调去外地新部门，说是升一级，但没写进合同',
+  '老东家想让我回去，工资加两千，我现在这家刚熬过试用期',
+  '手上项目做了一半，领导让我把它交给新人，我去接一个没人愿意接的'
+];
+/* 军师：专长决定他替你盯哪一维（那一维的质问便宜 1 分钟），并且每轮多 1 分钟 */
+const ADVISORS = [
+  ['气泡水','HR 话术观察','people'], ['大鱼','组织变化分析','timing'],
+  ['泡面','技术岗位风向','money'], ['馍馍','办公室见闻','worst'],
+  ['十年 HRD','招聘话术','people'], ['外企转国企的人','规则与流程','timing'], ['被裁两次的产品','现金流与备选','worst']
+];
+const LIVE_MAX = 4;
 const AD = {
   st: 'setup', busy: false, timer: null, src: '',
-  sc: '组里空降了一个新领导，第一天就找每个人单独聊，说是"随便聊聊"',
-  roles: [['气泡水','空降的新领导'],['大鱼','带组八年的老员工'],['泡面','手握核心模块的骨干'],['馍馍','转正答辩在下周的实习生']],
+  sc: CASES[0],
+  roles: [['气泡水','money'],['大鱼','people'],['泡面','timing'],['馍馍','worst']],
   from: ['', '', '', ''], adv: null,
-  liar: '', truth: {}, slots: {}, bank: {}, srcOf: {}, quote: {},
-  round: 0, min: 0, hand: [], sel: '', gag: '', evi: null, liveUsed: false,
+  slots: {}, bank: {}, srcOf: {}, last: {},
+  round: 0, min: 0, sel: '', evi: null, calls: 0, live: 0,
   lines: [], shown: 0, note: '',
-  bet: '', settled: false, res: null
+  call: '', settled: false, res: null
 };
 const DTABS = m => `<div class="dtabs"><b class="${m==='ai'?'on':''}" data-dmode="ai">开局 · 自己出题</b><b class="${m==='script'?'on':''}" data-dmode="script">看一局样例</b></div>`;
 
@@ -3766,13 +3779,18 @@ function adWait(ms, fn){
   }, ms);
 }
 const adMax = () => AD.adv ? 4 : 3;
-const adCost = k => Math.max(1, QC[k].cost - (AD.adv && AD.adv[2] === k ? 1 : 0));
-function adHand(){
-  const h = ['ask', 'old'];
-  if (AD.evi) h.push('evi');
-  if (AD.adv) h.push('mute');
-  return h;
+/* 跨座位质问 2′，同座位深挖 1′，亮证据 2′；军师盯的那一维便宜 1′ */
+function adCost(by, tg){
+  if (by === 'evi') return 2;
+  if (by === tg) return 1;
+  const d = adDimOf(tg);
+  return Math.max(1, 2 - (AD.adv && AD.adv[2] === d ? 1 : 0));
 }
+const adDimOf = nm => (AD.roles.find(r => r[0] === nm) || [])[1] || '';
+const adCells = k => AD.slots[k] || [];
+const adHard = k => adCells(k).some(x => x.by !== adNameOf(k));
+const adNameOf = k => (AD.roles.find(r => r[1] === k) || [])[0] || '';
+const adHardN = () => DIMS.filter(d => AD.slots[d.k] && adHard(d.k)).length;
 
 /* ---------- 组局：四个座位各自选谁来演 ---------- */
 /* 分身战绩跟着名字走——这就是它的简历，也是「凭什么值 99 元」的答案 */
@@ -3780,7 +3798,7 @@ const AREC = {};
 function adRec(nm){ return AREC[nm] || (AREC[nm] = { lie: 0, caught: 0, spot: 0 }); }
 function adRecHTML(nm){
   const r = adRec(nm);
-  return '<i class="arec" title="对局战绩 · 骗过 ' + r.lie + ' 人 / 被识破 ' + r.caught + ' 次 / 识破他人 ' + r.spot + ' 次">'
+  return '<i class="arec" title="对局战绩 · 发言 ' + r.lie + ' 次 / 被质问 ' + r.caught + ' 次 / 质问他人 ' + r.spot + ' 次">'
     + r.lie + '·' + r.caught + '·' + r.spot + '</i>';
 }
 function adSetupHTML(){
@@ -3788,16 +3806,20 @@ function adSetupHTML(){
     '<option value="mine"' + (AD.from[i] === 'mine' ? ' selected' : '') + '>我的机器人 · 免费</option>',
     '<option value="hire"' + (AD.from[i] === 'hire' ? ' selected' : '') + '>雇别人的分身 · ' + SEAT_PRICE + '</option>'].join('');
   return '<div class="adform tight">'
-    + '<div class="muted">四只蝴蝶各自入席，一个座位一次独立调用，谁也看不到别人的底——三轮质询，把撒谎的那个钉在桌上。</div>'
-    + '<div class="adlb">场景（发生了什么）</div>'
+    + '<div class="muted">写一件你现在真的拿不定主意的事。四个 agent 各自只看得见一个维度，说的都对、都是半张脸——'
+      + '你的活儿是<b>指派一个去当面质问另一个</b>，把他那一维漏掉的代价撬出来。</div>'
+    + '<div class="adlb">你的困境（也可以从下拉里挑一条现成的）</div>'
     + '<textarea class="ta" id="adSc" rows="2">' + esc(AD.sc) + '</textarea>'
-    + '<div class="adlb">四个座位 · 名字 / 身份 / 谁来演（尾部三个数是这个分身的战绩：骗过·被识破·识破他人）</div>'
+    + '<select class="ta" id="adCase" style="margin-top:3px"><option value="-1">— 换一条预置困境 —</option>'
+    + CASES.map((c, i) => '<option value="' + i + '">' + esc(c.slice(0, 26)) + '</option>').join('') + '</select>'
+    + '<div class="adlb">四个座位 · 名字 / 他只看得见哪一维 / 谁来演（尾部三个数是战绩：发言·被质问·质问他人）</div>'
     + AD.roles.map((r, i) => '<div class="adrow">'
         + '<input class="anm" id="adNm' + i + '" value="' + esc(r[0]) + '" placeholder="名字">'
-        + '<input class="aid" id="adId' + i + '" value="' + esc(r[1]) + '" placeholder="身份 / 立场">'
+        + '<span class="aid adim" style="--dc:' + DIMOF[r[1]].qc + '"><b>' + esc(DIMOF[r[1]].nm)
+        + '</b>看得见' + esc(DIMOF[r[1]].see) + '，看不见' + esc(DIMOF[r[1]].blind) + '</span>'
         + '<select class="aid" id="adFr' + i + '" style="flex:0 0 128px">' + srcOpt(i) + '</select>'
         + adRecHTML(r[0]) + '</div>').join('')
-    + '<div class="adlb">军师（横置在你面前 · 每轮一条钉钉私聊 + 解锁「闭麦」 + 每轮多 1 分钟）</div>'
+    + '<div class="adlb">军师（横置在你面前 · 每轮一条钉钉私聊 + 他盯的那一维便宜 1 分钟 + 每轮多 1 分钟）</div>'
     + '<select class="ta" id="adAdv">'
     + '<option value="-1">不雇 · 免费</option>'
     + ADVISORS.map((a, i) => '<option value="' + i + '"' + (AD.adv && AD.adv[0] === a[0] ? ' selected' : '') + '>'
@@ -3805,10 +3827,12 @@ function adSetupHTML(){
     + '</select>'
     + '<button class="rbtn pri" data-ad="start" style="margin-top:7px">开局发牌</button>'
     + '<button class="rbtn" data-ad="files" style="margin-left:6px">卷宗架</button>'
-    + '<span class="muted" style="margin-left:8px">「周与胡蝶，则必有分矣」——雇来的分身，你也看不到它的底</span></div>';
+    + '<span class="muted" style="margin-left:8px">「周与胡蝶，则必有分矣」——一叶障目，说的是每个人只看得见一片叶子</span></div>';
 }
 
-/* ---------- 手牌：渲染进 PPT 备注区的兄弟节点，绝不碰 #pptNote ---------- */
+/* ---------- 手牌：渲染进 PPT 备注区的兄弟节点，绝不碰 #pptNote ----------
+   手牌 = 你手里的四个顾问。打出一张，再点桌上另一个座位：
+   那就是 A 当面质问 B，B 那一格记上一条，署名 A。 */
 function adHandRender(){
   const el = $('#dreamHand'); if (!el) return;
   const on = window.dreamMode === 'ai' && AD.st === 'play';
@@ -3822,21 +3846,26 @@ function adHandRender(){
       + '</b>' + esc(AD.adv[1]) + '</div></div>'
     : '<div class="advisor empty"><div class="tx">军师位空着<br>没人给你递牌</div></div>';
   h += '</div><div class="qrow">';
-  if (AD.phase === 'talk'){
-    h += '<div class="qnil">他们正在各说各的——<br>说完这一轮，牌才轮到你手上。</div>';
+  if (AD.phase === 'talk' || AD.phase === 'wait1'){
+    h += '<div class="qnil">' + (AD.phase === 'wait1' ? '他正在开口——<br>这是一次现场的独立调用。'
+      : '他们正在各说各的——<br>说完这一轮，牌才轮到你手上。') + '</div>';
+  } else if (AD.phase === 'sign'){
+    h += '<div class="qnil">三轮打完了——<br>回幻灯片上签个字。</div>';
   } else {
-    h += adHand().map(k => {
-      const c = QC[k], cost = adCost(k), poor = cost > AD.min;
-      const isE = k === 'evi';
-      return '<button class="qcard' + (isE ? ' evi' : '') + (AD.sel === k ? ' on' : '') + '" data-q="' + k + '"'
-        + (poor ? ' disabled' : '') + ' title="' + esc(c.tip) + ' · 点亮「' + esc(SLOTN[c.slot] || '任意一格') + '」">'
-        + '<i class="cost">' + cost + '′</i><i class="kind" style="--qc:' + c.qc + '"></i>'
-        + '<b>' + esc(c.nm) + '</b><span>' + esc(isE && AD.evi ? AD.evi.tx : c.tip) + '</span></button>';
+    h += AD.roles.map(r => {
+      const nm = r[0], d = DIMOF[r[1]], poor = AD.min < 1;
+      return '<button class="qcard' + (AD.sel === nm ? ' on' : '') + '" data-q="' + esc(nm) + '"'
+        + (poor ? ' disabled' : '') + ' title="派' + esc(nm) + '去质问桌上另一个人 · 2′（问他自己 1′，但他只会给自己那维更好听的版本）">'
+        + '<i class="cost">2′</i><i class="kind" style="--qc:' + d.qc + '"></i>'
+        + '<b>' + esc(nm) + '</b><span>' + esc(d.nm) + ' · ' + esc(d.ask) + '</span></button>';
     }).join('');
-    if (!AD.evi) h += '<button class="qcard evi" data-q="getevi" title="去 Excel 薪资表或资讯库点一行，才拿得到这张牌">'
+    if (AD.evi) h += '<button class="qcard evi" data-q="evi" title="把这行真数据甩到某一格上，那一格直接算硬">'
+      + '<i class="cost">2′</i><i class="kind" style="--qc:#7B5FB0"></i><b>亮证据</b><span>' + esc(AD.evi.tx) + '</span></button>';
+    else h += '<button class="qcard evi" data-q="getevi" title="去 Excel 薪资表或资讯库点一行，才拿得到这张牌">'
       + '<i class="cost">取</i><i class="kind" style="--qc:#7B5FB0"></i><b>亮证据</b><span>去表里选一行真数据</span></button>';
     h += '<button class="rbtn" data-q="pass" style="flex:0 0 auto;align-self:center">过这一轮</button>';
-    if (AD.sel) h += '<div class="qnil">选好了——<br>点桌上一张牌，打给他。</div>';
+    if (AD.sel) h += '<div class="qnil">' + (AD.sel === 'evi' ? '证据在手——<br>点桌上一张牌，甩给他。'
+      : esc(AD.sel) + ' 站起来了——<br>点桌上另一张牌，让他去问。') + '</div>';
   }
   el.innerHTML = h + '</div>';
 }
@@ -3854,26 +3883,32 @@ function aiDreamRender(){
   const si = cur ? AD.roles.findIndex(r => r[0] === cur[0]) : -1;
   const deal = adDeal; adDeal = false;
   const fin = AD.st === 'done';
-  const snip = AD.sc.slice(0, 22) + (AD.sc.length > 22 ? '…' : '');
-  /* 摊牌这一屏不再重复标题：结算面板自己带「摊牌 · 谁是一叶障目」，
-     幻灯片副标题也还挂着场景——省下这一行，牌桌下沿才收得进 16:9 */
+  const snip = AD.sc.slice(0, 20) + (AD.sc.length > 20 ? '…' : '');
+  /* 常驻计数：这一行本身就是多智能体架构的展示位，评委不用问，屏幕在替他数 */
+  const cnt = '<i class="acount" title="本局已发生的独立调用次数 · 四个座位视野互相隔离">独立调用 '
+    + AD.calls + ' · 视野隔离 ' + AD.roles.length + ' 路</i>';
   if (!fin) h += '<div class="dhint">'
     + (AD.st === 'wait' ? '洗牌中'
-      : '第 ' + AD.round + ' / ' + ROUNDS + ' 轮 · 本轮剩 ' + AD.min + ' 分钟')
-    + ' · ' + esc(snip)
+      : '第 ' + AD.round + ' / ' + ROUNDS + ' 轮 · 本轮剩 ' + AD.min + ' 分钟 · 代价买到 ' + adHardN() + '/4 格')
+    + ' · ' + esc(snip) + cnt
     + (AD.st === 'play' && AD.phase === 'act' ? '　<b>手牌在下面的备注区——那儿只有你看得见</b>' : '') + '</div>';
   h += dreamCastHTML(AD.roles, {
-    deal, shuffling: AD.st === 'wait', slots: AD.slots, srcOf: AD.srcOf, gag: AD.gag,
+    deal, shuffling: AD.st === 'wait', slots: AD.slots, srcOf: AD.srcOf, dims: 1,
     aim: AD.st === 'play' && AD.phase === 'act',
-    canBet: fin ? false : false, bet: AD.bet, liar: fin ? AD.liar : '', stamp: '一叶障目'
+    aimTip: '让选中的那位去质问他',
+    bet: AD.call
   });
-  if (AD.st === 'wait') h += '<div class="adwait"><i></i><i></i><i></i>四张牌各自在对自己的台词——四次独立调用，他们看不到彼此的底…</div>';
+  if (AD.st === 'wait') h += '<div class="adwait"><i></i><i></i><i></i>四张牌各自在对自己的台词——四次独立调用，他们只看得见自己那一维…</div>';
   else {
     if (cur && !fin){
-      const role = (AD.roles.find(r => r[0] === cur[0]) || [])[1] || '';
-      h += dreamSpeech(cur[0], role, cur[1]);
+      const r = AD.roles.find(x => x[0] === cur[0]);
+      h += dreamSpeech(cur[0] + (cur[2] ? ' → ' + cur[2] : ''), r ? DIMOF[r[1]].nm : '', cur[1]);
     }
-    if (!fin) h += dreamLogHTML(rows.slice(0, -1).map(l => [l[0], l[1]]));
+    if (!fin) h += dreamLogHTML(rows.slice(0, -1).map(l => [l[0] + (l[2] ? '→' + l[2] : ''), l[1]]));
+    if (AD.phase === 'sign') h += '<div class="dseat"><span class="dhint" style="margin:0 6px 0 0">'
+      + '桌上摆着 ' + adHardN() + ' 格硬代价——现在你签一个字：</span>'
+      + ['做', '不做', '再等等'].map(s => '<button class="rbtn' + (s === '做' ? ' pri' : '') + '" data-sign="' + s + '">' + s + '</button>').join('')
+      + '</div>';
     if (fin) h += adResultHTML();
   }
   $('#dreamGame').innerHTML = h;
@@ -3884,70 +3919,76 @@ function aiDreamRender(){
 
 function adResultHTML(){
   const r = AD.res || {};
-  return '<div class="adg"><div class="agh">摊牌 · ' + esc(AD.liar) + ' 是一叶障目 · ' + esc(r.head || '') + '</div>'
-    + Object.keys(AD.truth[AD.liar] || {}).filter(k => AD.truth[AD.liar][k]).map(k =>
-        '<div class="agi"><div class="t"><b>' + esc(SLOTN[k]) + '</b>'
-        + (AD.slots[AD.liar] && AD.slots[AD.liar][k] ? '　你打亮了' : '　你没打到') + '</div>'
-        + '<div class="tl">' + esc(WHYTX[k]) + '</div></div>').join('')
+  return '<div class="adg"><div class="agh">四片叶子 · ' + esc(r.head || '') + '</div>'
+    + DIMS.map(d => {
+        const cs = adCells(d.k), hard = adHard(d.k);
+        return '<div class="agi"><div class="t"><b>' + esc(d.nm) + '</b>'
+          + (cs.length ? esc(cs[cs.length - 1].tx) : '这一格你没买 —— 也就是说你在拿它赌')
+          + '</div><div class="tl">' + (cs.length
+              ? esc(cs.map(x => x.by).join(' / ') + ' 说的' + (hard ? ' · 交叉验证过' : ' · 只有他自己那一维'))
+              : esc('没有任何人替你算过' + d.see)) + '</div></div>';
+      }).join('')
     + '<div class="tell">' + esc(r.tell || '') + '</div></div>'
     + '<div class="dseat"><button class="rbtn pri" data-ad="again">同一桌再来一局</button>'
-    + '<button class="rbtn" data-ad="reset">换个场景</button>'
+    + '<button class="rbtn" data-ad="reset">换个困境</button>'
     + '<button class="rbtn" data-ad="files">存进卷宗架</button>'
-    + '<button class="rbtn" data-ad="bill">看结算单</button></div>'
-    + '<div class="dhint" style="margin-top:7px">每张牌左上角标着它这句话是真模型生成还是脚本兜底 · 破绽已存进资讯库，玩过的局不白玩</div>';
+    + '<button class="rbtn" data-ad="bill">看完整决定书</button></div>'
+    + '<div class="dhint" style="margin-top:7px">每张牌左上角标着它这句话是真模型生成还是脚本兜底 · 完整决定书已进 Outlook 草稿箱</div>';
 }
 
-/* ---------- 底牌：谁在撒谎，谁身上有哪几处对不上 ----------
-   一叶障目三格全有；其余人各自最多两格——每个人都有点小心思，
-   但三格全亮的只可能是他一个，唯一解成立。 */
+/* ---------- 发牌：四个座位各绑一维，四格代价全部清空 ----------
+   没有底牌，也没有骗子——每个人说的都是真的，只是都只有半张脸。 */
 function adDeck(){
-  const rs = AD.roles, ks = ['t', 'n', 'f'];
-  AD.liar = rs[(Math.random() * rs.length) | 0][0];
-  AD.truth = {}; AD.slots = {}; AD.srcOf = {}; AD.bank = {}; AD.quote = {};
-  rs.forEach(r => {
-    const nm = r[0];
-    AD.slots[nm] = { t: 0, n: 0, f: 0 };
-    if (nm === AD.liar){ AD.truth[nm] = { t: 1, n: 1, f: 1 }; return; }
-    const pick = ks.slice().sort(() => Math.random() - .5).slice(0, (Math.random() * 3) | 0);
-    AD.truth[nm] = { t: 0, n: 0, f: 0 };
-    pick.forEach(k => AD.truth[nm][k] = 1);
-  });
+  AD.slots = {}; AD.srcOf = {}; AD.bank = {}; AD.last = {};
+  DIMS.forEach(d => AD.slots[d.k] = []);
+  AD.calls = 0; AD.live = 0;
 }
 
-/* ---------- 一个角色一次独立调用：他只拿到场景 + 自己的身份 + 自己的底 ---------- */
-function adSys(nm, role, liar, seat){
-  let p = '你在一场四人职场对话里演「' + nm + '」，身份是' + role + '。你只知道自己这一份设定，看不到别人的底牌。';
-  p += liar
-    ? '你心里藏着一件不能说的事，嘴上要把它糊过去：你的时间线对不上、你给不出经得起查的数字、你的立场和你嘴上说的不一致。你不承认，但被逼问时会露一点。'
-    : '你说的基本是真话，只是也有一点自己的小算盘，不会全盘托出。';
+/* ---------- 一个座位一次独立调用：他只拿到困境 + 自己那一维，看不到别人的视角 ---------- */
+function adSys(nm, dim, seat){
+  const d = DIMOF[dim];
+  let p = '你在一场四人职场议事里演「' + nm + '」。你只看得见一个维度：' + d.see + '。'
+    + '你完全看不见' + d.blind + '，别人问你这些，你就说那不归你管。'
+    + '你不知道另外三个人各自看的是哪一维，也看不到他们的设定。'
+    + '你说的都是真话，只是只有这一维的真话。';
   if (seat === 'mine'){
     const b = (typeof botProfile === 'function') ? botProfile() : null;
     if (b) p += '你的说话方式：' + String(b.dna).replace(/\n/g, '；').slice(0, 60) + '。' + String(b.flow).replace(/\n/g, '；').slice(0, 60) + '。';
   } else if (seat === 'hire'){
     p += '你是别人训练出来的分身，语气比在场所有人都更像一个老手，句子短、带判断。';
   }
-  p += '严格输出 4 行，每行一句台词，不超过 24 字，不要名字前缀、不要引号、不要编号：'
-    + '第1行 开场发言；第2行 被当面追问一个具体数字时的回答；第3行 被翻旧账对质时的回答；第4行 被甩出一行真实数据时的回答。全部用中文。';
+  p += '严格输出 4 行，每行一句话，不超过 24 字，不要名字前缀、不要引号、不要编号：'
+    + '第1行 从你这一维给出建议；第2行 被追问一个具体数字时的回答；第3行 被别人拿他那一维的话当面对质时的回答；'
+    + '第4行 被甩出一行真实数据时的回答。全部用中文。';
   return p.slice(0, 1900);
 }
-function adFallback(nm, role, liar){
-  return liar
-    ? ['其实没那么复杂，大家别多想，都是例行安排。',
-       '数字这种事回头我发你，现在报不准，别咬字眼。',
-       '我先前那句是另一个语境，你别断章取义。',
-       '这张表我没见过，来源要再核，先不落字。']
-    : ['我作为' + role + '，只关心这事之后，谁的位置动了。',
-       '我这边的数就摆在那儿，你要哪一项我现在念。',
-       '我说过的话你可以翻，前后是一条线。',
-       '这行数据对得上，那就按数据说话。'];
+function adFallback(nm, dim){
+  return ({
+    money : ['这事只看一件：钱多多少、什么时候到账。',
+             '照现在的口径，一年差六到八万，税前。',
+             '你说的那些我不管，我这笔账没算错。',
+             '这行数对得上，那就按数说话。'],
+    people:['你走了以后，谁替你说话，这才是问题。',
+             '数我说不上来，我只知道谁会记着这一笔。',
+             '划不划算不归我管，我管的是脸面。',
+             '数据是数据，人不是按数据记你的。'],
+    timing:['现在不是时候，再往后两个月就是另一回事。',
+             '时间窗口大概八周，过了就得重排。',
+             '对不对我不评价，我只说早晚。',
+             '这个时间点，跟我说的先后对得上。'],
+    worst :['先问最坏那一下：断了收入你能撑几个月。',
+             '按最坏算，六个月现金流，压线。',
+             '概率多小我不管，我管兜不兜得住。',
+             '这行数如果是真的，那退路比我以为的窄。']
+  })[dim] || ['……', '……', '……', '……'];
 }
 async function adAgent(i){
-  const [nm, role] = AD.roles[i];
-  const liar = nm === AD.liar;
+  const [nm, dim] = AD.roles[i];
   let four = null, src = 'script';
   try {
-    const j = await askAI('梦蝶局·' + nm, adSys(nm, role, liar, AD.from[i]),
-      '场景：' + AD.sc.slice(0, 160) + '\n现在轮到你开口。');
+    AD.calls++;
+    const j = await askAI('梦蝶局·' + nm, adSys(nm, dim, AD.from[i]),
+      '我的困境：' + AD.sc.slice(0, 160) + '\n从你这一维，先说一句。');
     if (j && j.ok && j.text){
       const ls = String(j.text).split(/\n+/)
         .map(s => s.trim().replace(/^[\-*\d.、\s]*/, '').replace(/^[^：:]{1,8}[：:]/, '').replace(/^[「"']|[」"']$/g, ''))
@@ -3955,9 +3996,12 @@ async function adAgent(i){
       if (ls.length >= 4){ four = ls.slice(0, 4); src = 'model'; }
     }
   } catch (e){ /* 网络挂了也照跑，只是标成脚本 */ }
-  if (!four) four = adFallback(nm, role, liar);
+  if (!four) four = adFallback(nm, dim);
   AD.bank[nm] = { open: four[0], r: { n: four[1], t: four[2], f: four[3] }, used: {} };
   AD.srcOf[nm] = src;
+  AD.last[nm] = four[0];
+  /* 开局这条是他自己说的，先把自己那一格填成「软」 */
+  AD.slots[dim].push({ by: nm, tx: four[0], src });
 }
 
 /* ---------- 开局：四次并发独立调用 ---------- */
@@ -3971,15 +4015,19 @@ async function adEngine(){
 
 function adNextRound(){
   AD.round++;
-  if (AD.round > ROUNDS) return adShowdown();
-  AD.min = adMax(); AD.sel = ''; AD.gag = ''; AD.liveUsed = false; AD.phase = 'talk';
+  if (AD.round > ROUNDS) return adSign();
+  AD.min = adMax(); AD.sel = ''; AD.phase = 'talk';
   adAdvisorWhisper();
-  const speak = AD.roles.map(r => r[0]);
+  /* 第一轮四个人各自开口；后面只让还没被质问过的那几维再补一句，省时间也省调用 */
+  const speak = AD.round === 1 ? AD.roles.map(r => r[0])
+    : AD.roles.filter(r => !adHard(r[1])).map(r => r[0]).slice(0, 2);
   let ix = 0;
   const step = () => {
     if (ix >= speak.length){ AD.phase = 'act'; aiDreamRender(); return; }
     const nm = speak[ix++];
-    AD.lines.push([nm, adRoundLine(nm)]);
+    const tx = adRoundLine(nm);
+    AD.last[nm] = tx;
+    AD.lines.push([nm, tx]);
     AD.shown = AD.lines.length;
     aiDreamRender();
     adWait(950, step);
@@ -3996,120 +4044,133 @@ function adRoundLine(nm){
   return b.r[k];
 }
 
-/* ---------- 出牌：命中就点亮那一格，打空就是分钟白花 ---------- */
-async function adPlay(k, target){
-  const cost = adCost(k);
+/* ---------- 出牌：指派 by 当面质问 target ----------
+   信息在两个 agent 之间传递——发起方的 system 里没有目标那一维，
+   目标的原话是通过 user 递过去的，这就是画面上看得见的 A2A。 */
+async function adPlay(by, target){
+  const cost = adCost(by, target);
   if (cost > AD.min) return;
   AD.min -= cost; AD.sel = '';
-  const slot = QC[k].slot;
-  let hit = '', gag = false;
-  if (k === 'mute'){
-    gag = true; AD.gag = target;
-    const left = ['t', 'n', 'f'].filter(s => AD.truth[target][s] && !AD.slots[target][s]);
-    if (left.length) hit = left[(Math.random() * left.length) | 0];
-  } else if (AD.truth[target][slot] && !AD.slots[target][slot]) hit = slot;
-  if (hit) AD.slots[target][hit] = 1;
-  if (k === 'evi') AD.evi = null;   // 证据是一次性的，打完得再去取
+  const dim = adDimOf(target), d = DIMOF[dim];
+  const evi = by === 'evi';
+  const cross = !evi && by !== target;
 
-  const role = (AD.roles.find(r => r[0] === target) || [])[1] || '';
-  let tx = '', src = AD.srcOf[target];
-  if (gag){
-    tx = '（被要求这一轮不要发言，他把手机反扣在桌上）';
-  } else if (!AD.liveUsed){
-    /* 每轮只给被质询的那一个人一次现场调用——你出牌，模型当场回应 */
-    AD.liveUsed = true;
+  let tx = '', src = AD.srcOf[by] || 'script', speaker = evi ? '你' : by;
+  if (evi){
+    tx = '（把这行数按在桌上）' + AD.evi.tx;
+    src = 'model';                      // 真实数据，不是生成的
+    AD.evi = null;
+  } else if (cross && AD.live < LIVE_MAX){
+    /* 现场的一次独立调用：发起方只带着自己那一维，看着目标的原话开口 */
+    AD.live++; AD.calls++;
     AD.phase = 'wait1'; aiDreamRender();
+    const bd = adDimOf(by);
     try {
-      const j = await askAI('梦蝶局·' + target, adSys(target, role, target === AD.liar, AD.from[AD.roles.findIndex(r => r[0] === target)]),
-        '场景：' + AD.sc.slice(0, 110) + '\n你正在被' + QC[k].act
-          + (hit ? '，对方戳中了——' + FLAWTX[hit] : '，但这一下没戳到你')
-          + '。只回一句话，不超过 24 字，不要名字前缀。');
+      const j = await askAI('梦蝶局·' + by + '→' + target,
+        adSys(by, bd, AD.from[AD.roles.findIndex(r => r[0] === by)]),
+        '我的困境：' + AD.sc.slice(0, 100)
+        + '\n同桌的「' + target + '」刚才说：「' + (AD.last[target] || '') + '」'
+        + '\n从你这一维看，他这条漏了什么代价？只回一句话，不超过 26 字，不要名字前缀。');
       if (j && j.ok && j.text){
         const s = String(j.text).split(/\n+/)[0].trim().replace(/^[^：:]{1,8}[：:]/, '').replace(/^[「"']|[」"']$/g, '');
         if (s.length > 3){ tx = s.slice(0, 40); src = 'model'; }
       }
     } catch (e){ /* 降级 */ }
-    if (!tx){ tx = adPressLine(target, hit, k); src = 'script'; }
-    AD.srcOf[target] = src;
+    if (!tx){ tx = adPressLine(by, target); src = 'script'; }
+    AD.srcOf[by] = src;
+  } else if (cross){
+    const b = AD.bank[by];
+    tx = (b && b.r.t) || adPressLine(by, target);
+    src = 'script'; AD.srcOf[by] = src;   // 现场调用额度用完，照实标脚本
   } else {
+    /* 让他深挖自己那一维：只会给自己更乐观的版本，所以算软 */
     const b = AD.bank[target];
-    tx = (b && b.r[slot === '*' ? 'n' : slot]) || adPressLine(target, hit, k);
+    tx = (b && (b.r.n || b.r.f)) || adPressLine(target, target);
+    src = 'script'; AD.srcOf[target] = src;
   }
-  AD.lines.push([target, tx]);
-  /* 这一格是被哪句话露出来的，当场记下——卷宗要原话，不能事后随便抓一句凑 */
-  if (hit && target === AD.liar) AD.quote[hit] = tx;
+  /* 这一格记上一条，署名是发起方——署名不是发起方，这一格就永远是软的 */
+  AD.slots[dim].push({ by: speaker, tx, src });
+  AD.last[speaker] = tx;
+  if (!evi) adRec(speaker).spot++, adRec(target).caught++;
+
+  AD.lines.push([speaker, tx, target]);
   AD.shown = AD.lines.length;
   AD.phase = 'act';
-  if (hit && typeof osToast === 'function') osToast(target + ' 的「' + SLOTN[hit] + '」亮了');
-  const nailed = AD.roles.some(r => { const s = AD.slots[r[0]]; return s.t && s.n && s.f; });
-  if (nailed) AD.min = 0;
+  if (typeof osToast === 'function')
+    osToast('「' + d.nm + '」这一格' + (adHard(dim) ? '变硬了：' : '又记一条：') + speaker + ' 评过');
   aiDreamRender();
   if (AD.min < 1) adWait(1400, adNextRound);
 }
-function adPressLine(nm, hit, k){
-  if (hit) return ({ t: '那天的先后……我可能记岔了，不重要吧。',
-                     n: '数字回头我发你，现在报不准，别咬字眼。',
-                     f: '我立场没变，是你们理解得太窄。' })[hit];
-  return nm === AD.liar ? '这个我早说过了，你还要我说几遍。' : '这一条我经得起查，你随便翻。';
+function adPressLine(by, target){
+  const d = DIMOF[adDimOf(by)] || DIMS[0];
+  return d.ask + '——' + target + '这条，我这一维的代价他没算。';
 }
 
-/* ---------- 摊牌：分层结算，押错也带走一条 ---------- */
-function adShowdown(){ AD.st = 'done'; AD.phase = ''; AD.gag = '';
-  const s = AD.slots[AD.liar] || {}, nailed = s.t && s.n && s.f;
-  const hit = AD.bet === AD.liar;
-  const notes = ['t', 'n', 'f'].filter(k => AD.slots[AD.liar] && AD.slots[AD.liar][k])
-    .map(k => '梦蝶局破绽笔记 · ' + AD.liar + '（' + SLOTN[k] + '）：' + WHYTX[k]);
-  let head, tell, take;
-  if (nailed && hit){ head = '你把三格全打亮了，还押中了他'; take = 3; tell = '三条破绽全进了资讯库——下一局它们就是你手上的证据牌。'; }
-  else if (nailed){ head = '三格全亮，实锤了他，只是你押的是 ' + (AD.bet || '没押'); take = 3; tell = '锤穿了就不必靠押——破绽照样全进资讯库。'; }
-  else if (hit){ head = '你押中了，但没锤穿'; take = 2; tell = '猜对了不算赢透，举证才算。进库的只有你真打亮的那几条。'; }
-  else { head = AD.bet ? '你押的是 ' + AD.bet + '，没押中' : '你没押注'; take = 1; tell = '输了也带走一条——玩过的局，不白玩。'; }
-  const keep = notes.length ? notes.slice(0, take)
-    : ['梦蝶局破绽笔记 · ' + AD.liar + '（' + SLOTN.f + '）：' + WHYTX.f];
-  AD.res = { head, tell, nailed, hit, take: keep.length };
+/* ---------- 签字：三轮打完，玩家自己下结论 ---------- */
+function adSign(){ AD.st = 'play'; AD.phase = 'sign'; AD.min = 0; AD.sel = ''; aiDreamRender(); }
+
+/* ---------- 决定书：分层结算，一格没买也照样带走一份 ---------- */
+function adShowdown(){ AD.st = 'done'; AD.phase = '';
+  const n = adHardN(), miss = DIMS.filter(d => !adHard(d.k));
+  const sign = AD.call || '再等等';
+  let head, tell;
+  if (n >= 4){ head = '四格全买齐了，你签的是「' + sign + '」';
+    tell = '四维代价都摆到桌上了——这份决定不是拍脑袋，是算过的。'; }
+  else if (n >= 2){ head = '买到 ' + n + ' 格，你签的是「' + sign + '」';
+    tell = '没买的那 ' + miss.length + ' 格（' + miss.map(d => d.nm).join(' / ') + '）你是在拿它赌——赌得起就签。'; }
+  else { head = '只买到 ' + n + ' 格，你签的是「' + sign + '」';
+    tell = '你现在做的是一个只算了一维的决定。不是错，是你还没看见另外三片叶子。'; }
+  const notes = DIMS.map(d => {
+    const cs = adCells(d.k);
+    return '梦蝶局代价清单 · ' + d.nm + '：' + (cs.length
+      ? cs.map(x => x.by + '「' + x.tx + '」').slice(0, 2).join('；')
+      : '这一格没买 —— 也就是说你在拿它赌');
+  });
+  AD.res = { head, tell, hard: n, sign, miss: miss.map(d => d.nm), take: notes.length };
   if (!AD.settled){
     AD.settled = true;
-    /* 战绩跟着分身走：撒谎的那个骗过了没识破他的人，被识破就记一笔 */
-    AD.roles.forEach(r => {
-      const rc = adRec(r[0]);
-      if (r[0] === AD.liar){ if (nailed || hit) rc.caught++; else rc.lie += AD.roles.length - 1; }
-      else if (nailed || hit) rc.spot++;
-    });
-    const f = adFileMake(nailed, hit, keep);
-    keep.forEach(t => S.lib.unshift({ text: t, ind: '互联网', type: 'biz', peak: 12, t: stamp() }));
-    mk('梦蝶局揭穿一叶障目：' + AD.liar + '在「' + AD.sc.slice(0, 12) + '」里露了馅', 'fun', 12, 'news',
-       hit ? '我（押中了）' : '梦蝶局', '互联网');
+    AD.roles.forEach(r => adRec(r[0]).lie++);
+    const f = adFileMake(n, sign, notes);
+    notes.forEach(t => S.lib.unshift({ text: t, ind: '互联网', type: 'biz', peak: 12, t: stamp() }));
+    mk('梦蝶局 · 四片叶子拼了「' + AD.sc.slice(0, 12) + '」：买到 ' + n + '/4 格代价，我签的是' + sign,
+       'fun', 12, 'news', '我', '互联网');
     /* 卷宗本身也是一颗泡泡——能被吹大、能沉底、能被后来的人翻到 */
     mk(f.bubble, 'fun', 14, 'news', '梦蝶局卷宗', '互联网');
     libRender(); sync();
-    adBill(keep);
+    adBill(notes);
   }
   aiDreamRender();
 }
 
 /* ---------- 案例卷宗：一个人踩过的坑，变成所有人的地图 ---------- */
 const ADFILES = [
-  { sc: '内推的那位说包能翻倍，先交三千流程费', cast: '猎头 / 内推人 / HR / 你',
-    liar: '一叶障目', flaws: ['「翻倍」只给形容词，从不肯报一个数', '公司名要「保密」，查无此岗', '流程费说可退，却不肯落纸'],
+  { sc: '内推的那位说包能翻倍，先交三千流程费', cast: '气泡水（只算钱）/ 大鱼（只算人）/ 泡面（只算时机）/ 馍馍（只算最坏）',
+    sign: '不做', hard: 4,
+    costs: ['只算钱：三千是沉没成本，「翻倍」从头到尾没给过一个数',
+            '只算人：真内推的人不收钱，收了钱他就不是你的人了',
+            '只算最坏：钱要不回来，你还多一条查无此岗的经历'],
     lesson: '凡是先要钱的机会，都不是机会。' },
-  { sc: '表哥的项目，说缺个技术合伙人，不用出钱只出人', cast: '表哥 / 项目方 / 前同事 / 你',
-    liar: '一叶障目', flaws: ['上线时间一改再改', '「已经有客户」但说不出一个名字', '嘴上说股份，合同里写的是劳务'],
+  { sc: '表哥的项目，说缺个技术合伙人，不用出钱只出人', cast: '气泡水（只算钱）/ 大鱼（只算人）/ 泡面（只算时机）/ 馍馍（只算最坏）',
+    sign: '再等等', hard: 3,
+    costs: ['只算钱：不出钱只出人，你出的是这一年的工资',
+            '只算时机：上线时间一改再改，你的窗口比项目的窗口短',
+            '只算最坏：嘴上说股份，合同里写的是劳务'],
     lesson: '只出人不出钱，通常是只有你在出。' }
 ];
-function adFileMake(nailed, hit, keep){
-  const flaws = ['t', 'n', 'f'].filter(k => AD.truth[AD.liar] && AD.truth[AD.liar][k]).map(k => {
-    const got = AD.slots[AD.liar] && AD.slots[AD.liar][k];
-    const said = (AD.quote || {})[k] || '';
-    return SLOTN[k] + '：' + WHYTX[k] + (got && said ? '——原话「' + said + '」' : '（这条你没打到）');
-  }).slice(0, 3);
-  const lesson = nailed ? '举证比猜准更值钱：三格都打亮，才轮不到他狡辩。'
-    : hit ? '你看对了人，但没拿出证据——下次先取证再开口。'
-    : '看走眼不丢人，丢的是没留下证据。这条记下来，下一局它就是你的牌。';
-  const f = { sc: AD.sc.slice(0, 40), cast: AD.roles.map(r => r[0] + '（' + r[1] + '）').join(' / '),
-              liar: AD.liar, flaws, lesson, t: stamp(),
-              bubble: '梦蝶局卷宗 · ' + AD.sc.slice(0, 14) + '｜撒谎的是' + AD.liar + '｜' + lesson };
+function adFileMake(n, sign, notes){
+  const costs = DIMS.map(d => {
+    const cs = adCells(d.k);
+    return d.nm + '：' + (cs.length ? cs[cs.length - 1].tx + '（' + cs.map(x => x.by).join('/') + '）'
+      : '这一格你没买 —— 也就是说你在拿它赌');
+  });
+  const lesson = n >= 4 ? '四维都算过再签的字，事后不用回头找理由。'
+    : n >= 2 ? '你买了 ' + n + ' 格，剩下的是在赌——知道自己在赌，这就是进步。'
+    : '一维决策不一定错，但它经不起第二个人问一句「那个呢」。';
+  const f = { sc: AD.sc.slice(0, 40), cast: AD.roles.map(r => r[0] + '（' + DIMOF[r[1]].nm + '）').join(' / '),
+              sign, hard: n, costs, lesson, t: stamp(),
+              bubble: '梦蝶局卷宗 · ' + AD.sc.slice(0, 14) + '｜四维代价买到 ' + n + '/4｜我签的是' + sign + '｜' + lesson };
   ADFILES.unshift(f);
-  S.lib.unshift({ text: '梦蝶局卷宗 · ' + f.sc + '：' + f.liar + ' 是一叶障目。' + lesson,
+  S.lib.unshift({ text: '梦蝶局卷宗 · ' + f.sc + '：买到 ' + n + '/4 格代价，签的是' + sign + '。' + lesson,
                   ind: '互联网', type: 'biz', peak: 14, t: stamp() });
   return f;
 }
@@ -4118,38 +4179,46 @@ function adFilesHTML(){
     + '<div class="adfiles">' + ADFILES.map(f =>
         '<div class="fi"><b>' + esc(f.sc) + '</b>'
         + '<span class="ln">' + esc(f.cast) + '</span>'
-        + '<span>撒谎的是 <b style="display:inline">' + esc(f.liar) + '</b></span>'
-        + '<span>' + f.flaws.map(x => '· ' + esc(x)).join('<br>') + '</span>'
+        + '<span>代价买到 <b style="display:inline">' + f.hard + '/4</b> 格 · 最后签的是 <b style="display:inline">'
+          + esc(f.sign) + '</b></span>'
+        + '<span>' + f.costs.map(x => '· ' + esc(x)).join('<br>') + '</span>'
         + '<span class="ln">一句教训：' + esc(f.lesson) + '</span></div>').join('')
     + '</div><button class="rbtn pri" data-ad="reset" style="margin-top:6px">回去组局</button></div>';
 }
-/* 结算单落进 Outlook 草稿箱——赢来的东西留在办公软件里 */
-function adBill(keep){
+/* 完整决定书落进 Outlook 草稿箱——幻灯片只放摘要，正文在邮件里 */
+function adBill(notes){
   if (typeof MAILS === 'undefined' || !MAILS.draft) return;
   const cost = AD.from.filter(f => f === 'hire').length * 29 + (AD.adv ? 99 : 0);
-  AD.mail = '<p>场景：' + esc(AD.sc.slice(0, 40)) + '</p>'
-    + '<p>撒谎的是 <b>' + esc(AD.liar) + '</b>（一叶障目）。' + esc(AD.res.head) + '。</p>'
-    + '<p>本局支出：雇座位 ' + AD.from.filter(f => f === 'hire').length + ' 个 + 军师 ' + (AD.adv ? 1 : 0) + ' 位 = ¥' + cost + '</p>'
-    + '<p>带走的破绽笔记（已进资讯库）：</p><ul>' + keep.map(t => '<li>' + esc(t) + '</li>').join('') + '</ul>'
+  AD.mail = '<p>困境：' + esc(AD.sc.slice(0, 60)) + '</p>'
+    + '<p>我签的是 <b>' + esc(AD.res.sign) + '</b>。' + esc(AD.res.head) + '。</p>'
+    + '<p>四维代价清单：</p><ul>'
+    + DIMS.map(d => {
+        const cs = adCells(d.k);
+        return '<li><b>' + esc(d.nm) + '</b>：' + (cs.length
+          ? cs.map(x => esc(x.tx) + '<span class="muted">（' + esc(x.by) + ' 说的' + (x.by === adNameOf(d.k) ? ' · 只有他自己那一维' : ' · 交叉验证过') + '）</span>').join('<br>')
+          : '<b>这一格你没买 —— 也就是说你在拿它赌</b>') + '</li>';
+      }).join('') + '</ul>'
+    + '<p>本局支出：雇座位 ' + AD.from.filter(f => f === 'hire').length + ' 个 + 军师 ' + (AD.adv ? 1 : 0) + ' 位 = ¥' + cost
+    + ' · 独立调用 ' + AD.calls + ' 次（四个座位视野互相隔离）</p>'
+    + '<p>' + esc(AD.res.tell) + '</p>'
     + '<p class="muted">蝴蝶飞走了，指尖还沾着翅膀上的粉。</p>';
-  MAILS.draft.unshift({ fr: '梦蝶局', tm: stamp(), sj: '梦蝶局结算单 · ' + AD.sc.slice(0, 10),
-    pv: AD.res.head + ' · 带走 ' + AD.res.take + ' 条破绽笔记', body: AD.mail });
+  MAILS.draft.unshift({ fr: '梦蝶局', tm: stamp(), sj: '决定书 · ' + AD.sc.slice(0, 10),
+    pv: '签的是' + AD.res.sign + ' · 四维代价买到 ' + AD.res.hard + '/4 格', body: AD.mail });
 }
 
 /* ---------- 军师：每轮一条钉钉私聊 + 会话列表红点 + 任务栏闪 ---------- */
 function adAdvisorWhisper(){
   if (!AD.adv) return;
-  const k = AD.adv[2], sus = AD.roles.map(r => r[0]).filter(n => n !== AD.liar || Math.random() < .7);
-  const who = sus[(Math.random() * sus.length) | 0] || AD.roles[0][0];
-  const tip = '第 ' + AD.round + ' 轮 · 我盯着「' + who + '」——'
-    + ({ ask: '他给的全是形容词，逼他报一个数。',
-         old: '他这轮的说法和上一轮对不上，翻他旧账。',
-         evi: '别听他说，去表里捞一行数按在桌上。',
-         mute: '让他闭麦一轮，看谁急着替他补位。' })[k];
+  const miss = DIMS.filter(d => !adHard(d.k));
+  const d = miss.length ? miss[(Math.random() * miss.length) | 0] : DIMOF[AD.adv[2]];
+  const who = adNameOf(d.k), other = (AD.roles.find(r => r[1] !== d.k) || [])[0] || '';
+  const tip = '第 ' + AD.round + ' 轮 · 【' + d.nm + '】这一格还是软的——'
+    + (miss.length ? '让「' + other + '」去问「' + who + '」，他那一维看不见' + d.blind + '。'
+                   : '四格都买齐了，剩下的分钟拿去买第二条交叉。');
   const st = document.querySelector('#imStream');
   if (st){
     st.insertAdjacentHTML('beforeend', '<div class="imsg bot"><div class="av">' + esc(AD.adv[0].slice(0, 1)) + '</div>'
-      + '<div><div class="who">' + esc(AD.adv[0]) + ' · ' + esc(AD.adv[1]) + '（军师）</div>'
+      + '<div><div class="who">' + esc(AD.adv[0]) + ' · ' + esc(AD.adv[1]) + '（军师 · 脚本模拟）</div>'
       + '<div class="bb">' + esc(tip) + '</div></div></div>');
     if (st.parentNode) st.parentNode.scrollTop = st.parentNode.scrollHeight;
   }
@@ -4164,12 +4233,10 @@ function adAdvisorWhisper(){
 $('#dreamGame').addEventListener('click', e => {
   const md = e.target.closest('[data-dmode]');
   if (md){ window.dreamMode = md.dataset.dmode; dreamRender(); return; }
+  const sg = e.target.closest('[data-sign]');
+  if (sg && AD.phase === 'sign'){ AD.call = sg.dataset.sign; return adShowdown(); }
   const aim = e.target.closest('[data-aim]');
-  if (aim && AD.st === 'play' && AD.phase === 'act'){
-    if (AD.sel) adPlay(AD.sel, aim.dataset.aim);
-    else { AD.bet = AD.bet === aim.dataset.aim ? '' : aim.dataset.aim; aiDreamRender(); }
-    return;
-  }
+  if (aim && AD.st === 'play' && AD.phase === 'act' && AD.sel){ adPlay(AD.sel, aim.dataset.aim); return; }
   const a = e.target.closest('[data-ad]');
   if (!a) return;
   const k = a.dataset.ad;
@@ -4179,10 +4246,9 @@ $('#dreamGame').addEventListener('click', e => {
     const rs = [], fr = [];
     for (let i = 0; i < 4; i++){
       const nm = ($('#adNm' + i) && $('#adNm' + i).value.trim()) || '';
-      const id = ($('#adId' + i) && $('#adId' + i).value.trim()) || '';
-      if (nm){ rs.push([nm.slice(0, 6), id || '身份不明']); fr.push(($('#adFr' + i) && $('#adFr' + i).value) || ''); }
+      if (nm){ rs.push([nm.slice(0, 6), DIMS[i].k]); fr.push(($('#adFr' + i) && $('#adFr' + i).value) || ''); }
     }
-    if (rs.length < 2) return osAlert('梦蝶局', '至少两个角色才成局——一个人不叫局，叫独白。');
+    if (rs.length < 2) return osAlert('梦蝶局', '至少两个座位才成局——一个人不叫局，叫独白。');
     const ai = $('#adAdv') ? parseInt($('#adAdv').value, 10) : -1;
     const adv = ai >= 0 ? ADVISORS[ai] : null;
     const cost = fr.filter(f => f === 'hire').length * 29 + (adv ? 99 : 0);
@@ -4208,10 +4274,16 @@ $('#dreamGame').addEventListener('click', e => {
 function adBoot(){
   clearTimeout(AD.timer); AD.timer = null;
   AD.busy = true; AD.st = 'wait'; AD.lines = []; AD.shown = 0; AD.round = 0;
-  AD.bet = ''; AD.settled = false; AD.res = null; AD.evi = null; AD.sel = ''; AD.gag = ''; AD.phase = 'talk';
+  AD.call = ''; AD.settled = false; AD.res = null; AD.evi = null; AD.sel = ''; AD.phase = 'talk';
   aiDreamRender();
   adEngine();
 }
+/* 预置困境下拉：挑一条，直接填进上面那块 textarea */
+document.addEventListener('change', e => {
+  if (e.target.id !== 'adCase') return;
+  const i = parseInt(e.target.value, 10);
+  if (i >= 0 && $('#adSc')){ AD.sc = CASES[i]; $('#adSc').value = CASES[i]; }
+});
 
 /* ---------- 「亮证据」的唯一来源：切到 Excel 或资讯库，点一行真数据 ----------
    SALARY 会被机器人在运行时 push，所以快照文本，绝不存下标。 */
@@ -4236,7 +4308,7 @@ document.addEventListener('click', e => {
 /* ---------- 备注区的手牌：只有讲者看得见的那一块 ---------- */
 document.addEventListener('click', e => {
   const q = e.target.closest('#dreamHand [data-q]');
-  if (!q || AD.st !== 'play') return;
+  if (!q || AD.st !== 'play' || AD.phase !== 'act') return;
   const k = q.dataset.q;
   if (k === 'pass'){ AD.sel = ''; AD.min = 0; aiDreamRender(); return adWait(600, adNextRound); }
   if (k === 'getevi'){
@@ -4244,7 +4316,6 @@ document.addEventListener('click', e => {
     if (typeof osToast === 'function') osToast('去 Sheet2 人力成本对标找一行对得上的数，点它', 'salary');
     return;
   }
-  if (adCost(k) > AD.min) return;
   AD.sel = AD.sel === k ? '' : k;
   adHandRender(); aiDreamRender();
 });
@@ -4406,5 +4477,6 @@ opsRender();
 <script src="games/hide.js" defer></script>
 <script src="games/word.js" defer></script>
 <script src="games/mbti.js" defer></script>
+<script src="games/dreamroom.js" defer></script>
 </body>
 </html>
