@@ -5,7 +5,7 @@
    行为与 server/index.js 对齐：无 key / 超额 / 超时 一律 mode:script，
    前端自己降级并如实标注，不把脚本模拟冒充真实调用。
    ============================================================ */
-import { ask, hasKey, model } from './ai.js';
+import { askWithUsage, hasKey, isQwen, model } from './ai.js';
 import { GATE_SINGLETON } from './ai-gate.js';
 import { serveMedia } from './media.js';
 
@@ -20,6 +20,10 @@ const MAX_ANSWER = 1200;
 
 const DEFAULT_DAILY = 300;
 const DEFAULT_HOURLY = 20;
+
+// 没调模型就是实打实的 0；调了但没拿到数才是 null。两者别混。
+const NO_USAGE = { inputTokens: 0, outputTokens: 0, totalTokens: 0 };
+const UNKNOWN_USAGE = { inputTokens: null, outputTokens: null, totalTokens: null };
 
 export default {
   async fetch(request, env) {
@@ -46,36 +50,46 @@ async function health(request, env) {
     ok: true,
     stage: 2,
     ai: hasKey(env) ? 'ready' : 'no-key',
-    model: hasKey(env) ? model(env) : null,
+    model: model(env),
     colo: request.cf?.colo ?? null,
     quota: { ...(await gate(env).stats()), dailyLimit: limit(env.AI_DAILY_LIMIT, DEFAULT_DAILY) }
   });
 }
 
 async function handleAsk(request, env) {
-  if (request.method !== 'POST') return json({ ok: false, mode: 'script', why: '方法不支持' }, 405);
-  if (!hasKey(env)) return json({ ok: false, mode: 'script', why: '未配置模型 key' });
+  // 每条响应都带耗时和用量，前端的调用面板不用为缺字段做兼容
+  const startedAt = Date.now();
+  const meta = (usage) => ({ durationMs: Date.now() - startedAt, usage });
+  const down = (why, status) => json({ ok: false, mode: 'script', why, ...meta(NO_USAGE) }, status);
+
+  if (request.method !== 'POST') return down('方法不支持', 405);
+  if (!hasKey(env)) return down('未配置模型 key');
+  if (!isQwen(env)) return down('参赛版模型配置不是千问');
 
   const body = await readJson(request);
-  if (!body) return json({ ok: false, mode: 'script', why: '请求体过大或不是 JSON' });
+  if (!body) return down('请求体过大或不是 JSON');
 
   const blocked = await gate(env).check(
     clientIp(request),
     limit(env.AI_DAILY_LIMIT, DEFAULT_DAILY),
     limit(env.AI_PER_HOUR, DEFAULT_HOURLY)
   );
-  if (blocked) return json({ ok: false, mode: 'script', why: blocked });
+  if (blocked) return down(blocked);
 
   try {
-    const text = await ask(
+    const { text, usage } = await askWithUsage(
       env,
       String(body.system || '').slice(0, MAX_SYSTEM),
       String(body.q || '').slice(0, MAX_QUESTION)
     );
     if (!text.trim()) throw new Error('empty');
-    return json({ ok: true, mode: 'model', model: model(env), text: text.slice(0, MAX_ANSWER) });
+    return json({
+      ok: true, mode: 'model', model: model(env),
+      text: text.slice(0, MAX_ANSWER), ...meta(usage)
+    });
   } catch {
-    return json({ ok: false, mode: 'script', why: '模型超时或出错' });
+    // 已经打出去了但没拿到用量，这里必须是 null 而不是 0
+    return json({ ok: false, mode: 'script', why: '模型超时或出错', ...meta(UNKNOWN_USAGE) });
   }
 }
 

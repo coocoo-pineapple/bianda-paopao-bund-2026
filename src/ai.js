@@ -11,29 +11,46 @@ const MAX_TOKENS = 400;
 const TEMPERATURE = 0.7;
 const ANTHROPIC_VERSION = '2023-06-01';
 
-const DEFAULT_STYLE = 'anthropic';
-const DEFAULT_BASE = 'https://api.anthropic.com';
-const DEFAULT_MODEL = 'claude-sonnet-5';
+// 默认值与 server/ai.js 保持一致：参赛版跑千问（百炼的 OpenAI 兼容模式）
+const DEFAULT_STYLE = 'openai';
+const DEFAULT_BASE = 'https://dashscope.aliyuncs.com/compatible-mode';
+const DEFAULT_MODEL = 'qwen3.8-max';
+
+/**
+ * @typedef {{ inputTokens: number | null, outputTokens: number | null, totalTokens: number | null }} Usage
+ */
 
 export const hasKey = (env) => !!env.AI_API_KEY;
 
 export const model = (env) => env.AI_MODEL || DEFAULT_MODEL;
 
+/** 参赛版只认千问：配成别家模型一律降级，不拿别家结果冒充参赛口径 */
+export const isQwen = (env) => /^qwen/i.test(model(env));
+
 const style = (env) => (env.AI_STYLE || DEFAULT_STYLE).toLowerCase();
 const base = (env) => (env.AI_BASE_URL || DEFAULT_BASE).replace(/\/$/, '');
 
 /**
- * 调模型。超时或上游非 2xx 都抛错，交给调用方降级。
+ * 调模型，连 token 用量一起带回来 —— 前端要显示这次调用烧了多少。
+ * 超时或上游非 2xx 都抛错，交给调用方降级。
  * @param {{ AI_API_KEY?: string, AI_STYLE?: string, AI_BASE_URL?: string, AI_MODEL?: string }} env
  * @param {string} system
  * @param {string} user
- * @returns {Promise<string>}
+ * @returns {Promise<{ text: string, usage: Usage }>}
  */
-export async function ask(env, system, user) {
+export async function askWithUsage(env, system, user) {
   const signal = AbortSignal.timeout(TIMEOUT_MS);
   return style(env) === 'openai'
     ? askOpenAi(env, system, user, signal)
     : askAnthropic(env, system, user, signal);
+}
+
+/**
+ * 只要正文的老接口，留给不关心用量的调用方。
+ * @returns {Promise<string>}
+ */
+export async function ask(env, system, user) {
+  return (await askWithUsage(env, system, user)).text;
 }
 
 async function askOpenAi(env, system, user, signal) {
@@ -46,7 +63,10 @@ async function askOpenAi(env, system, user, signal) {
     temperature: TEMPERATURE,
     messages: [{ role: 'system', content: system }, { role: 'user', content: user }]
   }, signal);
-  return ((json.choices || [])[0] || {}).message?.content || '';
+  return {
+    text: ((json.choices || [])[0] || {}).message?.content || '',
+    usage: normalizeUsage(json.usage || {}, 'openai')
+  };
 }
 
 async function askAnthropic(env, system, user, signal) {
@@ -60,7 +80,30 @@ async function askAnthropic(env, system, user, signal) {
     system,
     messages: [{ role: 'user', content: user }]
   }, signal);
-  return (json.content || []).map((c) => c.text || '').join('');
+  return {
+    text: (json.content || []).map((c) => c.text || '').join(''),
+    usage: normalizeUsage(json.usage || {}, 'anthropic')
+  };
+}
+
+/** 数不出来就给 null，别拿 0 冒充「真的没烧 token」 */
+const tokenCount = (value) => (Number.isFinite(value) ? value : null);
+
+/**
+ * 两家的字段名不一样：openai 是 prompt/completion_tokens，
+ * anthropic 是 input/output_tokens。归一成同一套，前端只认一种。
+ * @returns {Usage}
+ */
+function normalizeUsage(raw, style) {
+  const inputTokens = tokenCount(style === 'openai'
+    ? raw.prompt_tokens ?? raw.input_tokens
+    : raw.input_tokens ?? raw.prompt_tokens);
+  const outputTokens = tokenCount(style === 'openai'
+    ? raw.completion_tokens ?? raw.output_tokens
+    : raw.output_tokens ?? raw.completion_tokens);
+  const totalTokens = tokenCount(raw.total_tokens) ??
+    (inputTokens !== null && outputTokens !== null ? inputTokens + outputTokens : null);
+  return { inputTokens, outputTokens, totalTokens };
 }
 
 async function post(url, headers, body, signal) {

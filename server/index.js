@@ -40,36 +40,63 @@ app.use(express.static(PUBLIC_DIR, {
 
 // 健康检查：部署后用它确认服务活着
 app.get('/api/health', (req, res) => {
-  res.json({ ok: true, stage: 2, ai: ai.hasKey() ? 'ready' : 'no-key', uptime: Math.round(process.uptime()) });
+  res.json({
+    ok: true, stage: 2, ai: ai.hasKey() ? 'ready' : 'no-key', model: ai.MODEL,
+    uptime: Math.round(process.uptime())
+  });
 });
 
 // AI 问答：无 key / 超额 / 超时 一律返回 mode:script，前端自己降级并如实标注
 app.post('/api/ask', async (req, res) => {
+  const startedAt = Date.now();
+  const callMeta = usage => ({ durationMs: Date.now() - startedAt, usage });
+  const noUsage = { inputTokens: 0, outputTokens: 0, totalTokens: 0 };
   const { system, q } = req.body || {};
-  if (!ai.hasKey()) return res.json({ ok: false, mode: 'script', why: '未配置模型 key' });
+  if (!ai.hasKey()) return res.json({
+    ok: false, mode: 'script', why: '未配置模型 key', ...callMeta(noUsage)
+  });
+  if (!ai.isQwen()) return res.json({
+    ok: false, mode: 'script', why: '参赛版模型配置不是千问', ...callMeta(noUsage)
+  });
   const blocked = ai.gate(req.ip || 'x');
-  if (blocked) return res.json({ ok: false, mode: 'script', why: blocked });
+  if (blocked) return res.json({
+    ok: false, mode: 'script', why: blocked, ...callMeta(noUsage)
+  });
   try {
-    const text = await ai.ask(String(system || '').slice(0, 2000), String(q || '').slice(0, 500));
+    const { text, usage } = await ai.askWithUsage(
+      String(system || '').slice(0, 2000),
+      String(q || '').slice(0, 500)
+    );
     if (!text.trim()) throw new Error('empty');
-    res.json({ ok: true, mode: 'model', model: ai.MODEL, text: text.slice(0, 1200) });
+    res.json({
+      ok: true, mode: 'model', model: ai.MODEL, text: text.slice(0, 1200),
+      ...callMeta(usage)
+    });
   } catch (e) {
-    res.json({ ok: false, mode: 'script', why: '模型超时或出错' });
+    res.json({
+      ok: false, mode: 'script', why: '模型超时或出错',
+      ...callMeta({ inputTokens: null, outputTokens: null, totalTokens: null })
+    });
   }
 });
 
-const server = app.listen(PORT, () => {
-  console.log(`[变大泡泡] http://localhost:${PORT}`);
-  console.log(`[变大泡泡] 静态目录 ${PUBLIC_DIR}`);
-});
+// 本地直接启动；Vercel 通过 api/index.js 引用 app，不重复监听端口。
+const server = require.main === module
+  ? app.listen(PORT, () => {
+      console.log(`[变大泡泡] http://localhost:${PORT}`);
+      console.log(`[变大泡泡] 静态目录 ${PUBLIC_DIR}`);
+    })
+  : null;
 
 // 阶段 3 会在这里挂 WebSocket：
 //   const { attachWater } = require('./water');
 //   attachWater(server);
 
-process.on('SIGINT', () => {
-  console.log('\n[变大泡泡] 收到 SIGINT，关闭中');
-  server.close(() => process.exit(0));
-});
+if (server) {
+  process.on('SIGINT', () => {
+    console.log('\n[变大泡泡] 收到 SIGINT，关闭中');
+    server.close(() => process.exit(0));
+  });
+}
 
 module.exports = { app, server };

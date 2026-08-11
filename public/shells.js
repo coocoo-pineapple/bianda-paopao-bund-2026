@@ -47,7 +47,7 @@ const SHELLS = [
     tabs: ['开始', '插入', '设计', '切换', '动画', '幻灯片放映'], ribbon: PPT_RIBBON, view: 'review' },
   { id: 'mail',  title: '收件箱 - zhuangzhou@paopao.work - Outlook',
     tabs: ['开始', '发送/接收', '文件夹', '视图', '帮助'], ribbon: MAIL_RIBBON, view: 'mail' },
-  { id: 'chat',  title: '企业微信 - 产品二部',
+  { id: 'chat',  title: '钉钉 - 产品二部',
     tabs: ['消息', '通讯录', '工作台', '文档', '会议'], ribbon: CHAT_RIBBON, view: 'chat' },
   { id: 'bi',    title: '经营分析看板 - 数据平台',
     tabs: ['概览', '报表', '指标', '预警', '导出'], ribbon: BI_RIBBON, view: 'ops' },
@@ -278,7 +278,7 @@ const SLIDES = [
   { t: '博主机器人 · 框架库', n: '他遇事先掏哪把尺子。没有尺子的人，答什么都像安慰。' },
   { t: '博主机器人 · 固定动作', n: '先复述、再判断、最后给一个今天就能做的动作。少一步就变鸡汤。' },
   { t: '博主机器人 · 禁区', n: '不承诺结果、不做投资建议、不替你决定。写清楚了他才敢说话。' },
-  { t: '收菜 · 一键 Word', n: '把这一局的收获导出成述职报告的一段。摸鱼的产出也是产出。' }
+  { t: '收菜 · 一键 Word', n: '把这一局的收获导出成述职报告的一段。玩出来的东西，也是产出。' }
 ];
 
 function buildRail() {
@@ -532,62 +532,72 @@ function buildBI() {
 /* ---------- 游戏工坊：趣味区是玩家的游戏平台，不是官方游戏合集 ----------
    官方带头做几个，玩家自己上传，别人玩了可以打赏 —— 趣味区自己就能变现。 */
 const GAMES = [
-  { nm: '爽文背单词',  by: '官方',            tip: 128, go: 'ref'  },
-  { nm: '捡手机文学',  by: '玩家 · 鼓盆而歌', tip: 86,  go: 'phone' },
-  { nm: '职场五子棋',  by: '玩家 · 井底之蛙', tip: 28 },
-  { nm: '工位躲猫猫',  by: '玩家 · 呆若木鸡', tip: 12 }
+  { nm: '爽文背单词',  by: '官方',            tip: 128, go: 'wordgame', ic: 'it-word' },
+  { nm: '捡手机文学',  by: '玩家 · 鼓盆而歌', tip: 86,  go: 'phone',    ic: 'it-phone' },
+  { nm: '职场五子棋',  by: '玩家 · 井底之蛙', tip: 28,  go: 'gomoku',   ic: 'it-gomoku' },
+  { nm: '工位躲猫猫',  by: '玩家 · 呆若木鸡', tip: 12,  go: 'hide',     ic: 'it-hide' }
 ];
 
 function buildGameHall() {
   const el = $('#gameHall');
-  if (!el || el.dataset.built) return;
+  if (!el) return;
   el.innerHTML = GAMES.map((g, i) => `
-    <div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--rule)">
-      <div style="flex:1;min-width:0"><b style="font-size:12px">${esc(g.nm)}</b>
-        <div class="muted" style="font-size:10.5px">${esc(g.by)} · 已获打赏 ¥<span data-tipn="${i}">${g.tip}</span></div></div>
-      ${g.go ? `<button class="rbtn" data-play="${g.go}" style="padding:3px 8px;font-size:11px">去玩</button>` : ''}
-      <button class="rbtn" data-tip="${i}" style="padding:3px 8px;font-size:11px">赏 ¥1</button>
+    <div class="ghrow">
+      <span class="ghic" style="background-image:url(assets/icons/${g.ic}.png)"></span>
+      <div style="flex:1;min-width:0"><b style="font-size:12.5px">${esc(g.nm)}</b>
+        <div class="muted" style="font-size:10.5px">${esc(g.by)} · 已获打赏 ¥<span data-tipn="${i}">${tipOf(g)}</span></div></div>
+      ${g.go ? `<button class="rbtn pri" data-play="${g.go}" style="padding:4px 10px;font-size:11px">去玩</button>` : ''}
+      <button class="rbtn" data-tip="${i}" style="padding:4px 8px;font-size:11px">赏 ¥1</button>
     </div>`).join('') +
     '<div class="muted" style="margin-top:6px;font-size:10.5px">小游戏、皮肤、小工具。谁的点子有人玩，谁收钱。九成归他，一成归平台——平台也要吃饭。</div>';
-  el.addEventListener('click', e => {
-    const p = e.target.closest('[data-play]');
-    if (p) return goFeature(p.dataset.play);
-    const t = e.target.closest('[data-tip]');
-    if (t) {
-      const i = +t.dataset.tip;
-      GAMES[i].tip += 1;
-      $(`[data-tipn="${i}"]`).textContent = GAMES[i].tip;
-    }
-  });
-  el.dataset.built = '1';
+  // 监听只绑一次，重画不重绑（dataset.built 以前把监听和渲染绑在一起，重画就双触发）
+  if (!el.dataset.built) {
+    el.addEventListener('click', e => {
+      const p = e.target.closest('[data-play]');
+      if (p) return goFeature(p.dataset.play);
+      const t = e.target.closest('[data-tip]');
+      if (t) {
+        const g = GAMES[+t.dataset.tip];
+        if (window.BPKit) BPKit.tip.add(g.go, 1); else g.tip += 1;
+        $(`[data-tipn="${t.dataset.tip}"]`).textContent = tipOf(g);
+      }
+    });
+    el.dataset.built = '1';
+  }
 }
+// 打赏数字唯一真源：初始值 + 本地累计。各游戏窗底栏读同一个函数，不再各写各的
+function tipOf(g) { return window.BPKit ? BPKit.tip.total(g.go, g.tip) : g.tip; }
+function rebuildGameHall() { buildGameHall(); }
 
 /* ---------- 皮肤商城：玩家做皮肤卖，试穿立即生效 ----------
    皮肤是套在水面上的滤镜，买完直接跳回广场看效果。 */
 const SKINS = [
   { nm: '默认水色', by: '官方',            price: 0, sold: '—', f: '' },
-  { nm: '深海',     by: '玩家 · 望洋兴叹', price: 6, sold: 214, f: 'hue-rotate(35deg) saturate(1.15)' },
-  { nm: '凌晨两点',     by: '玩家 · 井底之蛙', price: 6, sold: 167, f: 'hue-rotate(160deg) saturate(1.3)' },
-  { nm: '黄昏',     by: '玩家 · 守株待兔', price: 3, sold: 98,  f: 'hue-rotate(-45deg) saturate(1.1)' }
+  { nm: '深海',     by: '玩家 · 望洋兴叹', price: 6, sold: 214, f: 'hue-rotate(185deg) saturate(1.35) brightness(.82)' },
+  { nm: '凌晨两点',     by: '玩家 · 井底之蛙', price: 6, sold: 167, f: 'hue-rotate(205deg) saturate(.5) brightness(.6)' },
+  { nm: '黄昏',     by: '玩家 · 守株待兔', price: 3, sold: 98,  f: 'hue-rotate(-20deg) saturate(1.45) brightness(1.08)' }
 ];
 
 function buildSkinShop() {
   const el = $('#skinShop');
   if (!el || el.dataset.built) return;
   el.innerHTML = SKINS.map((k, i) => `
-    <div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--rule)">
-      <div style="flex:1;min-width:0"><b style="font-size:12px">${esc(k.nm)}</b>
+    <div class="ghrow">
+      <span class="skprev" style="filter:${k.f || 'none'}"></span>
+      <div style="flex:1;min-width:0"><b style="font-size:12.5px">${esc(k.nm)}</b>
         <div class="muted" style="font-size:10.5px">${esc(k.by)}${k.price ? ` · ¥${k.price} · 已售 <span data-soldn="${i}">${k.sold}</span> 份` : ' · 免费'}</div></div>
-      <button class="rbtn" data-wear="${i}" style="padding:3px 8px;font-size:11px">试穿</button>
-      ${k.price ? `<button class="rbtn" data-buy="${i}" style="padding:3px 8px;font-size:11px">买</button>` : ''}
+      <button class="rbtn" data-wear="${i}" style="padding:4px 10px;font-size:11px">试穿</button>
+      ${k.price ? `<button class="rbtn" data-buy="${i}" style="padding:4px 8px;font-size:11px">买</button>` : ''}
     </div>`).join('') +
-    '<div class="muted" style="margin-top:6px;font-size:10.5px">你调的色，别人穿在自己那片水上。皮肤跟马甲走，不跟人走。</div>';
+    '<div class="muted" id="skinTip" style="margin-top:6px;font-size:10.5px">你调的色，别人穿在自己那片水上。皮肤跟马甲走，不跟人走。</div>';
   el.addEventListener('click', e => {
     const w = e.target.closest('[data-wear]'), b = e.target.closest('[data-buy]');
     if (!w && !b) return;
     const i = +(w || b).dataset[w ? 'wear' : 'buy'];
     if (b) { SKINS[i].sold += 1; $(`[data-soldn="${i}"]`).textContent = SKINS[i].sold; }
     $('#stage').style.filter = SKINS[i].f;   // 桌面水面立刻换肤，不用跳转
+    const tip = $('#skinTip');
+    if (tip) tip.textContent = `「${SKINS[i].nm}」已套在整片水面上 · 缩小窗口看效果`;
   });
   el.dataset.built = '1';
 }
@@ -758,7 +768,7 @@ function tvMsg(html) {
   });
 })();
 
-/* ---------- 一键 Word：摸鱼翻译成述职 ----------
+/* ---------- 一键 Word：社区里的收获写回述职 ----------
    闭环：开头是述职报告，结尾写回述职报告。数据全部取自真实 S 状态，
    翻译得越正经越好笑。重复点击是重新生成，不是追加。 */
 
@@ -865,7 +875,7 @@ const TOUR = [
   { t: '16:45', h: '转化的收据', v: 'ops', k: '证据',
     tx: '一千二百八十四个人围观，三百一十二个玩起来，九十六个学到东西，十四个真掏了钱。看板上这排收窄的数字，去邮箱翻结算单，一分不差。' },
   { t: '18:00', h: '下班前，一键述职', v: 'home', k: '闭环', act: () => harvestToWord(),
-    tx: '按一下。今天摸的鱼，全部换算成「跨部门信息同步 1,284 次」。字数真的涨了。你以为他在写述职报告——他真的在写述职报告。' }
+    tx: '按一下。今天攒下的对表、接单、翻资料，全部换算成「跨部门信息同步 1,284 次」。字数真的涨了。你以为他在写述职报告——他真的在写述职报告。' }
 ];
 
 let tourIx = -1;
@@ -1017,7 +1027,7 @@ document.addEventListener('keydown', e => {
 /* ---------- 可见切换器：按功能列，角标告诉你会变成哪个软件 ---------- */
 const BADGE = {
   word: ['W', '#2B579A'], excel: ['X', '#217346'], ppt: ['P', '#C43E1C'],
-  mail: ['O', '#0F6CBD'], chat: ['微', '#2E7D5B'], bi: ['BI', '#3B2E58'], desk: ['⊞', '#1B3B5A']
+  mail: ['O', '#0F6CBD'], chat: ['钉', '#0089FF'], bi: ['BI', '#3B2E58'], desk: ['⊞', '#1B3B5A']
 };
 
 function buildSwitcher() {
