@@ -1,4 +1,4 @@
-// 梦蝶议事厅 · 桌面入口 + 双皮肤验收
+// 对齐会 · 桌面入口 + 双皮肤验收
 // 跑法：node tools/probe-dreamroom-skin.cjs [url]
 const { launch } = require('./cdp.cjs');
 const URL = process.argv[2] || 'http://localhost:3457/app.html';
@@ -82,6 +82,7 @@ const W = '#winDreamRoom';
   const play = () => pg.evaluate(w => {
     const win = document.querySelector(w);
     const av = win.querySelector('.dr-av');
+    const tool = win.querySelector('.k-tool');
     return {
       skin: win.dataset.skin,
       title: (win.querySelector('.dwh').textContent || '').trim(),
@@ -89,15 +90,39 @@ const W = '#winDreamRoom';
       avBg: av ? getComputedStyle(av).backgroundColor : '(无)',
       avs: [...win.querySelectorAll('.dr-av')].map(a => a.textContent),
       cards: [...win.querySelectorAll('.dr-c h4')].map(x => x.textContent.trim()),
-      foot: (win.querySelector('.k-foot') || {}).textContent || ''
+      foot: (win.querySelector('.k-foot') || {}).textContent || '',
+      // 壳套壳自检：kit 那条文档工具条必须整条不可见，会议客户端上面不该再压一层
+      toolVis: tool ? getComputedStyle(tool).display : '(无)'
     };
   }, W);
   R.playTm = await play();
   await pg.shot(OUT + '/dreamroom-skin-tm-play.png');
 
-  await pg.evaluate(w => document.querySelector(w + ' [data-sk="teams"]').click(), W);
+  // 6 会中换皮只能走控制栏的「更多」——工具条已经拆掉，皮肤按钮不该再浮在界面上
+  R.moreBefore = await pg.evaluate(w => ({
+    menu: !!document.querySelector(w + ' .dr-menu'),
+    // 只数看得见的：加入前那一排还留在 DOM 里，但整屏是隐藏的，不算浮在会议界面上
+    visiblePills: [...document.querySelectorAll(w + ' [data-sk]')].filter(b => b.offsetParent).length
+  }), W);
+  await pg.evaluate(w => document.querySelector(w + ' .dr-ctl u.more').click(), W);
+  await pg.sleep(400);
+  R.moreOpen = await pg.evaluate(w => {
+    const m = document.querySelector(w + ' .dr-menu');
+    if (!m) return { on: false };
+    const r = m.getBoundingClientRect();
+    const wr = document.querySelector(w).getBoundingClientRect();
+    return {
+      on: true, items: [...m.querySelectorAll('b')].map(b => b.textContent + (b.classList.contains('on') ? '*' : '')),
+      inside: r.right <= wr.right + 1 && r.bottom <= wr.bottom + 1 && r.top >= wr.top,
+      btnOn: !!document.querySelector(w + ' .dr-ctl u.more.on')
+    };
+  }, W);
+  await pg.shot(OUT + '/dreamroom-skin-more.png');
+
+  await pg.evaluate(w => document.querySelector(w + ' .dr-menu [data-sk="teams"]').click(), W);
   await pg.sleep(700);
   R.playTeams = await play();
+  R.menuClosed = await pg.evaluate(w => !document.querySelector(w + ' .dr-menu'), W);
   await pg.shot(OUT + '/dreamroom-skin-teams-play.png');
 
   R.errs = pg.clean();

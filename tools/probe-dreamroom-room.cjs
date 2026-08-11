@@ -1,4 +1,4 @@
-// 梦蝶议事厅 · 会中界面验收：宫格 / 控制栏 / 共享收条
+// 对齐会 · 会中界面验收：宫格 / 控制栏 / 共享收条
 // 跑法：node tools/probe-dreamroom-room.cjs [url]
 const { launch } = require('./cdp.cjs');
 const URL = process.argv[2] || 'http://localhost:3457/app.html';
@@ -74,7 +74,11 @@ const W = '#winDreamRoom';
   R.shared = await room();              // 出结论后：共享打开，宫格收成顶部一条
   await pg.shot(OUT + '/dreamroom-room-teams.png');
 
-  await pg.evaluate(w => document.querySelector(w + ' [data-sk="tm"]').click(), W);
+  await pg.evaluate(w => {
+    document.querySelector(w + ' .dr-ctl u.more').click();
+  }, W);
+  await pg.sleep(300);
+  await pg.evaluate(w => document.querySelector(w + ' .dr-menu [data-sk="tm"]').click(), W);
   await pg.sleep(700);
   R.sharedTm = await room();            // 换皮后控制栏要跟着换
   await pg.shot(OUT + '/dreamroom-room-tm.png');

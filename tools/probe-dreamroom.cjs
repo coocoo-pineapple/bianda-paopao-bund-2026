@@ -1,4 +1,4 @@
-// 梦蝶议事厅验收：Teams 会议壳 + 每座位独立调用 + 逐座位真/脚 + 推演
+// 对齐会验收：会议壳 + 每座位独立调用 + 逐座位真/脚 + 推演
 // 跑法：node tools/probe-dreamroom.cjs [url]
 const { launch } = require('./cdp.cjs');
 const URL = process.argv[2] || 'http://localhost:3457/app.html';
@@ -86,7 +86,7 @@ const W = '#winDreamRoom';
   }, W);
 
   R.calls = await pg.evaluate(() => window.__sys.length);
-  R.aiLog = await pg.evaluate(() => (typeof AILOG !== 'undefined' ? AILOG.filter(x => /议事厅/.test(x.src)).length : -1));
+  R.aiLog = await pg.evaluate(() => (typeof AILOG !== 'undefined' ? AILOG.filter(x => /对齐会/.test(x.src)).length : -1));
 
   // 存卷
   const before = await pg.evaluate(() => S.bubbles.length);
@@ -94,7 +94,7 @@ const W = '#winDreamRoom';
   await pg.sleep(600);
   R.file = await pg.evaluate(b => ({
     grew: S.bubbles.length > b,
-    last: (S.bubbles.find(x => x.author === '梦蝶议事厅') || {}).text || ''
+    last: (S.bubbles.find(x => x.author === '对齐会') || {}).text || ''
   }), before);
 
   R.errs = pg.clean();

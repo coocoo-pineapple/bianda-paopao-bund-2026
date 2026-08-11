@@ -114,7 +114,7 @@ $('#xlTabs').addEventListener('click', e => {
 });
 
 // PPT：工具条（放映入口）+ 左缩略图栏 + 画布 + 底部备注区
-const bPpt = mkWin('winPPT', 'ppt', 'Q3复盘汇报.pptx - PowerPoint', 'left:250px;top:40px;width:900px;height:640px');
+const bPpt = mkWin('winPPT', 'ppt', '组织架构调整_说明.pptx - PowerPoint', 'left:250px;top:40px;width:900px;height:640px');
 bPpt.parentNode.querySelector('.dwh').insertAdjacentHTML('afterend',
   '<div class="dwt"><button id="pptPlay" class="rbtn pri">从头开始放映</button><button class="rbtn">从当前幻灯片</button><span class="sp" id="pptCnt">幻灯片 1/10　中文(中国)</span></div>');
 bPpt.innerHTML = '<div class="paper2"></div>';
@@ -607,14 +607,58 @@ setInterval(() => {
   st.parentNode.insertBefore(d, st);
 })();
 
-/* ---------- 桌面小广告：时不时弹一下，弹的都是真内容 ---------- */
+/* ---------- 小广告：桌面弹一下，热榜插一楼，弹的都是真内容 ----------
+   广告位是唯一能同时装"牛皮癣"和"自制游戏入口"的地方：
+   热榜第 4 楼插一条，配一张表情包（熊猫头和小猫两个系列混着用），点进去就是我们自己的游戏。
+   游戏那半边从 GAMES 现取，registerGame 上新的游戏自动进广告池。
+   pd 写成 "系列/型号"，型号挑和广告词对得上的那一型。 */
 const ADS = [
-  { t: '摸鱼助手 Pro', b: '检测到您已连续高效摸鱼 6 小时 12 分，建议升级至专业版', go: 'draw', tag: '推广' },
-  { t: '隔壁厂 P7 薪资已曝光', b: '55k×16。看完再决定今天下午要不要认真', go: 'salary', tag: '热帖' },
-  { t: '你的机器人今天比你活跃', b: '它替你发言 47 次，收了 3 条料。你一句话没说', go: 'chat', tag: '提醒' },
-  { t: '某咖啡品牌', b: '下午三点第二杯半价。楼下那家，队已经排到电梯口了', go: 'desk', tag: '广告' }
+  { t: '摸鱼助手 Pro', b: '检测到您已连续高效摸鱼 6 小时 12 分，建议升级至专业版', go: 'draw', tag: '推广', pd: 'cat/YTSC' },
+  { t: '隔壁厂 P7 薪资已曝光', b: '55k×16。看完再决定今天下午要不要认真', go: 'salary', tag: '热帖', pd: 'panda/PJBH' },
+  { t: '你的机器人今天比你活跃', b: '它替你发言 47 次，收了 3 条料。你一句话没说', go: 'chat', tag: '提醒', pd: 'cat/YJSH' },
+  { t: '某咖啡品牌', b: '下午三点第二杯半价。楼下那家，队已经排到电梯口了', go: 'desk', tag: '广告', pd: 'panda/PJSC' }
 ];
-let adIx = 0;
+// 自制游戏的广告词：一句钩子 + 一张对得上性格的表情包。没写文案的新游戏走兜底句
+const AD_COPY = {
+  wordgame: ['背完这三十个词，他在复盘会上把总监说到沉默', 'panda/PTBH'],
+  phone: ['前台捡到一部没锁屏的手机，聊天记录还在往下滚', 'cat/YTBH'],
+  gomoku: ['和王总下棋从来没赢过？第 17 手你本来有活四', 'panda/YJSH'],
+  hide: ['三楼那位靠这招躲过四次巡检，工位一直是空的', 'cat/YTBC'],
+  mbti: ['一分钟测出你的职场型号，测出"摸鱼哲学家"的那批已经不来了', 'panda/YTSH'],
+  dreamroom: ['今晚有人要在会上被当场拆穿，还差一票', 'cat/PJSH']
+};
+const AD_PD = ['panda/PTBC', 'cat/PJBC', 'panda/YJSC', 'cat/PTSC', 'panda/YTBH', 'cat/YJBH'];
+function adPool() {
+  const gs = (typeof GAMES !== 'undefined' ? GAMES : []).map((g, i) => {
+    const c = AD_COPY[g.go];
+    return {
+      t: g.nm, go: g.go, tag: '广告',
+      b: c ? c[0] : g.by + '出品，已有 ' + g.tip + ' 人打赏。上班时间也能开',
+      pd: c ? c[1] : AD_PD[i % AD_PD.length]
+    };
+  });
+  return ADS.concat(gs);
+}
+// 表情包探测：能加载才铺图，加载不了退回首字色块（和文件夹图标一个兜底路数）
+const adPd = {};
+function memeThumb(pd, ch) {
+  const u = 'assets/mbti/' + pd + '.png', k = pd.replace('/', '-');
+  if (adPd[pd] === undefined) {
+    adPd[pd] = false;
+    const im = new Image();
+    im.onload = () => {
+      adPd[pd] = true;
+      $$('.adpd[data-pd="' + k + '"]').forEach(el => {
+        el.classList.add('pic'); el.style.backgroundImage = 'url(' + u + ')'; el.textContent = '';
+      });
+    };
+    im.src = u;
+  }
+  return adPd[pd]
+    ? `<span class="adpd pic" data-pd="${k}" style="background-image:url(${u})"></span>`
+    : `<span class="adpd" data-pd="${k}">${esc(ch || '')}</span>`;
+}
+let adIx = 0, adCur = ADS[0];
 const adStyle = document.createElement('style');
 adStyle.textContent = `#adwin{position:fixed;right:14px;bottom:58px;width:264px;background:#fff;border:1px solid #C9C9C9;
   border-radius:4px;box-shadow:0 8px 30px rgba(0,0,0,.35);z-index:310;display:none;overflow:hidden;cursor:pointer}
@@ -623,27 +667,74 @@ adStyle.textContent = `#adwin{position:fixed;right:14px;bottom:58px;width:264px;
 #adwin .ah{display:flex;align-items:center;background:#F3F3F3;border-bottom:1px solid #E1E1E1;padding:4px 8px;font-size:10px;color:#8A8A8A}
 #adwin .ah b{margin-left:auto;cursor:pointer;font-weight:400;padding:0 4px;font-size:12px}
 #adwin .ah b:hover{color:#C42B1C}
-#adwin .ab{padding:10px 12px}
+#adwin .ab{padding:10px 12px;display:flex;gap:9px;align-items:flex-start}
+#adwin .at{flex:1;min-width:0}
 #adwin .ab .t1{font-size:13px;font-weight:700;color:#1F1F1F;margin-bottom:3px}
-#adwin .ab .t2{font-size:11.5px;color:#5A5A5A;line-height:1.6}`;
+#adwin .ab .t2{font-size:11.5px;color:#5A5A5A;line-height:1.6}
+.adpd{flex:none;width:46px;height:46px;border-radius:3px;background:#EFEFEF center/cover no-repeat;
+  display:grid;place-items:center;font-size:13px;color:#A8A8A8}
+.adpd.pic{background-color:transparent}
+#hot li.hotad{align-items:center;gap:6px;background:#FFFBEA;margin:2px -3px;padding:5px 3px;border-radius:3px;cursor:pointer}
+#hot li.hotad:hover{background:#FFF5D6}
+#hot li.hotad .adpd{flex:none;width:34px;height:34px;font-size:11px}
+#hot li.hotad .hx{flex:1;min-width:0;line-height:1.4;white-space:normal;color:#6B5320}
+#hot li.hotad .hx b{display:block;font-size:11.5px;color:#8A5B00;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#hot li.hotad .hx i{font-style:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#hot li.hotad .hg{flex:none;font-style:normal;font-size:9px;color:#B08A3A;border:1px solid #E3CE9A;border-radius:2px;padding:0 3px}
+#hot li.hotad .hcx{flex:none;font-weight:400;color:#BEB59A;cursor:pointer;padding:0 2px}
+#hot li.hotad .hcx:hover{color:#C42B1C}`;
 document.head.appendChild(adStyle);
 const adEl = document.createElement('div');
 adEl.id = 'adwin';
 document.body.appendChild(adEl);
 function popAd() {
-  const a = ADS[adIx % ADS.length]; adIx++;
-  adEl.innerHTML = `<div class="ah">${esc(a.tag)}<b data-adx>×</b></div><div class="ab"><div class="t1">${esc(a.t)}</div><div class="t2">${esc(a.b)}</div></div>`;
+  const p = adPool();
+  const a = p[adIx % p.length]; adIx++; adCur = a;
+  adEl.innerHTML = `<div class="ah">${esc(a.tag)}<b data-adx>×</b></div>` +
+    `<div class="ab">${memeThumb(a.pd, a.t[0])}<div class="at">` +
+    `<div class="t1">${esc(a.t)}</div><div class="t2">${esc(a.b)}</div></div></div>`;
   adEl.classList.add('on');
   setTimeout(() => adEl.classList.remove('on'), 12000);
 }
 adEl.addEventListener('click', e => {
   if (e.target.closest('[data-adx]')) { adEl.classList.remove('on'); return; }
-  const a = ADS[(adIx - 1) % ADS.length];
   adEl.classList.remove('on');
-  goFeature(a.go);
+  goFeature(adCur.go);
 });
 setTimeout(popAd, 75000);
 setInterval(popAd, 90000);
+
+/* ---------- 热榜第 4 楼的广告位：关掉 40 秒后换一条再来，这才叫小广告 ---------- */
+// 从 ADS.length 起步：桌面弹窗从头推，热榜直接从自制游戏那半边开始，两处不撞车
+let hotAdIx = ADS.length, hotAdMute = 0;
+function hotAd() {
+  const ul = $('#hot');
+  if (!ul || ul.querySelector('.hotad') || Date.now() < hotAdMute) return;
+  const p = adPool(), a = p[hotAdIx % p.length];
+  const li = document.createElement('li');
+  li.className = 'hotad';
+  li.dataset.go = a.go;
+  li.innerHTML = memeThumb(a.pd, a.t[0]) +
+    `<span class="hx"><b>${esc(a.t)}</b><i>${esc(a.b)}</i></span>` +
+    `<em class="hg">广告</em><b class="hcx" data-hax>×</b>`;
+  ul.insertBefore(li, ul.children[3] || null);
+}
+(function hotAdBind() {
+  const ul = $('#hot');
+  if (!ul) return;
+  ul.addEventListener('click', e => {
+    const li = e.target.closest('.hotad');
+    if (!li) return;
+    if (e.target.closest('[data-hax]')) { hotAdIx++; hotAdMute = Date.now() + 40000; li.remove(); return; }
+    goFeature(li.dataset.go);
+  });
+  // sync 每次重画热榜都会把广告冲掉，包一层让它自己贴回去
+  if (typeof sync === 'function') {
+    const raw = sync;
+    sync = function () { raw.apply(null, arguments); hotAd(); };
+  }
+  hotAd();
+})();
 
 /* ---------- 泡泡详情卡：想看了再点（PRD 0.5 批注 #1） ---------- */
 document.body.insertAdjacentHTML('beforeend',
@@ -1989,7 +2080,7 @@ const BAR_PREV = {
     ['Sheet3 · 岗位机会', '内推与空缺', 'jobs']
   ],
   review: [
-    ['Q3复盘汇报.pptx', '梦蝶局 · 四个 AI 一个假猎头', 'review']
+    ['组织架构调整_说明.pptx', '梦蝶局 · 四个 AI 一个假猎头', 'review']
   ],
   pitch: [
     ['变大泡泡·产品介绍.pptx', '给评委看的那一版', 'pitch']
@@ -2068,10 +2159,11 @@ const BAR_PREV = {
    没看过的文件金光呼吸，进场后 toast 依次指路，点过即安静。 */
 (function onboard() {
   // 1) 产品介绍立在放映图标旁边：两份新人文件并排在银幕上方
-  //    梦蝶局是评委必看模块，从「趣味游戏」文件夹里挪到桌面 C 位，名字继续伪装成一份复盘 PPT
+  //    梦蝶局是评委必看模块，从「趣味游戏」文件夹里挪到桌面 C 位，名字伪装成一份组织架构调整说明
+  //    （不叫「复盘」是因为桌面另一头的对齐会用的就是复盘会那套壳，两个都叫复盘会看成同一个东西）
   const di = $('#deskIcons');
   document.body.insertAdjacentHTML('beforeend',
-    '<div id="deskDream" class="dski"><span class="ic page" data-x="P" style="--tag:#C43E1C"></span><em>Q3复盘汇报.pptx</em></div>' +
+    '<div id="deskDream" class="dski"><span class="ic page" data-x="P" style="--tag:#C43E1C"></span><em>组织架构调整_说明.pptx</em></div>' +
     '<div id="deskPitch" class="dski"><span class="ic page" data-x="P" style="--tag:#C43E1C"></span><em>新员工手册_看完就懂.pptx</em></div>');
   $('#deskPitch').addEventListener('click', () => { goFeature('pitch'); seen('pitch'); });
   // 直接落在「AI 开局」那一页：剧本局是脚本兜底版，评委第一眼要看到真调用的那个

@@ -49,7 +49,7 @@
 
 > 妙处：**摸鱼的人真的在看 Excel，只是这张 Excel 里是隔壁厂的薪资。**
 
-### 壳 3 · PPT `Q3复盘汇报.pptx`（新，一小时）
+### 壳 3 · PPT `组织架构调整_说明.pptx`（新，一小时）
 
 - 左侧幻灯片缩略图栏、中间画布、底部「第 3 页，共 12 页」+ 备注区
 - **梦蝶局搬进来演播**：对局每一行 = 一页幻灯片，自动翻页就是自动播放。押注区做成"投票页"，揭底做成"总结页"（破绽标在备注区）
@@ -132,7 +132,7 @@ function cycleMask(){ … }
 const SHELLS = [
   { id:'word',  chrome:'#chromeWord',  title:'2026年度第三季度工作述职报告.docx - Word' },
   { id:'excel', chrome:'#chromeExcel', title:'2026年度预算表.xlsx - Excel' },
-  { id:'ppt',   chrome:'#chromePPT',   title:'Q3复盘汇报.pptx - PowerPoint' },
+  { id:'ppt',   chrome:'#chromePPT',   title:'组织架构调整_说明.pptx - PowerPoint' },
   { id:'desk',  chrome:'#chromeDesk',  title:null }
 ];
 function wearShell(i){ /* 换 chrome、搬 DOM 节点、改 title */ }

@@ -1,11 +1,11 @@
-// 梦蝶议事厅 · 一场四个人的线上会（Teams / 企鹅会议 两套皮）
+// 对齐会 · 一场四个人的线上会（Teams / 企鹅会议 两套皮）
 // 伪装选会议软件不是随便挑的：一场四个人的会、2×2 的画面宫格、底下一条控制栏，
 // 语音输入在这里是原生控件，不是硬塞的炫技。
 // 皮肤两套是因为「跨公司」是这产品的地基——你司用哪家会议软件，这扇窗就该长成哪家。
 //
-// 和隔壁「梦蝶局卡牌」的分工：那边是 AI 的信誉考场（有输赢、有战绩）；
-// 这边是人的议事厅——你把想不通的事摆上桌，雇 AI 去演那几个当事人，看他们各自在意什么。
-// 两个入口并存，这边当正门。
+// 和「梦蝶局」的分工：那边是一局有输赢的牌——AI 的信誉考场，战绩会攒下来。
+// 这边不是游戏，是工具：你把想不通的事摆上桌，雇 AI 去演那几个当事人，看他们各自在意什么。
+// 两个各走各的门，互不套壳。
 //
 // 一条红线：每个座位一次独立 askAI，system 互不包含别人的设定；
 // 谁调通了谁挂「真」，调不通挂「脚」，逐座位标，不整局一刀切。
@@ -177,11 +177,10 @@
       id: 'winDreamRoom', app: 'chat', go: 'dreamroom',
       title: '项目复盘 · 对齐会（4 人）- Microsoft Teams',
       style: 'left:150px;top:64px;width:940px;height:598px',
-      tile: ['议', '梦蝶议事厅', '想不通的事，摆上桌', '#6264A7'],
-      hall: { nm: '梦蝶议事厅', by: '官方', tip: 88 }
+      hall: { nm: '对齐会', by: '官方', tip: 88 }
     });
 
-    // 桌面 C 位开一个入口：正门得能从桌面直接推开，不能只藏在文件夹里
+    // 桌面 C 位就是它唯一的入口，不再进趣味游戏文件夹——正门只留一扇
     // 名字继续伪装成一场会——老板瞟一眼是在开会，不是在玩
     (function deskEntry() {
       if (document.querySelector('#deskRoom')) return;
@@ -225,38 +224,72 @@
       '&[data-skin=tm]{--c:#2B7FFF;--c2:#1A6BE8;--bg:#F2F3F5;--sd:#F7F8FA;--rl:#E5E6EB;--dm:#4E5969;--rd:6px;--fa:6px;' +
       '  --st:#17181C;--tile:#232529;--tl2:#2B2E33;--tx:#F2F3F5;--tx2:#86909C;--tr:#2E3238}' +
       '&[data-skin=tm] .dwh{background:#1D2129}' +
-      '&[data-skin=tm] .k-tool{background:#fff;border-bottom:1px solid var(--rl)}' +
-      '.dwb{background:var(--bg)}' +
+      // kit 给文档窗配的工具条在这儿是多余的一层壳——会议客户端没有这条，整条不要
+      '.k-tool{display:none}' +
+      '.dwb{background:var(--st)}' +
       '.k-side{width:222px;background:var(--sd);border-left:1px solid var(--rl)}' +
-      '.dr-h{font-size:12px;color:var(--dm);margin:0 0 6px}' +
-      '.dr-q{width:100%;min-height:84px;box-sizing:border-box;padding:8px 9px;border:1px solid var(--rl);' +
-      '  border-radius:var(--rd);font:13px/1.65 inherit;resize:vertical;background:#fff}' +
-      '.dr-q:focus{outline:0;border-color:var(--c);box-shadow:0 0 0 1px var(--c)}' +
-      '.dr-bar{display:flex;align-items:center;gap:6px;margin:6px 0 12px;flex-wrap:wrap}' +
-      '.dr-mic{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border:1px solid var(--rl);' +
-      '  background:#fff;border-radius:14px;cursor:pointer;font-size:12px}' +
-      '.dr-mic i{width:8px;height:8px;border-radius:50%;background:#8A8886;display:inline-block}' +
-      '.dr-mic[disabled]{opacity:.55;cursor:not-allowed}' +
-      '.dr-mic.rec{border-color:#C43E1C;color:#C43E1C}' +
-      '.dr-mic.rec i{background:#C43E1C;animation:k-glow 1.2s infinite}' +
-      '.dr-ex{font-size:12px;color:var(--c);cursor:pointer;text-decoration:underline dotted}' +
-      '.dr-sk{margin-left:6px;display:flex;gap:0;border:1px solid var(--rl);border-radius:11px;overflow:hidden;background:#fff}' +
-      '.dr-sk b{font-weight:400;font-size:11px;padding:2px 9px;cursor:pointer;color:var(--dm)}' +
+      // ---- 加入会议前那一屏 ----
+      // 真客户端进会前是一张深色预览页：左边摄像头画面，右边选设备，底下一个蓝色「加入」。
+      // 这场会没有摄像头，那块黑框就放你要摆上桌的那件事——加入之前你看见的本来就该是你自己。
+      '&[data-st=intro] .k-stage{padding:0;background:var(--st);overflow:hidden}' +
+      '&[data-st=intro] .k-side{display:none}' +          // 会前没有聊天面板，进了会才有
+      '&[data-st=intro] .k-st[data-k=intro]{height:100%;box-sizing:border-box;padding:13px 15px}' +
+      '.dr-pre{display:flex;gap:15px;height:100%;box-sizing:border-box;color:var(--tx)}' +
+      '.dr-pvw{width:330px;flex:none;display:flex;flex-direction:column;min-height:0}' +
+      '.dr-pv{flex:1;min-height:0;display:flex;flex-direction:column;background:#0C0C0F;' +
+      '  border:1px solid var(--tr);border-radius:8px;padding:11px 12px}' +
+      '.dr-pvh{font-size:10.5px;color:var(--tx2);letter-spacing:.3px;margin-bottom:7px}' +
+      '.dr-q{flex:1;min-height:0;width:100%;box-sizing:border-box;padding:0;border:0;background:none;' +
+      '  color:var(--tx);font:13px/1.75 inherit;resize:none}' +
+      '.dr-q:focus{outline:0}' +
+      '.dr-q::placeholder{color:#63636B}' +
+      '.dr-pvc{display:flex;align-items:center;gap:9px;margin-top:11px;flex-wrap:wrap}' +
+      '.dr-mic{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border:1px solid var(--tr);' +
+      '  background:var(--tile);color:var(--tx);border-radius:16px;cursor:pointer;font:12px inherit}' +
+      '.dr-mic:hover{background:var(--tl2)}' +
+      '.dr-mic i{width:8px;height:8px;border-radius:50%;background:var(--tx2);display:inline-block}' +
+      '.dr-mic[disabled]{opacity:.45;cursor:not-allowed}' +
+      '.dr-mic.rec{border-color:#D74F4F;color:#F2A0A0}' +
+      '.dr-mic.rec i{background:#D74F4F;animation:k-glow 1.2s infinite}' +
+      '.dr-ex{font-size:12px;color:#9AA6E0;cursor:pointer;text-decoration:underline dotted}' +
+      '.dr-why{font-size:11px;color:var(--tx2)}' +
+      // 右半边＝真客户端的「加入前设置」。那儿选的是麦克风和摄像头，这儿选的是这场会有谁
+      '.dr-pj{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0}' +
+      '.dr-pj h4{margin:0 0 3px;font-size:13px;color:var(--tx);font-weight:600}' +
+      '.dr-h{font-size:11.5px;color:var(--tx2);margin:0 0 8px;line-height:1.65}' +
+      '.dr-h b{color:var(--tx);font-weight:400}' +
+      '.dr-tbw{flex:1;min-height:0;overflow:auto}' +
+      '.dr-tb{width:100%;border-collapse:collapse;font-size:12px}' +
+      '.dr-tb th{font-weight:400;color:var(--tx2);text-align:left;padding:0 6px 5px 0;font-size:10.5px}' +
+      '.dr-tb td{padding:3px 6px 3px 0;vertical-align:middle}' +
+      '.dr-tb input,.dr-tb select{width:100%;box-sizing:border-box;padding:5px 7px;border:1px solid var(--tr);' +
+      '  border-radius:4px;background:var(--tile);color:var(--tx);font:12px inherit}' +
+      '.dr-tb input:focus,.dr-tb select:focus{outline:0;border-color:var(--c)}' +
+      '.dr-tb input::placeholder{color:#63636B}' +
+      '.dr-tb tr.me td{color:var(--tx2);font-size:11.5px;padding-top:6px}' +
+      '.dr-tb tr.me b{color:var(--tx);font-weight:400}' +
+      '.dr-x{border:0;background:none;color:var(--tx2);cursor:pointer;font-size:15px;line-height:1}' +
+      '.dr-x:hover{color:#F2A0A0}' +
+      '.dr-warn{font-size:11px;color:var(--tx2);line-height:1.7;margin-top:8px}' +
+      '.dr-warn b{color:var(--tx);font-weight:400}' +
+      // 加入那一排：选哪家客户端 + 蓝色大按钮，位置跟真客户端一样在右下
+      '.dr-join{flex:0 0 auto;display:flex;align-items:center;gap:9px;margin-top:11px;' +
+      '  padding-top:11px;border-top:1px solid var(--tr)}' +
+      '.dr-cl{font-size:11px;color:var(--tx2)}' +
+      '.dr-sk{display:flex;border:1px solid var(--tr);border-radius:13px;overflow:hidden;background:var(--tile)}' +
+      '.dr-sk b{font-weight:400;font-size:11px;padding:3px 10px;cursor:pointer;color:var(--tx2)}' +
       '.dr-sk b.on{background:var(--c);color:#fff}' +
-      '.dr-tb{width:100%;border-collapse:collapse;font-size:12px;background:#fff;border:1px solid var(--rl)}' +
-      '.dr-tb th{background:var(--sd);font-weight:600;color:var(--dm);text-align:left;padding:5px 7px;border-bottom:1px solid var(--rl)}' +
-      '.dr-tb td{padding:4px 6px;border-bottom:1px solid var(--rl);vertical-align:middle}' +
-      '.dr-tb input{width:100%;box-sizing:border-box;padding:4px 5px;border:1px solid var(--rl);border-radius:3px;font:12px inherit}' +
-      '.dr-tb input:focus{outline:0;border-color:var(--c)}' +
-      '.dr-tb select{padding:3px;border:1px solid var(--rl);border-radius:3px;font:12px inherit;background:#fff}' +
-      '.dr-tb tr.me td{background:color-mix(in srgb,var(--c) 8%,#fff)}' +
-      '.dr-x{border:0;background:none;color:#A19F9D;cursor:pointer;font-size:14px;line-height:1}' +
-      '.dr-x:hover{color:#C43E1C}' +
+      '.dr-bar{display:flex;align-items:center;gap:6px;margin:7px 0 0;flex-wrap:wrap}' +
+      // .dr-b 基准色给共享出来的那份白底内容用；预览页是深色的，单独压一层
       '.dr-b{padding:5px 14px;border:1px solid var(--rl);background:#fff;border-radius:var(--rd);cursor:pointer;font:12px inherit}' +
       '.dr-b:hover{background:var(--sd)}' +
       '.dr-b.pri{background:var(--c);border-color:var(--c);color:#fff}' +
       '.dr-b.pri:hover{background:var(--c2)}' +
       '.dr-b[disabled]{opacity:.5;cursor:not-allowed}' +
+      '.dr-pre .dr-b{background:var(--tile);border-color:var(--tr);color:var(--tx)}' +
+      '.dr-pre .dr-b:hover{background:var(--tl2)}' +
+      '.dr-pre .dr-b.pri{margin-left:auto;padding:7px 22px;font-size:13px;background:var(--c);border-color:var(--c);color:#fff}' +
+      '.dr-pre .dr-b.pri:hover{background:var(--c2)}' +
       // ---- 会中：整块深色，上面宫格下面控制栏 ----
       // kit 的 .k-stage 默认是白底带内边距的文档区，进会后整个让位给会议界面
       '&[data-st=play] .k-stage{padding:0;background:var(--st);display:flex;flex-direction:column;overflow:hidden}' +
@@ -301,16 +334,28 @@
       '.dr-share2:empty{display:none}' +
       '.dr-share2 .shh{font-size:10px;color:var(--dm);margin-bottom:8px;letter-spacing:.3px}' +
       '.dr-share2 .shh b{color:var(--c2);font-weight:600}' +
+      '.dr-share2 .dr-h{color:var(--dm)}' +          // 共享出来的是白底那份，说明文字得跟着变深
       // 控制栏：两家都是居中一排，挂断在最右边且是红的
-      '.dr-ctl{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:4px;' +
+      '.dr-ctl{position:relative;flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:4px;' +
       '  padding:7px 12px;border-top:1px solid var(--tr);background:var(--st)}' +
       '.dr-ctl u{text-decoration:none;display:inline-flex;flex-direction:column;align-items:center;gap:3px;' +
       '  padding:4px 10px;border-radius:var(--rd);color:var(--tx2);font-size:9.5px;cursor:default;line-height:1.2}' +
       '.dr-ctl u i{font-style:normal;font-size:14px;line-height:1;filter:grayscale(1) brightness(1.7)}' +
       '.dr-ctl u:hover{background:var(--tl2)}' +
+      '.dr-ctl u.more{cursor:pointer}' +
+      '.dr-ctl u.more.on{background:var(--tl2);color:var(--tx)}' +
       '.dr-ctl .end{background:#C0503F;color:#fff;padding:7px 15px;border-radius:var(--rd);font-size:11px;' +
       '  cursor:pointer;border:0;margin-left:12px}' +
       '.dr-ctl .end:hover{background:#D4604E}' +
+      // 「更多」是真能点开的：换会议客户端本来就该藏在这儿，而不是另起一条工具条
+      // 左右位置在 JS 里按按钮算，写死 right 会飘到别处——两家的按钮数不一样，「更多」不在同一个 x 上
+      '.dr-menu{position:absolute;left:0;bottom:52px;min-width:176px;background:var(--tile);' +
+      '  border:1px solid var(--tr);border-radius:var(--rd);padding:5px;box-shadow:0 10px 28px rgba(0,0,0,.55);z-index:6}' +
+      '.dr-menu .mh{font-size:10px;color:var(--tx2);padding:4px 8px 6px}' +
+      '.dr-menu b{display:block;font-weight:400;font-size:12px;color:var(--tx);padding:6px 8px;' +
+      '  border-radius:4px;cursor:pointer}' +
+      '.dr-menu b:hover{background:var(--tl2)}' +
+      '.dr-menu b.on:after{content:"　✓";color:var(--c)}' +
       '.dr-cmp h4{margin:0 0 2px;font-size:12px}' +
       '.dr-cmp .dr-h{margin-bottom:7px}' +
       '.dr-cmp li{font-size:12px;line-height:1.75;list-style:none}' +
@@ -322,8 +367,7 @@
       '.dr-note{font-size:12px}' +
       '.dr-note .re{line-height:1.6}' +
       '.dr-note .in{color:#8A8886;margin-top:3px;line-height:1.5}' +
-      '.dr-note .in:before{content:"（心里）"}' +
-      '.dr-warn{font-size:11px;color:#8A8886;margin-top:9px;line-height:1.7}'
+      '.dr-note .in:before{content:"（心里）"}'
     );
 
     // ---------------- 状态 ----------------
@@ -375,37 +419,40 @@
         G.calls ? ('真 ' + G.real + ' · 脚 ' + (G.calls - G.real)) : '尚未调用');
     }
 
-    // ---------------- 立案 ----------------
+    // ---------------- 加入会议前 ----------------
     function intro() {
       G.roles = DEMO.roles.map(function (r) { return { nm: r.nm, rel: r.rel, care: r.care, from: '' }; });
       G.out = {}; G.src = {}; G.calls = 0; G.real = 0; G.turns = 0;
-      title('立案');
-      hud.tool('<b style="font-size:12px">梦蝶议事厅</b>' +
-        '<span style="font-size:11px;color:var(--dm)">你说事，AI 演人，看各自在意什么</span>' +
-        skBar(), '第 1 步 / 共 2 步');
+      title('');
       hud.clearNotes();
-      h.side.innerHTML = '<div class="dr-h" style="padding:2px">这里会显示每个人的现场反应。<br><br>' +
-        '先在左边把事情说清楚，再把这件事里的人写上。<br><br>' +
-        '最后一位固定是「你」——也由 AI 来演。<b>让 AI 也演一个你，是为了防止这一局变成你自己的回声。</b></div>';
 
       var s = h.states.intro;
       s.innerHTML =
-        '<p class="dr-h">把想不通的那件事讲出来，讲得越具体，等会儿这几个人越像人。</p>' +
-        '<textarea class="dr-q" id="drQ" placeholder="比如：我做的项目跑赢目标 30%，复盘会上功劳被组长一句话带过……"></textarea>' +
-        '<div class="dr-bar">' +
-        '  <button class="dr-mic" data-dr="mic"><i></i><span>按住不用，点一下说话</span></button>' +
-        '  <span class="dr-ex" data-dr="demo">用这个例子填上</span>' +
-        '  <span style="font-size:11px;color:#8A8886" id="drMicWhy"></span>' +
+        '<div class="dr-pre">' +
+        '<div class="dr-pvw">' +
+        '  <div class="dr-pv">' +
+        '    <div class="dr-pvh">摄像头已关闭 · 这场会你要摆上桌的那件事</div>' +
+        '    <textarea class="dr-q" id="drQ" placeholder="讲得越具体，等会儿这几个人越像人。&#10;比如：我做的项目跑赢目标 30%，复盘会上功劳被组长一句话带过……"></textarea>' +
+        '  </div>' +
+        '  <div class="dr-pvc">' +
+        '    <button class="dr-mic" data-dr="mic"><i></i><span>点一下说话</span></button>' +
+        '    <span class="dr-ex" data-dr="demo">用这个例子填上</span>' +
+        '    <span class="dr-why" id="drMicWhy"></span>' +
+        '  </div>' +
         '</div>' +
-        '<p class="dr-h">这件事里有谁。<b>他在意什么可以留空</b>——留空就让他自己说，你猜的那一栏他有权推翻。</p>' +
-        '<table class="dr-tb"><thead><tr><th style="width:96px">谁</th><th style="width:34%">和你什么关系</th>' +
-        '<th>你猜他在意什么</th><th style="width:104px">谁来演</th><th style="width:20px"></th></tr></thead>' +
-        '<tbody id="drRows"></tbody></table>' +
-        '<div class="dr-bar" style="margin-top:9px">' +
-        '  <button class="dr-b" data-dr="add">＋ 再加一个人</button>' +
-        '  <button class="dr-b pri" data-dr="go" style="margin-left:auto">开局 · 让他们各自说话</button>' +
-        '</div>' +
-        '<div class="dr-warn" id="drWarn"></div>';
+        '<div class="dr-pj">' +
+        '  <h4>这场会里有谁</h4>' +
+        '  <p class="dr-h">「你猜他在意什么」可以留空——留空就让他自己说，你猜的那一栏他有权推翻。' +
+        '  最后一位固定是「你」，也由 AI 来演：<b>让 AI 也演一个你，这一局才不是你自己的回声。</b></p>' +
+        '  <div class="dr-tbw"><table class="dr-tb"><thead><tr>' +
+        '    <th style="width:92px">谁</th><th style="width:31%">和你什么关系</th>' +
+        '    <th>你猜他在意什么</th><th style="width:98px">谁来演</th><th style="width:18px"></th>' +
+        '  </tr></thead><tbody id="drRows"></tbody></table>' +
+        '  <div class="dr-bar"><button class="dr-b" data-dr="add">＋ 再加一个人</button></div>' +
+        '  <div class="dr-warn" id="drWarn"></div></div>' +
+        '  <div class="dr-join"><span class="dr-cl">用哪家客户端加入</span>' + skBar() +
+        '    <button class="dr-b pri" data-dr="go">加入会议</button></div>' +
+        '</div></div>';
 
       var w = micWhy();
       var mic = s.querySelector('[data-dr="mic"]');
@@ -433,8 +480,8 @@
           '<td><select data-f="from" data-i="' + i + '">' + opt(r.from) + '</select></td>' +
           '<td><button class="dr-x" data-dr="del" data-i="' + i + '" title="去掉这个人">×</button></td></tr>';
       }).join('') +
-        '<tr class="me"><td><b>「你」</b></td><td colspan="2" style="color:#605E5C">当事人本人 · 由 AI 扮演，它不替你说话</td>' +
-        '<td style="color:#8A8886">平台 AI</td><td></td></tr>';
+        '<tr class="me"><td><b>「你」</b></td><td colspan="2">当事人本人 · 由 AI 扮演，它不替你说话</td>' +
+        '<td>平台 AI</td><td></td></tr>';
     }
 
     function warn() {
@@ -493,7 +540,7 @@
       var j;
       try {
         j = (typeof askAI === 'function')
-          ? await askAI('梦蝶议事厅 · ' + r.nm, sys, '开始。')
+          ? await askAI('对齐会 · ' + r.nm, sys, '开始。')
           : { ok: false };
       } catch (e) { j = { ok: false }; }
       var o = (j && j.ok) ? parse(j.text) : null;
@@ -512,9 +559,7 @@
       G.calls = 0; G.real = 0; G.turns = 0; G.out = {}; G.src = {};
 
       var list = seats();
-      title('定位分析');
-      hud.tool('<b style="font-size:12px">' + K.esc(G.q.slice(0, 22)) + (G.q.length > 22 ? '…' : '') + '</b>' +
-        '<button class="dr-b" data-dr="back">重新立案</button>' + skBar(), '第 2 步 / 共 2 步');
+      title('');
       hud.clearNotes();
       h.hud.note(sk().tag, '开局：' + list.length + ' 个座位同时发言，各说各的。', 'k-note');
 
@@ -557,12 +602,33 @@
     }
 
     // 控制栏按哪家的来：两家的按钮不是同一排，Teams 六个，企鹅会议七个还多一个「邀请」。
-    // 这排按钮只有最右边那个是真的——离开会议就是回去重新立案，别的按钮点了什么都不该发生，
-    // 因为这场会本来也没有麦克风和摄像头。
+    // 这排按钮只有最右两个是真的——「更多」能点开，「离开会议」回到加入前那一屏。
+    // 别的按钮点了什么都不该发生，因为这场会本来也没有麦克风和摄像头。
     function ctlBar() {
-      return '<div class="dr-ctl">' + sk().ctl.map(function (b) {
-        return '<u><i>' + b[0] + '</i>' + K.esc(b[1]) + '</u>';
+      var c = sk().ctl;
+      return '<div class="dr-ctl">' + c.map(function (b, i) {
+        var more = i === c.length - 1;
+        return '<u' + (more ? ' class="more" data-dr="more"' : '') + '><i>' + b[0] + '</i>' + K.esc(b[1]) + '</u>';
       }).join('') + '<button class="end" data-dr="back">' + K.esc(sk().leave) + '</button></div>';
+    }
+
+    // 换会议客户端藏在「更多」里：真客户端的设置就在这个位置，不该另起一条工具条
+    function more() {
+      var ctl = h.states.play.querySelector('.dr-ctl');
+      if (!ctl) return;
+      var old = ctl.querySelector('.dr-menu');
+      var btn = ctl.querySelector('u.more');
+      if (old) { old.remove(); if (btn) btn.classList.remove('on'); return; }
+      var m = document.createElement('div');
+      m.className = 'dr-menu';
+      m.innerHTML = '<div class="mh">切换会议客户端</div>' + SKIN_ORDER.map(function (k) {
+        return '<b data-sk="' + k + '"' + (k === skin ? ' class="on"' : '') + '>' + SKIN[k].nm + '</b>';
+      }).join('');
+      ctl.appendChild(m);
+      // 弹在「更多」正上方，再夹回控制栏里边——真客户端的菜单就是从这个按钮长出来的
+      var x = btn ? (btn.offsetLeft + btn.offsetWidth / 2 - m.offsetWidth / 2) : 0;
+      m.style.left = Math.max(8, Math.min(x, ctl.clientWidth - m.offsetWidth - 8)) + 'px';
+      if (btn) btn.classList.add('on');
     }
 
     // 状态切换顺带把 data-st 写到窗口上：会中那一屏要整块变深色，
@@ -649,10 +715,10 @@
       var list = seats();
       var worst = null;
       list.forEach(function (r, i) { if (!worst && !r.me && G.out[i]) worst = { r: r, o: G.out[i] }; });
-      var txt = '【梦蝶议事厅】' + G.q.replace(/\s+/g, ' ').slice(0, 34) +
+      var txt = '【对齐会】' + G.q.replace(/\s+/g, ' ').slice(0, 34) +
         '　→ 摆上桌才看清：' + (worst ? worst.r.nm + '怕的是「' + worst.o.fear + '」' : '每个人怕的都不是同一件事');
       if (typeof mk === 'function') {
-        mk(txt, 'boss', 9, 'news', '梦蝶议事厅', '互联网');
+        mk(txt, 'boss', 9, 'news', '对齐会', '互联网');
         if (typeof sync === 'function') sync();
         hud.toast('已存进水面 · 能被吹大也能沉底', 'home');
         sfx.play('coin');
@@ -712,17 +778,12 @@
       } else if (k === 'go') { t.setAttribute('disabled', ''); start(); }
       else if (k === 'react') react();
       else if (k === 'file') file();
+      else if (k === 'more') more();
       else if (k === 'back') intro();
     });
 
-    // h.on 只委托 .dwb，而工具条是 .dwb 的兄弟节点——皮肤按钮和「重新立案」都在工具条上，
-    // 走 h.on 一辈子收不到点击。这里给工具条单独挂一个。
-    if (h.tool) h.tool.addEventListener('click', function (e) {
-      var s = e.target.closest && e.target.closest('[data-sk]');
-      if (s) { setSkin(s.dataset.sk); return; }
-      var d = e.target.closest && e.target.closest('[data-dr]');
-      if (d && d.dataset.dr === 'back') intro();
-    });
+    // 皮肤开关有两处：加入前那一屏的一排，和会中「更多」里的一项，都是 [data-sk]
+    h.on('[data-sk]', function (t) { setSkin(t.dataset.sk); });
 
     h.on('[data-f]', function (t) {
       var r = G.roles[+t.dataset.i];
