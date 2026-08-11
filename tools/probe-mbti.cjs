@@ -145,7 +145,7 @@ const enter = async (pg) => {
       cap: (win.querySelector('#mbPic + .mb-cap') || {}).textContent || '',
       badge: !!win.querySelector('.mb-photo .bdg'),
       collar: !!win.querySelector('.mb-photo .col'),
-      att: !!win.querySelector('#mbAtt'),
+      att: win.querySelectorAll('.mb-att').length,
       stamp: (win.querySelector('.k-stamp') || {}).textContent || '',
       notes: win.querySelectorAll('.k-side .k-note').length,
       foot: (win.querySelector('.dwf') || {}).textContent || '',
@@ -189,8 +189,8 @@ const enter = async (pg) => {
 
   console.log(JSON.stringify(R, null, 2));
   const bad = R.errs.length || R.reducedErrs.length
-    || !R.reg.go || !R.reg.tile.includes('职场MBTI') || !R.reg.hall.includes('职场MBTI')
-    || !R.reg.hallDom.includes('mbti') || !/8 个项目/.test(R.reg.cnt)
+    || !R.reg.go || !R.reg.tile.includes('话卷锅饼测试') || !R.reg.hall.includes('话卷锅饼测试')
+    || !R.reg.hallDom.includes('mbti') || !/9 个项目/.test(R.reg.cnt)
     || R.intro.state !== 'intro' || !R.intro.introOn || !R.intro.side
     || R.intro.demoProps.join('') !== 'PJBH'
     || R.play.state !== 'play' || R.play.folds.length !== 4 || R.play.tracks !== 4 || R.play.ops !== 2
@@ -204,7 +204,7 @@ const enter = async (pg) => {
     || !/同一项的有/.test(R.revisit.stat) || !R.revisit.prevDisabled
     || R.change.ax0 !== -1 || R.change.answered !== 1
     || R.over.state !== 'over' || !R.over.overOn || R.over.code.length !== 4
-    || R.over.shown !== R.over.code || !R.over.photo || !R.over.att
+    || R.over.shown !== R.over.code || !R.over.photo || R.over.att !== 4
     || R.over.props.join('') !== R.over.code || !R.over.badge || !R.over.collar || R.over.cap.length < 12
     || !R.over.stamp || R.over.notes < 5 || !/已归档/.test(R.over.foot)
     || R.bub.after !== R.bub.before + 1

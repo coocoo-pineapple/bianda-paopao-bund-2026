@@ -113,6 +113,19 @@
     ['头顶一张发光的大饼', '眼前吊着一张小饼']
   ];
 
+  // 真 MBTI 双射：话↔E/I · 卷↔J/P · 锅↔F/T · 饼↔N/S。
+  // 代号是 话-卷-锅-饼，转 MBTI 要重排成 话-饼-锅-卷。
+  var MB = { P: 'E', Y: 'I', J: 'J', T: 'P', B: 'F', S: 'T', H: 'N', C: 'S' };
+  var MBNM = {
+    ENFJ: '主人公', ESFJ: '执政官', ENTJ: '指挥官', ESTJ: '总经理',
+    ENFP: '竞选者', ESFP: '表演者', ENTP: '辩论家', ESTP: '企业家',
+    INFJ: '提倡者', ISFJ: '守卫者', INTJ: '建筑师', ISTJ: '物流师',
+    INFP: '调停者', ISFP: '探险家', INTP: '逻辑学家', ISTP: '鉴赏家'
+  };
+  function toMBTI(c) {
+    return MB[c[0]] + MB[c[3]] + MB[c[2]] + MB[c[1]];
+  }
+
   K.ready(function () {
     if (typeof registerGame !== 'function') return;
 
@@ -120,8 +133,8 @@
       id: 'winMBTI', app: 'mail', go: 'mbti',
       title: '人才盘点问卷 - zhuangzhou@paopao.work - Outlook',
       style: 'left:190px;top:84px;width:900px;height:566px',
-      tile: ['格', '职场MBTI', '四维盘点', '#0F6CBD', 'icons/it-mbti.png'],
-      hall: { nm: '职场MBTI', by: '官方', tip: 64, ic: 'it-mbti' }
+      tile: ['格', '话卷锅饼测试', 'MBTI 职场版', '#0F6CBD', 'icons/it-mbti.png'],
+      hall: { nm: '话卷锅饼测试', by: '官方', tip: 64, ic: 'it-mbti' }
     });
 
     var h = K.shell({
@@ -242,6 +255,10 @@
       '.mb-photo .cd{position:absolute;left:0;right:0;bottom:0;background:rgba(15,108,189,.94);color:#fff;' +
       '  font-family:var(--mono,monospace);font-size:13px;letter-spacing:4px;text-align:center;padding:4px 0;z-index:6}' +
       '.mb-photo .pp{position:absolute;z-index:5}' +
+      // 纸雕画像到位就整张换掉，CSS 剪影和道具全部让位
+      '.mb-photo.pic{background-size:contain;background-position:center top;background-repeat:no-repeat}' +
+      '.mb-photo.pic .fig,.mb-photo.pic .col,.mb-photo.pic .bdg,.mb-photo.pic .pp{display:none}' +
+      '.mb-photo.pic::before{display:none}' +
 
       // 话·拍：说话气泡，里面三个点在动
       '.mb-photo .p-P{right:8px;top:26px;background:#fff;border:1px solid #C3CBD5;border-radius:9px;' +
@@ -496,11 +513,32 @@
     }
 
     // ---------- 人格画像：四维各挂一件道具，16 型 16 张脸，零图片 ----------
+    // 性别版本一次测试里只掷一次骰子：站内画像和下载的分享卡必须是同一个人。
+    var picSex = null;
+    function sexOf() {
+      if (!picSex) picSex = sv.get('sex') || (Math.random() < .5 ? 'm' : 'f');
+      sv.set('sex', picSex);
+      return picSex;
+    }
+    var picSeq = 0;
     function photo(c) {
       var props = c.split('').map(function (ch) { return '<div class="pp p-' + ch + '">' + (ch === 'P' ? '<s></s><s></s><s></s>' : ch === 'T' ? 'Z<em>z</em>' : '') + '</div>'; }).join('');
-      return '<div class="mb-photo">' + props +
+      var box = '<div class="mb-photo">' + props +
         '<div class="fig"></div><div class="col"></div><div class="bdg"></div>' +
         '<div class="cd">' + c + '</div></div>';
+      // 纸雕画像探到就换装，探不到保持 CSS 剪影（单机版 file:// 走这条兜底）
+      // 认领用自增序号而不是型号：intro 的示例图和 over 的结论图会同时在 DOM 里，
+      // 按型号认领会让先画的那张被后完成的探测刷成别人的脸。
+      var key = c + '-' + sexOf(), tag = 'p' + (++picSeq);
+      var probe = new Image();
+      probe.onload = function () {
+        K.qa('.mb-photo[data-c="' + tag + '"]').forEach(function (el) {
+          el.classList.add('pic');
+          el.style.backgroundImage = 'url(assets/mbti/paper/' + key + '.png)';
+        });
+      };
+      probe.src = 'assets/mbti/paper/' + key + '.png';
+      return box.replace('class="mb-photo"', 'class="mb-photo" data-c="' + tag + '"');
     }
     // 画像说明：把四件道具翻译成人话，评委一眼看懂这张图为什么长这样
     function caption(c) {
@@ -528,11 +566,17 @@
         '<div style="font-size:15px;color:#222;font-weight:700;margin:4px 0 10px">' + K.esc(t.nm) + '</div>' +
         rows +
         '<div><span>建议工位</span>' + K.esc(t.st) + '</div>' +
+        '<div><span>对照 MBTI</span>约等于 <b>' + toMBTI(c) + '</b>「' + MBNM[toMBTI(c)] + '」</div>' +
         '<div><span>天敌型号</span><b>' + t.fo + '</b>「' + K.esc(TYPES[t.fo].nm) + '」，不建议与其组成二人小组</div>' +
         '</div>' +
         '<div><div id="mbPic">' + photo(c) + '</div><div class="mb-cap">' + K.esc(caption(c)) + '</div></div></div>' +
         '<p class="mb-p">' + K.esc(t.cm) + '</p>' +
-        '<div style="padding:6px 0 12px"><span class="mb-att" id="mbAtt"><i></i>你的人格画像.png（48 KB）</span></div>' +
+        '<div style="padding:6px 0 12px;display:flex;flex-wrap:wrap;gap:6px">' +
+        '<span class="mb-att mb-dl" data-lay="full"><i></i>人格画像_竖版.png（1024×1536）</span>' +
+        '<span class="mb-att mb-dl" data-lay="card"><i></i>人格画像_方版.png（1024×1024）</span>' +
+        '<span class="mb-att mb-dl" data-lay="strip"><i></i>人格画像_横条.png（1080×608）</span>' +
+        '<span class="mb-att mb-dl" data-lay="badge"><i></i>人格画像_挂件.png（640×640）</span>' +
+        '</div>' +
         '<div class="mb-act"><button class="rbtn gold mb-bub">转成泡泡，发到水面</button>' +
         '<button class="rbtn mb-again">重新盘点</button>' +
         '<span class="hint">同型号的人会来戳你。</span></div>' +
@@ -599,15 +643,23 @@
       if (t.classList.contains('mb-next')) return nav(1);
       if (t.classList.contains('mb-fin')) { sfx.play('click'); return end(); }
       if (t.classList.contains('mb-op')) return vote(t.dataset.o);
-      if (t.id === 'mbAtt') {
+      if (t.classList.contains('mb-dl')) {
         sfx.play('stamp');
         fx.pop(h.states.over.querySelector('.mb-photo'));
-        hud.toast('人格画像.png 已保存到「图片」', 'mbti');
+        var pc = code(false), pt = TYPES[pc];
+        if (typeof personaCard === 'function') {
+          personaCard({
+            code: pc, nm: pt.nm, fo: pt.fo, foNm: TYPES[pt.fo].nm, layout: t.dataset.lay, sex: sexOf(),
+            ax: AX.map(function (x, a) { var v = axVal(a); return { d: x.fold.charAt(0), p: v > 0 ? x.pn : x.nn, v: Math.abs(v) }; })
+          }, function () { hud.toast('分享卡已存下来了，带二维码，发得出去。', 'mbti'); });
+        } else {
+          hud.toast('人格画像.png 已保存到「图片」', 'mbti');
+        }
         return;
       }      if (t.classList.contains('mb-bub')) {
         var c = code(false), ty = TYPES[c];
         if (typeof mk === 'function') {
-          mk('测出来我的职场型号是 ' + c + '「' + ty.nm + '」：' + ty.cm.slice(0, 24) + '…', 'fun', 12, 'user', '职场MBTI');
+          mk('测出来我的职场型号是 ' + c + '「' + ty.nm + '」：' + ty.cm.slice(0, 24) + '…', 'fun', 12, 'user', '话卷锅饼测试');
           if (typeof sync === 'function') sync();
         }
         sfx.play('coin');

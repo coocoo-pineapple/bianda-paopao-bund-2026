@@ -337,7 +337,7 @@ body[data-shell=desk] #swBar{bottom:48px}
    靠覆写 --word-blue 让标题栏/选项卡/主按钮整体换品牌色。 */
 
 /* 默认（Word 壳）：非 Word 的 chrome 全部收起 */
-.fbar,#xlCols,#xlRows,#xlTabs,#pptRail,#pptNotes{display:none}
+.fbar,#xlCols,#xlRows,#xlTabs,#pptRail,#pptNotes,#tmStage,#tmChat,#tmTray{display:none}
 
 /* ---- Excel 壳 ---- */
 body[data-shell=excel]{--word-blue:#217346}
@@ -1746,6 +1746,9 @@ body:not(.os) #deskNote{display:none}
 .dtabs b.on{background:#C43E1C;border-color:#C43E1C;color:#fff}
 .dtabs b:not(.on):hover{border-color:#C43E1C;color:#C43E1C}
 .adform .adlb{font-size:11px;color:#8A6B42;margin:8px 0 4px;letter-spacing:.5px}
+/* 行内下拉：贴在小标题右边，不单独占一行高度 */
+.adform .acase{border:1px solid #C9A876;border-radius:3px;background:rgba(253,251,246,.9);
+  font-family:inherit;font-size:10px;color:#4A3A22;padding:0 3px;max-width:220px;outline:none;vertical-align:middle}
 .adform .ta{font-size:12.5px}
 .adrow{display:flex;gap:6px;margin-bottom:5px}
 .adrow input{border:1px solid var(--rule);border-radius:3px;padding:5px 8px;font-family:inherit;font-size:12px;outline:none}
@@ -1784,28 +1787,23 @@ body:not(.os) #deskNote{display:none}
 .dcast.shuffling .cardw:nth-child(4) .idcard{animation-delay:.6s}
 @keyframes shuf{0%,100%{transform:rotateY(180deg) translateY(0)}50%{transform:rotateY(180deg) translateY(-7px)}}
 /* 桌面提示条：牌桌上方那行小字 */
-.dhint{text-align:center;font-size:10.5px;color:rgba(226,238,250,.92);letter-spacing:.3px;margin:0 auto 6px;max-width:560px;
-  background:linear-gradient(90deg,transparent,rgba(8,20,36,.62) 12%,rgba(8,20,36,.62) 88%,transparent);
-  border-radius:9px;padding:3px 10px;text-shadow:0 1px 2px rgba(4,10,20,.8)}
+.dhint{text-align:center;font-size:11px;color:rgba(226,238,250,.92);letter-spacing:.3px;margin:0 auto 7px;max-width:760px;
+  background:linear-gradient(90deg,transparent,rgba(8,20,36,.62) 10%,rgba(8,20,36,.62) 90%,transparent);
+  border-radius:9px;padding:4px 12px;text-shadow:0 1px 2px rgba(4,10,20,.8);line-height:1.6}
 .dhint b{color:#F5C56B;font-weight:400}
 .dseat{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:7px}
-/* 梦蝶局这一页给牌桌腾地方：抬头和引文压扁，整局要一屏看完 */
+/* 幻灯片的抬头一直是压扁的，别的页也靠它塞进 16:9，留着 */
 #winPPT #slideHead{padding:2px 0 8px;margin-bottom:9px}
 #winPPT #slideHead .st{font-size:21px}
 #winPPT #slideHead .ss{margin-top:3px}
-#winPPT #v-review > .zz{margin-top:4px;line-height:1.6;font-size:12px}
-#winPPT #v-review > .card > .hd{padding-top:7px;padding-bottom:7px}
-#dreamGame .adg{max-height:90px;overflow:auto;padding:8px 11px;margin-top:7px}
-#dreamGame .adg .agh{margin-bottom:5px}
-#dreamGame .adg .agi{margin-bottom:5px}
-/* 卡牌局比剧本局高一截：这一页的引文和抬头再让出 26px，
-   否则牌桌下沿会被 16:9 的可视区切掉（.paper2 能滚，但一滚就露馅） */
-body.dreamai #winPPT #v-review > .zz{margin:2px 0 0;font-size:11px;line-height:1.4}
-body.dreamai #winPPT #v-review > .card > .hd{padding-top:4px;padding-bottom:4px}
-body.dreamai #dreamGame{padding-bottom:8px}
-body.dreamai .dhint{margin-bottom:4px}
-body.dreamai .dcast{margin-bottom:5px}
-body.dreamai .dlog{max-height:46px}
+#dreamGame .adg{padding:8px 12px;margin-top:7px}
+#dreamGame .adg .agh{margin-bottom:5px;font-size:12px}
+/* 结算四行：一维一行，署名压在行尾 */
+#dreamGame .adg .agi.one{display:flex;gap:8px;align-items:baseline;margin-bottom:4px}
+#dreamGame .adg .agi.one .t{flex:1;min-width:0;font-size:12px;line-height:1.65;color:var(--ink)}
+#dreamGame .adg .agi.one .t b{margin-right:5px;color:#7A5A2E}
+#dreamGame .adg .agi.one .tl{flex:0 0 auto;font-size:10px;color:#96552E}
+#dreamGame .adg .tell{margin-top:7px;padding-top:6px;font-size:11.5px;line-height:1.7}
 /* AI 猜测面板：真实的可能，按可能性配长短条 */
 .adg{border:1px solid #E4D2A8;background:#FDF9EE;border-radius:4px;padding:10px 12px;margin-top:9px}
 .adg .agh{font-size:12px;font-weight:700;color:#7A5A2E;letter-spacing:.5px;margin-bottom:7px}
@@ -1847,42 +1845,134 @@ body.dreamai .dlog{max-height:46px}
   border-radius:2px;padding:0 3px;z-index:2;background:rgba(122,90,46,.16);color:#7A5A2E}
 .idcard .csrc.real{background:#3F8F88;color:#fff}
 
-/* 手牌区 = PPT 备注区。备注区在 .paper2 外面，所以怎么排都撑不破 16:9 那张幻灯片 */
-body.dreamcards #pptNotes{flex-direction:row;align-items:stretch;gap:10px;padding:8px 12px}
-body.dreamcards #pptNotes .nt,body.dreamcards #pptNotes .nb{display:none}
-#dreamHand{display:none;flex:1;min-width:0;gap:10px}
-body.dreamcards #dreamHand{display:flex}
+/* ---- Teams 会议壳 --------------------------------------------
+   舞台是自由高度的 .dwb，不再是 16:9 幻灯片：四个 agent 各占一格，
+   字幕挂在宫格下面，手牌收进只有你看得见的私密托盘。 */
+#winTeams .dwb{background:#1F1F23;display:flex;flex-direction:row;padding:0}
+#tmBar{background:#292929;border-bottom-color:#3D3D42;color:#D8D8DC;gap:9px}
+#tmBar .rec,#tmBar .mic,#tmBar .cam{font-size:10.5px;color:#B4B4BC;border:1px solid #4A4A52;border-radius:11px;padding:1px 9px}
+#tmBar .rec{color:#F2A0A0;border-color:#7A3E3E}
+#tmBar .rec::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:#D74F4F;margin-right:5px;
+  vertical-align:middle;animation:tmrec 1.6s ease-in-out infinite}
+@keyframes tmrec{0%,100%{opacity:.35}50%{opacity:1}}
+#tmBar b{font-weight:400;font-size:11.5px;color:#EAEAEE;margin-left:5px}
+#tmBar i{font-style:normal;font-size:10px;letter-spacing:.3px;background:rgba(80,89,201,.9);color:#EEF0FF;border-radius:9px;padding:1px 8px}
+#tmBar button{background:#C0503F;border-color:#C0503F;color:#fff}
+#tmBar button:hover{background:#D4604E;border-color:#D4604E}
+#winTeams .dwf{background:#292929;border-top-color:#3D3D42;color:#9A9AA2}
+#tmStage{display:block;flex:1;min-width:0;overflow:auto;padding:12px 14px}
+#tmChat{display:flex;flex:0 0 232px;background:#252528;border-left:1px solid #3D3D42;flex-direction:column;overflow:hidden}
+#tmChat .tch{flex:0 0 auto;font-size:11.5px;color:#EAEAEE;padding:8px 11px 7px;border-bottom:1px solid #3D3D42}
+#tmChat .tch i{display:block;font-style:normal;font-size:9.5px;color:#8A8A94;margin-top:2px;letter-spacing:.3px}
+#tmChat .tcb{flex:1;overflow:auto;padding:9px 11px}
+#tmChat .tcm{background:#31313A;border-radius:6px;padding:6px 9px;margin-bottom:7px}
+#tmChat .tcm .w{font-size:9.5px;color:#9AA6E0;margin-bottom:2px}
+#tmChat .tcm .t{font-size:11px;color:#DCDCE2;line-height:1.65}
+#tmChat .tcm.sys{background:transparent;border:1px dashed #4A4A52;padding:5px 8px}
+#tmChat .tcm.sys .t{color:#8A8A94;font-size:10px}
+/* 参会者宫格：2×2，一格一个 agent */
+#winTeams .dcast{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 10px;perspective:1100px}
+#winTeams .cardw{width:auto;height:144px;perspective:900px}
+#winTeams .idcard .cface{background:linear-gradient(158deg,#2E3440,#232830);border-color:#454C5A;border-radius:8px}
+#winTeams .idcard .cface::before{border-color:rgba(255,255,255,.07)}
+#winTeams .idcard .cback{background:linear-gradient(158deg,#232830,#181C23);border-color:#454C5A;border-radius:8px}
+#winTeams .idcard .fig{top:34px;width:42px;height:42px;background:#5059C9}
+#winTeams .idcard .fig::after{top:40px;width:70px;height:32px;border-radius:22px 22px 0 0;background:#5059C9}
+#winTeams .idcard b{bottom:26px;font-size:14px;color:#EDEDF2}
+#winTeams .idcard em{bottom:11px;font-size:10px;color:#9AA0AE}
+#winTeams .idcard .wing{top:22px;width:20px;height:26px}
+#winTeams .idcard .wing.l{left:calc(50% - 33px)}
+#winTeams .idcard .wing.r{right:calc(50% - 33px)}
+/* 正在发言：Teams 紫描边 + 一圈呼吸，纯 CSS，不用定时器 */
+#winTeams .idcard.speaking{transform:none;z-index:3}
+#winTeams .idcard.speaking .cface{box-shadow:0 0 0 2px #7B83EB,0 0 22px rgba(123,131,235,.5);animation:tmspk 1.5s ease-in-out infinite}
+@keyframes tmspk{0%,100%{box-shadow:0 0 0 2px #7B83EB,0 0 14px rgba(123,131,235,.35)}
+  50%{box-shadow:0 0 0 3px #7B83EB,0 0 26px rgba(123,131,235,.62)}}
+#winTeams .dcast.hasfocus .idcard:not(.speaking):not(.liar){filter:brightness(.72)}
+#winTeams .dcast.deal .idcard{transform:translateY(-18px);opacity:0}
+#winTeams .dcast.deal.dealt .idcard{transform:none;opacity:1;transition:transform .45s cubic-bezier(.3,.9,.4,1),opacity .45s;transition-delay:var(--dd,0s)}
+#winTeams .dcast.shuffling .idcard{transform:none;animation:tmwait 1.6s ease-in-out infinite}
+@keyframes tmwait{0%,100%{opacity:.42}50%{opacity:.9}}
+#winTeams .idcard[data-aim]:hover{transform:translateY(-3px)}
+#winTeams .idcard[data-aim]:hover .cface{box-shadow:0 0 0 2px #F5C56B,0 0 18px rgba(245,197,107,.5)}
+#winTeams .idcard.hard .cface{box-shadow:0 0 0 2px #3F8F88,0 0 16px rgba(63,143,136,.4)}
+/* 揭底：id 选择器把上面那身深色压过了骗子牌的红，这儿再红回来 */
+#winTeams .idcard.liar .cface{background:linear-gradient(155deg,#7A2E22,#4A1C14);border-color:#C0503F;
+  box-shadow:0 0 0 2px #C0503F,0 0 20px rgba(192,80,63,.45)}
+#winTeams .idcard.liar .fig,#winTeams .idcard.liar .fig::after{background:#E0A08E}
+#winTeams .idcard.liar b{color:#F6DCD4}
+#winTeams .idcard.liar em{color:#D6A79C}
+#winTeams .idcard.liar .cface .stamp{color:#FFE2DA;border-color:#FFE2DA;background:rgba(122,46,34,.5);text-shadow:none}
+#winTeams .idcard.mybet .cface{box-shadow:0 0 0 2px #7B83EB,0 0 18px rgba(123,131,235,.42)}
+#winTeams .idcard .dcost{left:9px;right:9px;bottom:5px}
+#winTeams .idcard .dcost i{height:5px;background:rgba(255,255,255,.12);box-shadow:none}
+#winTeams .idcard .csrc{top:7px;left:7px;font-size:8.5px;background:rgba(255,255,255,.14);color:#C6C6CE}
+#winTeams .idcard .csrc.real{background:#3F8F88;color:#fff}
+/* 实时字幕：宫格下面那条黑底白字 */
+#winTeams .dspeech{max-width:none;background:rgba(18,18,22,.92);border:1px solid #3D3D42;border-radius:6px;
+  padding:8px 14px;margin:0 0 8px;box-shadow:none}
+#winTeams .dspeech::before{border-bottom-color:rgba(18,18,22,.92)}
+#winTeams .dspeech .dw{font-size:10px;color:#9AA6E0}
+#winTeams .dspeech .dt2{font-size:13px;color:#EDEDF2;line-height:1.7}
+#winTeams .dlog{max-width:none;max-height:64px}
+/* 回放揭底那张牌：四条破绽也得和宫格一起塞进舞台，不许内滚 */
+#winTeams .adg{margin-top:6px;padding:8px 12px}
+#winTeams .adg .agi{margin-bottom:5px}
+#winTeams .adg .tell{margin-top:6px;padding-top:5px}
+#winTeams #dreamGame{background:none;padding:0}
+#winTeams .dhint{max-width:none}
+/* 会议窗的页签是 Teams 紫，不是 PPT 那个橙红 */
+#winTeams .dtabs b{background:#2E2E34;border-color:#4A4A52;color:#B4B4BC}
+#winTeams .dtabs b.on{background:#5059C9;border-color:#5059C9;color:#fff}
+#winTeams .dtabs b:not(.on):hover{border-color:#7B83EB;color:#C4C9F5}
+/* 组局表单不用再为幻灯片省高度了：会议窗有的是地方 */
+#winTeams .adform.tight{padding:11px 14px}
+#winTeams .adform.tight .muted{font-size:11px;line-height:1.7}
+#winTeams .adform.tight .adlb{margin:8px 0 4px;font-size:11px}
+#winTeams .adform.tight .adrow{gap:6px;margin-bottom:5px}
+#winTeams .adform.tight .adrow input,#winTeams .adform.tight .adrow select{padding:5px 8px;font-size:12px}
+#winTeams .adform.tight .ta{font-size:12.5px;padding:7px 9px}
+#winTeams .adform.tight textarea.ta{line-height:1.65}
+#winTeams .adform.tight .rbtn{margin-top:9px!important;padding:5px 15px}
+#winTeams .adfiles{max-height:none}
+/* 私密托盘：与会者看不到这一栏 */
+#tmTray{flex:0 0 auto;height:122px;background:#232326;border-top:1px solid #3D3D42;display:none;
+  flex-direction:column;padding:5px 12px 8px}
+#tmTray .tt{flex:0 0 auto;font-size:9.5px;letter-spacing:.6px;color:#D6A65C;margin-bottom:5px}
+#tmTray .tt::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:#D6A65C;margin-right:6px;vertical-align:middle}
+body.dreamcards #tmTray{display:flex}
+#dreamHand{display:flex;flex:1;min-width:0;gap:10px;align-items:stretch}
 /* 左栏：本轮还剩几分钟 + 军师横置牌 */
-#dreamHand .qside{flex:0 0 auto;width:120px;display:flex;flex-direction:column;justify-content:space-between;gap:5px}
-.qtimer{font-family:var(--serif);font-size:10.5px;color:var(--ink-3);letter-spacing:.4px}
-.qtimer b{display:block;font-size:18px;color:#C43E1C;font-weight:700;line-height:1.15;font-family:var(--serif)}
-.qtimer .qbar{height:3px;border-radius:2px;background:#E6E2D6;margin-top:3px;overflow:hidden}
+#dreamHand .qside{flex:0 0 auto;width:128px;display:flex;flex-direction:column;justify-content:space-between;gap:5px}
+.qtimer{font-family:var(--serif);font-size:10.5px;color:#9A9AA2;letter-spacing:.4px}
+.qtimer b{display:block;font-size:19px;color:#F5C56B;font-weight:700;line-height:1.15;font-family:var(--serif)}
+.qtimer .qbar{height:3px;border-radius:2px;background:#3A3A42;margin-top:3px;overflow:hidden}
 .qtimer .qbar i{display:block;height:100%;background:linear-gradient(90deg,#F5C56B,#C75B2A);transition:width .45s ease}
 /* 军师：横置 = 支援位，桌游的通用语言 */
-.advisor{display:flex;align-items:center;gap:5px;border:1px solid #C9A876;border-radius:4px;padding:3px 5px;
-  background:linear-gradient(150deg,#F5ECD4,#E0C99C);box-shadow:0 2px 6px rgba(4,10,20,.22)}
-.advisor .av{width:15px;height:15px;border-radius:50%;background:#3A4450;flex:0 0 auto}
-.advisor .tx{font-size:9px;color:#7A5A2E;line-height:1.3;min-width:0;overflow:hidden}
-.advisor .tx b{display:block;font-size:10px;color:#4A3A22;font-family:var(--serif);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.advisor.empty{background:none;border-style:dashed;border-color:#CFC7B4;box-shadow:none}
-.advisor.empty .tx{color:var(--ink-3)}
-/* 质询牌：比身份牌小一号，横排，费用印在左上角 */
-#dreamHand .qrow{flex:1;min-width:0;display:flex;gap:7px;overflow-x:auto;align-items:flex-start;padding-bottom:2px}
-.qcard{flex:0 0 auto;width:94px;height:72px;border-radius:5px;position:relative;cursor:pointer;text-align:left;
-  font-family:inherit;border:1px solid #C9A876;background:linear-gradient(155deg,#F5ECD4,#E4D0A6);padding:15px 7px 5px;
-  box-shadow:0 2px 7px rgba(4,10,20,.26);transition:transform .18s,box-shadow .18s}
-.qcard:hover{transform:translateY(-4px);box-shadow:0 7px 16px rgba(4,10,20,.4)}
-.qcard.on{transform:translateY(-6px);box-shadow:0 8px 18px rgba(4,10,20,.45),0 0 0 2px #C43E1C}
+.advisor{display:flex;align-items:center;gap:5px;border:1px solid #4A4A52;border-radius:4px;padding:3px 5px;
+  background:#31313A}
+.advisor .av{width:15px;height:15px;border-radius:50%;background:#5059C9;flex:0 0 auto}
+.advisor .tx{font-size:9px;color:#9A9AA2;line-height:1.3;min-width:0;overflow:hidden}
+.advisor .tx b{display:block;font-size:10px;color:#DCDCE2;font-family:var(--serif);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.advisor.empty{background:none;border-style:dashed;border-color:#4A4A52}
+.advisor.empty .tx{color:#7A7A84}
+/* 质询牌：横排，费用印在左上角 */
+#dreamHand .qrow{flex:1;min-width:0;display:flex;gap:8px;overflow-x:auto;align-items:stretch;padding-bottom:2px}
+.qcard{flex:0 0 auto;width:104px;border-radius:6px;position:relative;cursor:pointer;text-align:left;
+  font-family:inherit;border:1px solid #4A4A52;background:linear-gradient(158deg,#33343E,#2A2B33);padding:17px 8px 7px;
+  box-shadow:0 2px 7px rgba(0,0,0,.3);transition:transform .18s,box-shadow .18s}
+.qcard:hover{transform:translateY(-4px);box-shadow:0 7px 16px rgba(0,0,0,.45)}
+.qcard.on{transform:translateY(-6px);box-shadow:0 8px 18px rgba(0,0,0,.5),0 0 0 2px #7B83EB}
 .qcard:disabled{cursor:not-allowed;opacity:.4;transform:none;box-shadow:none}
-.qcard .cost{position:absolute;top:3px;left:5px;font-size:9px;font-style:normal;color:#fff;background:#8A6B42;border-radius:2px;padding:0 4px}
-.qcard .kind{position:absolute;top:4px;right:5px;width:8px;height:8px;border-radius:2px;background:var(--qc,#8A6B42)}
-.qcard b{display:block;font-family:var(--serif);font-size:12.5px;color:#4A3A22;line-height:1.2}
-.qcard span{display:block;font-size:8.5px;color:#8A6B42;line-height:1.35;margin-top:2px}
-/* 证据牌：从 Excel 取回来的那张，纸色不一样，一眼看出不是系统发的 */
-.qcard.evi{background:linear-gradient(155deg,#E9F1ED,#CCDDD4);border-color:#7FA894}
-.qcard.evi b{font-size:10px;line-height:1.25}
-.qcard.evi span{color:#4E7A68}
-#dreamHand .qnil{font-size:10.5px;color:var(--ink-3);align-self:center;line-height:1.7}
+.qcard .cost{position:absolute;top:4px;left:6px;font-size:9px;font-style:normal;color:#fff;background:#5059C9;border-radius:2px;padding:0 4px}
+.qcard .kind{position:absolute;top:5px;right:6px;width:8px;height:8px;border-radius:2px;background:var(--qc,#8A6B42)}
+.qcard b{display:block;font-family:var(--serif);font-size:13px;color:#EDEDF2;line-height:1.2}
+.qcard span{display:block;font-size:9px;color:#9A9AA2;line-height:1.4;margin-top:3px}
+/* 证据牌：从 Excel 取回来的那张，一眼看出不是系统发的 */
+.qcard.evi{background:linear-gradient(158deg,#2C3B36,#222E2A);border-color:#4E7A68}
+.qcard.evi b{font-size:10.5px;line-height:1.3}
+.qcard.evi span{color:#7FA894}
+#dreamHand .qnil{font-size:11px;color:#9A9AA2;align-self:center;line-height:1.7}
 
 /* ---- 机器人工坊抽屉：默认收着，不跟主戏抢一屏 ---- */
 #wsCard.collapsed .bd{display:none}
@@ -2145,7 +2235,7 @@ body.dreamcards #dreamHand{display:flex}
 
     <div id="slideHead">
       <div class="st" id="slideTitle">化蝶 · 梦蝶局</div>
-      <div class="ss" id="slideSub">Q3 复盘汇报 · 第 1 节 · 机器人身份局实录</div>
+      <div class="ss" id="slideSub">Q3 复盘汇报 · 第 1 节 · 四维代价议事实录</div>
     </div>
 
     <!-- ============ 开始 · 泡泡广场 ============ -->
@@ -2392,9 +2482,12 @@ body.dreamcards #dreamHand{display:flex}
 
     <!-- ============ 审阅 · 化蝶 ============ -->
     <div class="view" id="v-review">
-      <h3 class="sec">化蝶 · 梦蝶局<small>午休加映场 · 四个分身替主人练识人</small></h3>
+      <h3 class="sec">化蝶 · 梦蝶局<small>午休加映场 · 四个分身各看一片叶子</small></h3>
       <div class="zz"><span class="zq">「周与胡蝶，则必有分矣。此之谓物化」——《庄子 · 齐物论》</span><span class="zh">分身、马甲、壳——换一个形态，就挣脱一个处境</span></div>
-      <div class="card" style="margin-top:2px"><h4>梦蝶局 · 机器人身份局<small>其中一个是假猎头，押中他</small></h4><div class="bd" id="dreamGame"></div></div>
+      <div class="card" style="margin-top:2px"><h4>梦蝶局 · 四片叶子买代价<small>指派一个 agent 去质问另一个，把他漏掉的代价撬出来</small></h4><div class="bd">
+        <p class="muted">这一局搬进 Microsoft Teams 了——四个分身各占一格，实时字幕在下面，你的手牌在只有你看得见的那一栏。</p>
+        <button class="rbtn pri" data-goteams>进会议室</button>
+      </div></div>
       <div class="split" style="margin-top:14px">
         <div style="flex:1">
           <div class="card"><h4>机器人水域 · 问答流<small>@一个机器人，免费 3 问</small></h4><div class="bd">
@@ -2470,6 +2563,16 @@ body.dreamcards #dreamHand{display:flex}
 <div id="pptNotes">
   <div class="nt">备注</div>
   <div class="nb" id="pptNote">这一页是自动生成的备注区。放映时每句台词的破绽实时标在这里，揭底后逐条回放。</div>
+</div>
+
+<!-- ============ 壳 chrome：Teams 会议（开机即被搬进 #winTeams） ============ -->
+<div id="tmStage"><div id="dreamGame"></div></div>
+<div id="tmChat">
+  <div class="tch">会议聊天<i>私密 · 仅你可见</i></div>
+  <div class="tcb" id="tmChatBody"></div>
+</div>
+<div id="tmTray">
+  <div class="tt">只有你看得见 · 与会者看不到这一栏</div>
   <div id="dreamHand"></div>
 </div>
 
@@ -3569,33 +3672,35 @@ boot();
 
 /* A1 */
 const DREAM_PLAYS = [
-  {title:'内推的那位', cast:{'一叶障目':'猎头 Anna', '匠石':'前同事老王', '老庖':'HR 小林','井底之蛙':'求职者'}, liar:'一叶障目', lines:[
-    {who:'井底之蛙',tx:'大家先说说，最近有没有靠谱岗位？'},
-    {who:'匠石',tx:'我前同事那边正缺一个产品负责人。'},
-    {who:'老庖',tx:'我们 HR 只看公开流程，不收任何费用。'},
-    {who:'一叶障目',tx:'我手里有个年薪翻倍的坑，今天就能安排面试。',tell:'这话你在哪儿听过：先给远超市场价的数字制造稀缺感。'},
-    {who:'匠石',tx:'不用急，先把 JD 和公司全名发出来。'},
+  {title:'内推的那位', cast:{'一叶障目':'猎头 Anna', '匠石':'前同事老王', '老庖':'HR 小林','井底之蛙':'求职者'},
+   dims:{'一叶障目':'money','匠石':'people','老庖':'timing','井底之蛙':'worst'}, liar:'一叶障目', lines:[
+    {who:'井底之蛙',tx:'我先把最坏那一下摆出来：这份工作真丢了，我手里还剩几个月。'},
+    {who:'匠石',tx:'我那边确实缺人。可你得先想清楚，走了以后谁替你说话。'},
+    {who:'老庖',tx:'流程有先后。正经岗位先发 JD 再谈钱，顺序反了就是信号。'},
+    {who:'一叶障目',tx:'年薪翻倍，今天就能安排面试。',tell:'这话你在哪儿听过：只报一个数字，别的一律不谈。'},
+    {who:'匠石',tx:'数字我不看。我看的是这家谁在带，你去了谁认你。'},
     {who:'一叶障目',tx:'公司暂时保密，签了保密协议才能透露。',tell:'这话你在哪儿听过：用保密为由回避公司与职位信息。'},
-    {who:'老庖',tx:'候选人不需要先交培训费或押金。'},
-    {who:'井底之蛙',tx:'那就走招聘官网投递，别走私人链接。'},
+    {who:'老庖',tx:'面试之前先签保密协议？这个时间点不对，正规流程没有这一步。'},
+    {who:'井底之蛙',tx:'那就走招聘官网投递，别走私人链接——退路得自己留。'},
     {who:'一叶障目',tx:'流程费 399 元，入职后全额返还，很快的。',tell:'这话你在哪儿听过：以可退费用为名索取转账。'},
-    {who:'匠石',tx:'正规面试不会把钱作为门槛。'},
-    {who:'老庖',tx:'我查到官网没有这个岗位，大家留意。',tell:'破绽核验：公开渠道查不到职位。'},
-    {who:'井底之蛙',tx:'看来答案已经很明显了。'}
+    {who:'井底之蛙',tx:'先问最坏：钱交出去人不见了，我找谁去。'},
+    {who:'老庖',tx:'我查了官网，这个岗位在这个时间点根本没开。',tell:'破绽核验：公开渠道查不到职位，时间线也对不上。'},
+    {who:'匠石',tx:'四个人各看一头，只有他那一头从头到尾只有钱。'}
   ]},
-  {title:'表哥的项目', cast:{'井底之蛙':'求职者', '匠石':'老同学','老庖':'HR 背调员','一叶障目':'投资表哥'}, liar:'一叶障目', lines:[
-    {who:'井底之蛙',tx:'最近有人拉我做副业，说是内部项目。'},
-    {who:'匠石',tx:'先问清楚合同主体和退出方式。'},
-    {who:'老庖',tx:'背调只会通过正式邮箱联系，不在群里收资料。'},
+  {title:'表哥的项目', cast:{'井底之蛙':'求职者', '匠石':'老同学','老庖':'HR 背调员','一叶障目':'投资表哥'},
+   dims:{'一叶障目':'money','匠石':'people','老庖':'timing','井底之蛙':'worst'}, liar:'一叶障目', lines:[
+    {who:'井底之蛙',tx:'有人拉我做副业。我先算最坏：这笔钱打水漂，我撑不撑得住。'},
+    {who:'匠石',tx:'看人。拉你的这位，真出了事你还找得到他吗。'},
+    {who:'老庖',tx:'正经顺序是先看合同主体，再谈打款——反过来就是有问题。'},
     {who:'一叶障目',tx:'我这项目稳赚，内部名额只剩两个。',tell:'这话你在哪儿听过：承诺稳赚并制造名额紧张。'},
-    {who:'井底之蛙',tx:'能给一份工商信息和风险说明吗？'},
+    {who:'井底之蛙',tx:'"稳赚"这两个字，说的就是最坏那一下没人兜。'},
     {who:'一叶障目',tx:'先转 2000 元锁定席位，资料随后发。',tell:'这话你在哪儿听过：先转账再给材料，顺序反常。'},
-    {who:'匠石',tx:'投资不该用个人收款码，也不会催你马上决定。'},
-    {who:'老庖',tx:'背调环节更不会让候选人替公司垫款。'},
+    {who:'老庖',tx:'先款后料，这个先后顺序本身就是破绽。'},
+    {who:'匠石',tx:'投资不用个人收款码，也不会催你今天就定。'},
     {who:'一叶障目',tx:'你们不信我？这是亲戚才给的渠道。',tell:'这话你在哪儿听过：用亲情和信任替代可验证信息。'},
-    {who:'井底之蛙',tx:'那就把项目名放到公开渠道核验。'},
-    {who:'匠石',tx:'查不到主体就先停手，别被情绪推着走。'},
-    {who:'老庖',tx:'我的结论：不付款、不提供身份证原件。'}
+    {who:'井底之蛙',tx:'那就把项目名放到公开渠道核验，查不到就先停手。'},
+    {who:'老庖',tx:'所有的"今天最后一天"都是他自己造出来的。',tell:'破绽核验：紧迫感来自对方，不来自事实。'},
+    {who:'匠石',tx:'他那一头只有钱和情分，另外三头一片空白。'}
   ]}
 ];
 let dreamIndex=0, dreamTimer=null, dreamShown=0, dreamBet='', dreamBetAsked=false, dreamPaused=false, dreamSettled=false;
@@ -3605,7 +3710,7 @@ function dreamStop(){
   dreamRender();
 }
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && document.querySelector('#winPPT.playing')) { e.preventDefault(); dreamStop(); }
+  if (e.key === 'Escape' && document.querySelector('#winTeams.playing')) { e.preventDefault(); dreamStop(); }
 });
 /* ---- 牌桌共用件：一排身份卡，牌背入席，谁说话谁的牌浮起来 ---- */
 const DWC = ['#D98E2B','#4FA8A0','#8B6FC0','#9BB24A'];
@@ -3673,15 +3778,16 @@ function dreamRender(){
   const p=DREAM_PLAYS[dreamIndex], rows=p.lines.slice(0,dreamShown);
   const fin = dreamShown>=p.lines.length;
   const canBet = dreamBetAsked&&!dreamBet;
-  const roles = Object.entries(p.cast);
+  /* 回放局和 AI 局同一套宫格：一个人一维，名字不动，身份栏换成他看得见的那一维 */
+  const roles = Object.keys(p.cast).map(n => [n, p.dims[n]]);
   const cur = rows.length ? rows[rows.length-1] : null;
   const idle = !dreamTimer && !dreamPaused && !fin && !rows.length;
   const deal = dreamDeal; dreamDeal = false;
   const si = (!fin && cur) ? roles.findIndex(r => r[0] === cur.who) : -1;
-  let h = '<div class="dhint">脚本模拟 · '+esc(p.title)+' · 四张身份卡只看得到公开发言，看不到彼此的底'
-    + (canBet ? '　<b>点一张卡，押他是假猎头</b>' : '') + '</div>';
-  h += dreamCastHTML(roles, { canBet, bet:dreamBet, liar: fin?p.liar:'', deal, shuffling: idle });
-  if (cur && !fin) h += dreamSpeech(cur.who, p.cast[cur.who], cur.tx);
+  let h = '<div class="dhint">会议录制回放 · '+esc(p.title)+' · 脚本模拟，未调用模型　四个人各只看得见一维，谁也看不到别人的底'
+    + (canBet ? '　<b>点一格，押他是假猎头</b>' : '') + '</div>';
+  h += dreamCastHTML(roles, { dims:1, canBet, bet:dreamBet, liar: fin?p.liar:'', deal, shuffling: idle });
+  if (cur && !fin) h += dreamSpeech(cur.who, DIMOF[p.dims[cur.who]].nm, cur.tx);
   if (!fin) h += dreamLogHTML(rows.slice(0,-1).map(l => [l.who, l.tx]));
   if(fin){
     if(!dreamSettled){
@@ -3696,10 +3802,10 @@ function dreamRender(){
       + p.lines.filter(l=>l.tell).map(l =>
           '<div class="agi"><div class="t"><b>'+esc(l.who)+'</b>「'+esc(l.tx)+'」</div><div class="tl">'+esc(l.tell)+'</div></div>').join('')
       + '<div class="tell">这局的破绽已吹到水面，话术存进了资讯库——玩过的局，不白玩。</div></div>'
-      + '<div class="dseat"><button class="rbtn pri" data-dream-restart>再来一局</button></div>';
+      + '<div class="dseat"><button class="rbtn pri" data-dream-restart>换一场录制</button></div>';
   }
-  else if(dreamPaused&&!dreamBet) h+='<div class="dhint" style="margin-top:9px">牌都在桌上了——点一张，押他是假猎头，押完接着演</div>';
-  else if(idle) h+='<div class="dseat"><button class="rbtn pri" data-dream-start>开局发牌</button></div>';
+  else if(dreamPaused&&!dreamBet) h+='<div class="dhint" style="margin-top:9px">回放暂停在这儿了——点一格，押他是假猎头，押完接着放</div>';
+  else if(idle) h+='<div class="dseat"><button class="rbtn pri" data-dream-start>播放这场录制</button></div>';
   $('#dreamGame').innerHTML=h;
   dreamStage(deal, si);
 }
@@ -3707,7 +3813,8 @@ function dreamSchedule(){ dreamTimer=setInterval(()=>{ dreamShown++; const halfw
 function dreamStart(){ if(dreamTimer) return; dreamShown=0; dreamBet=''; dreamBetAsked=false; dreamPaused=false; dreamDeal=true; dreamRender(); dreamSchedule(); }
 $('#dreamGame').addEventListener('click',e=>{ if(window.dreamMode!=='script') return; const st=e.target.closest('[data-dream-start]'); if(st){ dreamSettled=false; dreamStart(); } const bt=e.target.closest('[data-dream-bet]'); if(bt){ dreamBet=bt.dataset.dreamBet; dreamBetAsked=false; dreamPaused=false; dreamRender(); dreamSchedule(); } if(e.target.closest('[data-dream-restart]')){ dreamIndex=(dreamIndex+1)%DREAM_PLAYS.length; dreamShown=0; dreamBet=''; dreamBetAsked=false; dreamPaused=false; dreamSettled=false; dreamStart(); }});
 document.addEventListener('click',e=>{ const t=e.target.closest('[data-wstoggle]'); if(t){ const c=document.getElementById('wsCard'); if(c) c.classList.toggle('collapsed'); }});
-dreamRender();
+/* 首屏这一发挪到文件末尾统一打（见末尾包装链）——回放局现在要读 DIMOF，
+   在这儿调会踩它的 TDZ，整块内联脚本会当场断掉 */
 
 /* ============ AI 梦蝶局 · 四片叶子，买代价 ============================
    你不是第五个角色，是调度者。
@@ -3759,7 +3866,7 @@ const AD = {
   lines: [], shown: 0, note: '',
   call: '', settled: false, res: null
 };
-const DTABS = m => `<div class="dtabs"><b class="${m==='ai'?'on':''}" data-dmode="ai">开局 · 自己出题</b><b class="${m==='script'?'on':''}" data-dmode="script">看一局样例</b></div>`;
+const DTABS = m => `<div class="dtabs"><b class="${m==='ai'?'on':''}" data-dmode="ai">开局 · 自己出题</b><b class="${m==='script'?'on':''}" data-dmode="script">看一局回放</b></div>`;
 
 const dreamRenderScript = dreamRender;
 dreamRender = function(){
@@ -3806,28 +3913,27 @@ function adSetupHTML(){
     '<option value="mine"' + (AD.from[i] === 'mine' ? ' selected' : '') + '>我的机器人 · 免费</option>',
     '<option value="hire"' + (AD.from[i] === 'hire' ? ' selected' : '') + '>雇别人的分身 · ' + SEAT_PRICE + '</option>'].join('');
   return '<div class="adform tight">'
-    + '<div class="muted">写一件你现在真的拿不定主意的事。四个 agent 各自只看得见一个维度，说的都对、都是半张脸——'
-      + '你的活儿是<b>指派一个去当面质问另一个</b>，把他那一维漏掉的代价撬出来。</div>'
-    + '<div class="adlb">你的困境（也可以从下拉里挑一条现成的）</div>'
+    + '<div class="adlb">你现在真拿不定主意的那件事　'
+    + '<select id="adCase" class="acase"><option value="-1">— 或挑一条现成的 —</option>'
+    + CASES.map((c, i) => '<option value="' + i + '">' + esc(c.slice(0, 20)) + '</option>').join('') + '</select></div>'
     + '<textarea class="ta" id="adSc" rows="2">' + esc(AD.sc) + '</textarea>'
-    + '<select class="ta" id="adCase" style="margin-top:3px"><option value="-1">— 换一条预置困境 —</option>'
-    + CASES.map((c, i) => '<option value="' + i + '">' + esc(c.slice(0, 26)) + '</option>').join('') + '</select>'
-    + '<div class="adlb">四个座位 · 名字 / 他只看得见哪一维 / 谁来演（尾部三个数是战绩：发言·被质问·质问他人）</div>'
+    + '<div class="adlb">四个座位各自只看得见一维，说的都对、都是半张脸——你的活儿是<b>指派一个去当面质问另一个</b>'
+    + '（尾部三个数＝发言·被质问·质问他人）</div>'
     + AD.roles.map((r, i) => '<div class="adrow">'
         + '<input class="anm" id="adNm' + i + '" value="' + esc(r[0]) + '" placeholder="名字">'
-        + '<span class="aid adim" style="--dc:' + DIMOF[r[1]].qc + '"><b>' + esc(DIMOF[r[1]].nm)
-        + '</b>看得见' + esc(DIMOF[r[1]].see) + '，看不见' + esc(DIMOF[r[1]].blind) + '</span>'
-        + '<select class="aid" id="adFr' + i + '" style="flex:0 0 128px">' + srcOpt(i) + '</select>'
+        + '<span class="aid adim" style="--dc:' + DIMOF[r[1]].qc + '" title="看得见' + esc(DIMOF[r[1]].see)
+        + '，看不见' + esc(DIMOF[r[1]].blind) + '"><b>' + esc(DIMOF[r[1]].nm)
+        + '</b>见' + esc(DIMOF[r[1]].see) + '　盲' + esc(DIMOF[r[1]].blind) + '</span>'
+        + '<select class="aid" id="adFr' + i + '" style="flex:0 0 118px">' + srcOpt(i) + '</select>'
         + adRecHTML(r[0]) + '</div>').join('')
-    + '<div class="adlb">军师（横置在你面前 · 每轮一条钉钉私聊 + 他盯的那一维便宜 1 分钟 + 每轮多 1 分钟）</div>'
-    + '<select class="ta" id="adAdv">'
-    + '<option value="-1">不雇 · 免费</option>'
+    + '<div class="adlb">军师（每轮一条钉钉私聊 + 他盯的那一维便宜 1 分钟 + 每轮多 1 分钟）　'
+    + '<select id="adAdv" class="acase"><option value="-1">不雇 · 免费</option>'
     + ADVISORS.map((a, i) => '<option value="' + i + '"' + (AD.adv && AD.adv[0] === a[0] ? ' selected' : '') + '>'
         + esc(a[0]) + ' · ' + esc(a[1]) + ' · ' + ADV_PRICE + '</option>').join('')
-    + '</select>'
-    + '<button class="rbtn pri" data-ad="start" style="margin-top:7px">开局发牌</button>'
+    + '</select></div>'
+    + '<button class="rbtn pri" data-ad="start">开局发牌</button>'
     + '<button class="rbtn" data-ad="files" style="margin-left:6px">卷宗架</button>'
-    + '<span class="muted" style="margin-left:8px">「周与胡蝶，则必有分矣」——一叶障目，说的是每个人只看得见一片叶子</span></div>';
+    + '<span class="muted" style="margin-left:8px">一叶障目，说的是每个人只看得见一片叶子</span></div>';
 }
 
 /* ---------- 手牌：渲染进 PPT 备注区的兄弟节点，绝不碰 #pptNote ----------
@@ -3839,7 +3945,8 @@ function adHandRender(){
   document.body.classList.toggle('dreamcards', on);
   if (!on){ el.innerHTML = ''; return; }
   const mx = adMax();
-  let h = '<div class="qside"><div class="qtimer">第 ' + AD.round + ' / ' + ROUNDS + ' 轮 · 本轮剩'
+  let h = '<div class="qside"><div class="qtimer">'
+    + (AD.phase === 'sign' ? '三轮打完 · 剩' : '第 ' + AD.round + ' / ' + ROUNDS + ' 轮 · 本轮剩')
     + '<b>' + AD.min + ' 分钟</b><i class="qbar"><i style="width:' + Math.round(AD.min / mx * 100) + '%"></i></i></div>';
   h += AD.adv
     ? '<div class="advisor" title="横置的军师牌 · 支援位"><div class="av"></div><div class="tx"><b>' + esc(AD.adv[0])
@@ -3850,7 +3957,7 @@ function adHandRender(){
     h += '<div class="qnil">' + (AD.phase === 'wait1' ? '他正在开口——<br>这是一次现场的独立调用。'
       : '他们正在各说各的——<br>说完这一轮，牌才轮到你手上。') + '</div>';
   } else if (AD.phase === 'sign'){
-    h += '<div class="qnil">三轮打完了——<br>回幻灯片上签个字。</div>';
+    h += '<div class="qnil">三轮打完了——<br>回会上签个字。</div>';
   } else {
     h += AD.roles.map(r => {
       const nm = r[0], d = DIMOF[r[1]], poor = AD.min < 1;
@@ -3875,7 +3982,7 @@ function aiDreamRender(){
   if (AD.st === 'setup' || AD.st === 'files'){
     $('#dreamGame').innerHTML = h + (AD.st === 'files' ? adFilesHTML() : adSetupHTML());
     adHandRender();
-    if (typeof adSlideSync === 'function') adSlideSync();
+    if (typeof adMeetSync === 'function') adMeetSync();
     return;
   }
   const rows = AD.lines.slice(0, AD.shown);
@@ -3889,9 +3996,10 @@ function aiDreamRender(){
     + AD.calls + ' · 视野隔离 ' + AD.roles.length + ' 路</i>';
   if (!fin) h += '<div class="dhint">'
     + (AD.st === 'wait' ? '洗牌中'
+      : AD.phase === 'sign' ? '三轮打完 · 代价买到 ' + adHardN() + '/4 格'
       : '第 ' + AD.round + ' / ' + ROUNDS + ' 轮 · 本轮剩 ' + AD.min + ' 分钟 · 代价买到 ' + adHardN() + '/4 格')
     + ' · ' + esc(snip) + cnt
-    + (AD.st === 'play' && AD.phase === 'act' ? '　<b>手牌在下面的备注区——那儿只有你看得见</b>' : '') + '</div>';
+    + (AD.st === 'play' && AD.phase === 'act' ? '　<b>手牌在下面那条私密栏</b>' : '') + '</div>';
   h += dreamCastHTML(AD.roles, {
     deal, shuffling: AD.st === 'wait', slots: AD.slots, srcOf: AD.srcOf, dims: 1,
     aim: AD.st === 'play' && AD.phase === 'act',
@@ -3914,7 +4022,7 @@ function aiDreamRender(){
   $('#dreamGame').innerHTML = h;
   dreamStage(deal, si);
   adHandRender();
-  if (typeof adSlideSync === 'function') adSlideSync();
+  if (typeof adMeetSync === 'function') adMeetSync();
 }
 
 function adResultHTML(){
@@ -3922,18 +4030,18 @@ function adResultHTML(){
   return '<div class="adg"><div class="agh">四片叶子 · ' + esc(r.head || '') + '</div>'
     + DIMS.map(d => {
         const cs = adCells(d.k), hard = adHard(d.k);
-        return '<div class="agi"><div class="t"><b>' + esc(d.nm) + '</b>'
+        return '<div class="agi one"><span class="t"><b>' + esc(d.nm) + '</b>'
           + (cs.length ? esc(cs[cs.length - 1].tx) : '这一格你没买 —— 也就是说你在拿它赌')
-          + '</div><div class="tl">' + (cs.length
-              ? esc(cs.map(x => x.by).join(' / ') + ' 说的' + (hard ? ' · 交叉验证过' : ' · 只有他自己那一维'))
-              : esc('没有任何人替你算过' + d.see)) + '</div></div>';
+          + '</span><span class="tl">' + (cs.length
+              ? esc(cs.map(x => x.by).join('/') + (hard ? ' · 交叉验证过' : ' · 只有他自己那一维'))
+              : '没人替你算过') + '</span></div>';
       }).join('')
     + '<div class="tell">' + esc(r.tell || '') + '</div></div>'
     + '<div class="dseat"><button class="rbtn pri" data-ad="again">同一桌再来一局</button>'
     + '<button class="rbtn" data-ad="reset">换个困境</button>'
     + '<button class="rbtn" data-ad="files">存进卷宗架</button>'
     + '<button class="rbtn" data-ad="bill">看完整决定书</button></div>'
-    + '<div class="dhint" style="margin-top:7px">每张牌左上角标着它这句话是真模型生成还是脚本兜底 · 完整决定书已进 Outlook 草稿箱</div>';
+    + '<div class="dhint" style="margin-top:6px">牌左上角标着这句是真模型还是脚本兜底 · 完整决定书已进 Outlook 草稿箱</div>';
 }
 
 /* ---------- 发牌：四个座位各绑一维，四格代价全部清空 ----------
@@ -4007,6 +4115,9 @@ async function adAgent(i){
 /* ---------- 开局：四次并发独立调用 ---------- */
 async function adEngine(){
   adDeck();
+  const tc = document.querySelector('#tmChatBody');
+  if (tc) tc.innerHTML = '<div class="tcm sys"><div class="t">会议开始 · 四位与会者各自只看得见一个维度，'
+    + '他们彼此看不到对方说了什么。这一栏只有你看得见。</div></div>';
   await Promise.all(AD.roles.map((r, i) => adAgent(i)));
   AD.src = AD.roles.some(r => AD.srcOf[r[0]] === 'model') ? 'model' : 'script';
   AD.busy = false; AD.st = 'play'; AD.round = 0; adDeal = true;
@@ -4227,6 +4338,12 @@ function adAdvisorWhisper(){
     const nm = cv.querySelector('.nm');
     if (nm && !nm.querySelector('.rd')) nm.insertAdjacentHTML('afterbegin', '<i class="rd">1</i>');
   }
+  const tc = document.querySelector('#tmChatBody');
+  if (tc){
+    tc.insertAdjacentHTML('beforeend', '<div class="tcm"><div class="w">' + esc(AD.adv[0])
+      + ' · ' + esc(AD.adv[1]) + '（私密 · 只发给你）</div><div class="t">' + esc(tip) + '</div></div>');
+    tc.scrollTop = tc.scrollHeight;
+  }
   if (typeof osToast === 'function') osToast('军师 ' + AD.adv[0] + ' 发来一条私聊', 'chat');
 }
 
@@ -4434,48 +4551,93 @@ opsRender();
 <script src="shells.js"></script>
 <script src="os.js"></script>
 <script>
+/* 梦蝶局的壳：一场 Teams 会议。
+   四个 agent 各占一格，字幕在下面，手牌收在只有你看得见的私密托盘里。
+   #dreamGame / #dreamHand 是开机时就在 body 上的静态节点（事件在解析期已绑好），
+   这里只把它们搬进窗口 —— 搬家不重建，和 os.js 的 put() 一个路数。 */
+(function(){
+  if (typeof mkWin !== 'function') return;
+  const bTm = mkWin('winTeams', 'teams', '梦蝶局 · 四片叶子买代价 | Microsoft Teams',
+    'left:206px;top:20px;width:1064px;height:780px');
+  const win = bTm.parentNode;
+  win.querySelector('.dwh').insertAdjacentHTML('afterend',
+    '<div class="dwt" id="tmBar"><span class="rec">录制中</span>'
+    + '<span class="mic">静音</span><span class="cam">摄像头</span>'
+    + '<b id="tmRound">会议未开始</b><i id="tmCalls"></i>'
+    + '<span class="sp"><button class="rbtn" id="tmLeave">离开会议</button></span></div>');
+  bTm.appendChild($('#tmStage'));
+  bTm.appendChild($('#tmChat'));
+  win.appendChild($('#tmTray'));
+  win.insertAdjacentHTML('beforeend',
+    '<div class="dwf" id="tmFoot">会议进行中　4 人在线　字幕：中文(简体)　录制将存入 卷宗架</div>');
+
+  OS_GO.teams = ['winTeams'];
+  const bar = document.querySelector('#osbar');
+  if (bar){
+    const it = document.createElement('span');
+    it.className = 'app';
+    it.dataset.go = 'teams';
+    it.innerHTML = '<i style="background:#5059C9">T</i>Teams';
+    bar.insertBefore(it, bar.querySelector('.clk'));
+  }
+  // 审阅页那张卡只剩一个入口按钮，点它进会
+  document.addEventListener('click', e => {
+    if (e.target.closest('[data-goteams]')) goFeature('teams');
+  });
+  // 关窗停局：os.js 只给 winPPT 挂了 dreamStop，这扇是后加的
+  document.addEventListener('mousedown', e => {
+    if (e.target.closest('#winTeams [data-close]') && typeof dreamStop === 'function') dreamStop();
+  });
+  if ($('#tmLeave')) $('#tmLeave').addEventListener('click', () => {
+    if (typeof dreamStop === 'function') dreamStop();
+    win.classList.remove('on', 'min');
+    markBar();
+  });
+})();
+
 /* 卡牌局的收尾包装：shells.js 的 pptSync() 只认剧本局的全局量，
-   在 AI 卡牌局里会把标题和备注写回旧状态。它跑在 dreamRender 里面，
-   所以只能在它之后再包一层，把幻灯片同步纠正回来。 */
+   它跑在 dreamRender 里面，所以只能在它之后再包一层，把会议室这一头同步上。
+   pptSync 首行就查 #winPPT.on，会议窗里它自己空转，shells.js 一个字不用改。 */
 (function(){
   if (typeof dreamRender !== 'function') return;
   const _r = dreamRender;
   dreamRender = function(){
     _r();
-    /* 卡牌局比剧本局高一截，整页要让出一点地方——切回剧本局要把类摘掉 */
     document.body.classList.toggle('dreamai', window.dreamMode === 'ai');
-    if (window.dreamMode !== 'ai') return;
-    adSlideSync();
+    adMeetSync();
   };
-  window.adSlideSync = function(){
-    document.body.classList.add('dreamai');
-    const t = document.querySelector('#slideTitle'), s = document.querySelector('#slideSub'),
-          n = document.querySelector('#pptNote'), w = document.querySelector('#winPPT');
-    if (t) t.textContent = AD.st === 'done' ? '梦蝶局 · 摊牌' : '梦蝶局 · 第 ' + Math.max(1, AD.round) + ' 轮质询';
-    if (s) s.textContent = AD.st === 'setup' ? '组局：四个座位，谁来演由你定' : AD.sc.slice(0, 24);
-    if (n) n.textContent = '手牌在右边——三分钟一轮，用不完作废。';
-    if (w) w.classList.toggle('playing', AD.st === 'play' || AD.st === 'done');
-    /* .dwin 里所有 .view 都是 block（它们叠在同一张幻灯片里），
-       点到下半截会把牌桌顶出可视区——每帧把它钉回本页顶部。
-       窗口没开时 .paper2 高度是 0，scrollTop 写不进去，所以要等它真的可见 */
-    const g = document.querySelector('#dreamGame'), pg = g && g.closest('.paper2'),
-          vw = g && g.closest('.view');
-    if (pg && vw && pg.clientHeight > 40) pg.scrollTop = vw.offsetTop;
+  window.adMeetSync = function(){
+    const w = document.querySelector('#winTeams');
+    if (!w) return;
+    const ai = window.dreamMode === 'ai';
+    const rd = $('#tmRound'), cl = $('#tmCalls'), ft = $('#tmFoot');
+    if (ai){
+      if (rd) rd.textContent = AD.st === 'setup' ? '会议未开始 · 先写下你那件事'
+        : AD.st === 'files' ? '卷宗架 · 往期会议纪要'
+        : AD.st === 'done' ? '散会 · 决定书已签'
+        : AD.phase === 'sign' ? '三轮打完 · 等你签字'
+        : '第 ' + Math.max(1, AD.round) + ' / ' + ROUNDS + ' 轮 · 本轮剩 ' + AD.min + ' 分钟';
+      if (cl) cl.textContent = '独立调用 ' + AD.calls + ' · 视野隔离 ' + AD.roles.length + ' 路';
+      if (ft) ft.textContent = (AD.st === 'setup' || AD.st === 'files' ? '会议未开始'
+        : '会议进行中 · ' + AD.sc.slice(0, 22))
+        + '　' + AD.roles.length + ' 人在线　字幕：中文(简体)　录制将存入 卷宗架';
+      w.classList.toggle('playing', AD.st === 'play' || AD.st === 'done');
+    } else {
+      if (rd) rd.textContent = '会议录制回放 · 已归档';
+      if (cl) cl.textContent = '脚本模拟 · 未调用模型';
+      if (ft) ft.textContent = '回放中　4 人在线　字幕：中文(简体)　这一场已经开完了';
+      w.classList.toggle('playing', typeof dreamShown === 'number' && dreamShown > 0);
+    }
   };
-  /* PPT 窗口是后开的（.dwin 只切 .on 类，从不移除节点）——
-     它一露面就补钉一次，否则首屏那次钉在隐藏元素上，白钉 */
-  const w = document.querySelector('#winPPT');
-  if (w && window.MutationObserver) new MutationObserver(() => {
-    if (window.dreamMode === 'ai' && w.classList.contains('on')) adSlideSync();
-  }).observe(w, { attributes: true, attributeFilter: ['class'] });
   /* 首屏补渲染：包装链和 AREC / ADFILES 都齐了才敢跑，
-     默认落在卡牌局，一打开 PPT 看到的就是组局页 */
+     默认落在卡牌局，一进会议室看到的就是组局页 */
   dreamRender();
 })();
 </script>
 <script src="games/gomoku.js" defer></script>
 <script src="games/hide.js" defer></script>
 <script src="games/word.js" defer></script>
+<script src="games/persona-card.js" defer></script>
 <script src="games/mbti.js" defer></script>
 <script src="games/dreamroom.js" defer></script>
 </body>

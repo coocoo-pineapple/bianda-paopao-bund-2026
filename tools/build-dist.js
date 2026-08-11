@@ -16,6 +16,7 @@ const TAGS = [
   '<script src="games/gomoku.js" defer></script>',
   '<script src="games/hide.js" defer></script>',
   '<script src="games/word.js" defer></script>',
+  '<script src="games/persona-card.js" defer></script>',
   '<script src="games/mbti.js" defer></script>',
   '<script src="games/dreamroom.js" defer></script>'
 ];
@@ -26,6 +27,7 @@ const FILE = {
   '<script src="games/gomoku.js" defer></script>': 'games/gomoku.js',
   '<script src="games/hide.js" defer></script>': 'games/hide.js',
   '<script src="games/word.js" defer></script>': 'games/word.js',
+  '<script src="games/persona-card.js" defer></script>': 'games/persona-card.js',
   '<script src="games/mbti.js" defer></script>': 'games/mbti.js',
   '<script src="games/dreamroom.js" defer></script>': 'games/dreamroom.js'
 };

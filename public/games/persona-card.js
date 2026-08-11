@@ -1,12 +1,46 @@
-// 人格分享卡：纸雕背景图 + 浏览器现画的信息条 + 站点二维码，合成 1024x1536 PNG
-// 调用方（mbti.js）自己算好数据传进来，本文件不持有 TYPES，避免文案出现第二份真源：
-//   personaCard({ code, nm, st, fo, foNm, ax:[{d:'话',p:'拍',v:4}, ...4项] })
+// 人格分享卡：型号插画 + 浏览器现画的信息条 + 站点二维码，合成 1024x1536 PNG
+// 插画由 assets/mbti/paper/{型号}.png 提供（另一个窗口负责出图），本层不挑风格：
+// 深色纸雕、白底卡通、黑白涂鸦都能吃，整图等比放进画面区，四周用取自图角的底色补齐。
+// 调用：personaCard({ code, nm, fo, foNm, ax:[{d:'话',p:'拍',v:4}, ...4项] })
 (function () {
   'use strict';
 
   var SITE = 'https://bianda-paopao.yiwang2457.workers.dev/';
-  var W = 1024, H = 1536, ART = 1024;
   var KRAFT = '#C9A876', INK = '#221E1A', DIM = '#6B5A44', CODE = '#6B4A2F', GLOW = '#F5C56B';
+
+  // 四种版式，各占一个传播位。尺寸不同是因为落地的地方不同，不是为了好看：
+  //   full  1024x1536  朋友圈/小红书竖图，信息最全，默认
+  //   card  1024x1024  微信聊天窗、微博配图，方图不会被裁头（省掉天敌行和品牌副行）
+  //   strip 1080x608   群聊/公众号头图，横条，一眼看完
+  //   badge 640x640    头像挂件/贴纸，只有型号和外号，最省地方
+  // sub: 2=全套 1=省掉天敌行和副标 0=只有型号外号
+  var LAYOUT = {
+    full:  { w: 1024, h: 1536, art: 896,  qr: 5, name: 66, sub: 2 },
+    card:  { w: 1024, h: 1024, art: 496,  qr: 4, name: 56, sub: 1 },
+    strip: { w: 1080, h: 608,  art: 0,    qr: 4, name: 60, sub: 2 },
+    badge: { w: 640,  h: 640,  art: 428,  qr: 3, name: 44, sub: 0 }
+  };
+
+  // 分享卡上的一句话。站内 mbti.js 那份评语是「盘点系统的口吻」，偏刻薄；
+  // 发到社交平台的是这份，玩梗自嘲，不冲着人去。两份各归各用，不互相覆盖。
+  var MEME = {
+    PJBH: '你一个人，卷出了全组的进度条。',
+    PJBC: '老板画的饼你都信，还顺手帮他买了面粉。',
+    PJSH: '你的 PPT 跑得比锅还快。',
+    PJSC: '你信老板的饼，老板信你的饼，双向奔赴。',
+    PTBH: '方案能讲三小时，正文还停在第一行。',
+    PTBC: '全公司都能使唤你，你还挺开心。',
+    PTSH: '一年 87 页 PPT，转场动画全公司第一。',
+    PTSC: '日历满得像春运，人是清闲的。',
+    YJBH: '你不吭声，但最后大家用的是你那一版。',
+    YJBC: '最靠得住的那个，也是最容易被漏写进述职的那个。',
+    YJSH: '话不多，事全成，你想要的从来都拿到了。',
+    YJSC: '不问为什么，只问什么时候交。',
+    YTBH: '你的好点子，在别人的述职报告里过得很好。',
+    YTBC: '你不是低调，你是懒得设防。',
+    YTSH: '你早看穿了：饼是假的，摸鱼是真的。',
+    YTSC: '上班的本质被你还原了——一段有工资的时间。'
+  };
 
   /* ---------- GF(256) ---------- */
   var GEXP = [], GLOG = [];
@@ -236,85 +270,198 @@
     return out;
   }
 
-  function panel(ctx, o) {
-    var L = 64, top = ART, y;
+  // 竖排信息条：full / card / badge 共用，插画在上、纸条在下
+  function panel(ctx, o, T) {
+    var L = T.w >= 1024 ? 64 : 44, top = T.art, y, i;
     ctx.fillStyle = KRAFT;
-    ctx.fillRect(0, top, W, H - top);
-
-    ctx.fillStyle = CODE;
-    ctx.font = '700 32px Consolas, "Courier New", monospace';
+    ctx.fillRect(0, top, T.w, T.h - top);
     ctx.textBaseline = 'alphabetic';
-    var cs = o.code.split('');
-    for (var i = 0; i < cs.length; i++) ctx.fillText(cs[i], L + i * 28, top + 74);
-
-    ctx.fillStyle = INK;
-    ctx.font = '700 62px "Microsoft YaHei", "PingFang SC", sans-serif';
-    ctx.fillText(o.nm, L, top + 148);
-
-    y = top + 202;
-    var BW = 28, BH = 16, BG = 7;
-    for (i = 0; i < o.ax.length; i++) {
-      var a = o.ax[i];
-      ctx.font = '500 23px "Microsoft YaHei", "PingFang SC", sans-serif';
-      ctx.fillStyle = DIM;
-      ctx.fillText(a.d, L, y + 16);
-      ctx.fillStyle = INK;
-      ctx.fillText(a.p, L + 42, y + 16);
-      for (var k = 0; k < 4; k++) {
-        ctx.fillStyle = k < a.v ? GLOW : 'rgba(34,30,26,.16)';
-        ctx.fillRect(L + 148 + k * (BW + BG), y + 3, BW, BH);
-      }
-      ctx.fillStyle = DIM;
-      ctx.font = '500 20px Consolas, monospace';
-      ctx.fillText(a.v + '/4', L + 148 + 4 * (BW + BG) + 14, y + 16);
-      y += 36;
-    }
 
     var grid = qrMatrix(SITE);
-    var box = 5, side = (grid.length + 8) * box;
-    var qx = W - 64 - side, qy = H - 60 - side;
+    var box = T.qr, side = (grid.length + 8) * box;
+    var pad = T.w >= 1024 ? 56 : 36;
+    var qx = T.w - L - side, qy = T.h - pad - side;
+    drawQR(ctx, grid, qx, qy, box);
 
-    y += 20;
+    // 信息条左栏宽度：始终避开二维码
+    var CW = qx - L - 40;
+
+    y = top + (T.sub ? 88 : 78);
+    ctx.fillStyle = CODE;
+    ctx.font = '700 ' + (T.sub ? 34 : 28) + 'px Consolas, "Courier New", monospace';
+    var cs = o.code.split('');
+    for (i = 0; i < cs.length; i++) ctx.fillText(cs[i], L + i * (T.sub ? 30 : 25), y);
+
+    y += T.name + 16;
+    ctx.fillStyle = INK;
+    ctx.font = '700 ' + T.name + 'px "Microsoft YaHei", "PingFang SC", sans-serif';
+    ctx.fillText(o.nm, L, y);
+
+    // badge 只留型号和外号，不排四轴和评语——它是挂件，不是读物
+    if (!T.sub) {
+      ctx.fillStyle = DIM;
+      ctx.font = '400 19px "Microsoft YaHei", "PingFang SC", sans-serif';
+      ctx.fillText('变大泡泡 · 扫码测你的', L, y + 34);
+      return;
+    }
+
+    y += 66;
+    y = axes(ctx, o, L, y);
+
+    y += 24;
+    ctx.font = '500 27px "Microsoft YaHei", "PingFang SC", sans-serif';
+    ctx.fillStyle = INK;
+    var ln = wrap(ctx, o.meme || MEME[o.code] || '', CW);
+    for (i = 0; i < ln.length && i < 3; i++) { ctx.fillText(ln[i], L, y); y += 38; }
+
+    // card 版纸条矮，天敌行和品牌副行会顶出卡外，只留品牌一行
+    if (T.sub < 2) {
+      ctx.fillStyle = INK;
+      ctx.font = '700 24px "Microsoft YaHei", "PingFang SC", sans-serif';
+      ctx.fillText('变大泡泡 · 话卷锅饼测试', L, qy + side - 4);
+      return;
+    }
+
+    y += 4;
     ctx.font = '400 21px "Microsoft YaHei", "PingFang SC", sans-serif';
     ctx.fillStyle = DIM;
-    var wide = W - L - 64;
-    var ln = wrap(ctx, '建议工位　' + o.st, wide);
-    for (i = 0; i < ln.length && i < 2; i++) { ctx.fillText(ln[i], L, y); y += 30; }
     ctx.fillText('天敌型号　' + o.fo + '「' + o.foNm + '」', L, y);
 
-    drawQR(ctx, grid, qx, qy, box);
+    y = qy + side - 58;
     ctx.fillStyle = INK;
-    ctx.font = '700 24px "Microsoft YaHei", "PingFang SC", sans-serif';
-    ctx.fillText('变大泡泡 · 职场型号盘点', L, qy + side - 46);
+    ctx.font = '700 26px "Microsoft YaHei", "PingFang SC", sans-serif';
+    ctx.fillText('变大泡泡 · 话卷锅饼测试', L, y);
+    y += 36;
+    ctx.fillStyle = DIM;
+    ctx.font = '400 21px "Microsoft YaHei", "PingFang SC", sans-serif';
+    ctx.fillText('扫右边的码，测你自己的', L, y);
+  }
+
+  // 四根维度条，返回画完之后的 y
+  function axes(ctx, o, L, y) {
+    var BW = 30, BH = 17, BG = 8;
+    for (var i = 0; i < o.ax.length; i++) {
+      var a = o.ax[i];
+      ctx.font = '500 24px "Microsoft YaHei", "PingFang SC", sans-serif';
+      ctx.fillStyle = DIM;
+      ctx.fillText(a.d, L, y);
+      ctx.fillStyle = INK;
+      ctx.fillText(a.p, L + 44, y);
+      for (var k = 0; k < 4; k++) {
+        ctx.fillStyle = k < a.v ? GLOW : 'rgba(34,30,26,.16)';
+        ctx.fillRect(L + 156 + k * (BW + BG), y - 15, BW, BH);
+      }
+      ctx.fillStyle = DIM;
+      ctx.font = '500 21px Consolas, monospace';
+      ctx.fillText(a.v + '/4', L + 156 + 4 * (BW + BG) + 16, y);
+      y += 42;
+    }
+    return y;
+  }
+
+  // 横条：左边立绘，右边文字，给群聊和公众号头图用
+  function strip(ctx, o, img, T) {
+    var gr = ctx.createLinearGradient(0, 0, 0, T.h);
+    gr.addColorStop(0, '#D7BA90');
+    gr.addColorStop(1, '#C0A06C');
+    ctx.fillStyle = gr;
+    ctx.fillRect(0, 0, T.w, T.h);
+    ctx.textBaseline = 'alphabetic';
+
+    var AW = 420;
+    if (img) {
+      var k = Math.min(AW / img.width, (T.h - 24) / img.height);
+      var dw = img.width * k, dh = img.height * k;
+      ctx.drawImage(img, (AW - dw) / 2, T.h - dh - 12, dw, dh);
+    }
+
+    var L = AW + 28, y;
+    var grid = qrMatrix(SITE);
+    var box = T.qr, side = (grid.length + 8) * box;
+    var qx = T.w - 44 - side, qy = (T.h - side) / 2;
+    drawQR(ctx, grid, qx, qy, box);
+    var CW = qx - L - 36;
+
+    y = 92;
+    ctx.fillStyle = CODE;
+    ctx.font = '700 30px Consolas, "Courier New", monospace';
+    var cs = o.code.split('');
+    for (var i = 0; i < cs.length; i++) ctx.fillText(cs[i], L + i * 27, y);
+
+    y += T.name + 14;
+    ctx.fillStyle = INK;
+    ctx.font = '700 ' + T.name + 'px "Microsoft YaHei", "PingFang SC", sans-serif';
+    ctx.fillText(o.nm, L, y);
+
+    y += 54;
+    y = axes(ctx, o, L, y);
+
+    y += 20;
+    ctx.font = '500 25px "Microsoft YaHei", "PingFang SC", sans-serif';
+    ctx.fillStyle = INK;
+    var ln = wrap(ctx, o.meme || MEME[o.code] || '', CW);
+    for (i = 0; i < ln.length && i < 2; i++) { ctx.fillText(ln[i], L, y); y += 34; }
+
     ctx.fillStyle = DIM;
     ctx.font = '400 20px "Microsoft YaHei", "PingFang SC", sans-serif';
-    ctx.fillText('扫右边的码，测你自己的', L, qy + side - 12);
+    ctx.fillText('变大泡泡 · 话卷锅饼测试　扫码测你自己的', L, T.h - 40);
+  }
+
+  // 插画区底色：透明底的立绘（paper/ 那批）取角只会读到全 0，铺深色纸背；
+  // 白底卡通、深色纸雕这类不透明图则取四角均色补边，主体一律等比放进去不裁。
+  function artBg(ctx, img, T) {
+    var p = document.createElement('canvas');
+    p.width = img.width; p.height = img.height;
+    var pc = p.getContext('2d', { willReadFrequently: true });
+    pc.drawImage(img, 0, 0);
+    var r = 0, g = 0, b = 0, a = 0, n = 0, s = Math.max(2, Math.min(img.width, img.height) >> 5);
+    var spots = [[0, 0], [img.width - s, 0], [0, img.height - s], [img.width - s, img.height - s]];
+    for (var i = 0; i < spots.length; i++) {
+      var d = pc.getImageData(spots[i][0], spots[i][1], s, s).data;
+      for (var j = 0; j < d.length; j += 4) { r += d[j]; g += d[j + 1]; b += d[j + 2]; a += d[j + 3]; n++; }
+    }
+    if (a / n < 24) {   // 四角基本透明 = 抠好的立绘
+      var gr = ctx.createLinearGradient(0, 0, 0, T.art);
+      gr.addColorStop(0, '#243049');
+      gr.addColorStop(1, '#141B2A');
+      ctx.fillStyle = gr;
+    } else {
+      ctx.fillStyle = 'rgb(' + (r / n | 0) + ',' + (g / n | 0) + ',' + (b / n | 0) + ')';
+    }
+    ctx.fillRect(0, 0, T.w, T.art);
+  }
+
+  function art(ctx, img, T) {
+    artBg(ctx, img, T);
+    var k = Math.min(T.w / img.width, T.art / img.height);
+    var dw = img.width * k, dh = img.height * k;
+    ctx.drawImage(img, (T.w - dw) / 2, (T.art - dh) / 2, dw, dh);
   }
 
   function build(o, cb) {
+    var T = LAYOUT[o.layout] || LAYOUT.full;
     var cv = document.createElement('canvas');
-    cv.width = W; cv.height = H;
+    cv.width = T.w; cv.height = T.h;
     var ctx = cv.getContext('2d');
     var img = new Image();
-    img.onload = function () {
-      ctx.drawImage(img, 0, 0, ART, ART);
-      panel(ctx, o);
+    function draw(ok) {
+      if (T.art === 0) { strip(ctx, o, ok ? img : null, T); }
+      else if (ok) { art(ctx, img, T); panel(ctx, o, T); }
+      else { ctx.fillStyle = '#1B2436'; ctx.fillRect(0, 0, T.w, T.art); panel(ctx, o, T); }
       cb(cv);
-    };
-    img.onerror = function () {
-      ctx.fillStyle = '#1B2436';
-      ctx.fillRect(0, 0, W, ART);
-      panel(ctx, o);
-      cb(cv);
-    };
-    img.src = 'assets/persona/' + o.code + '.png';
+    }
+    img.onload = function () { draw(true); };
+    img.onerror = function () { draw(false); };
+    // 性别版本由 mbti.js 传进来，保证卡上的人和站内画像是同一个；单独调用时兜底 m
+    img.src = 'assets/mbti/paper/' + o.code + '-' + (o.sex === 'f' ? 'f' : 'm') + '.png';
   }
 
   window.personaCardPreview = build;
 
   window.personaCard = function (o, done) {
     build(o, function (cv) {
-      var name = '变大泡泡-' + o.code + '-' + o.nm + '.png';
+      var sfx = o.layout && o.layout !== 'full' ? '-' + o.layout : '';
+      var name = '变大泡泡-' + o.code + '-' + o.nm + sfx + '.png';
       function save(url) {
         var a = document.createElement('a');
         a.href = url; a.download = name;
