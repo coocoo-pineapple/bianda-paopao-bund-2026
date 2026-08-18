@@ -26,7 +26,7 @@ const shot = (p, n) => p.screenshot({ path: path.join(OUT, n + '.png') });
   await p.waitForTimeout(1200);
   await p.evaluate(() => { const s = document.querySelector('#splash'); if (s) s.classList.add('off'); });
   await p.waitForTimeout(400);
-  await p.evaluate(() => { if (typeof goFeature === 'function') goFeature('review'); });
+  await p.evaluate(() => { if (typeof goFeature === 'function') goFeature('teams'); });
   await p.waitForTimeout(800);
   await shot(p, '01-ppt');
 
@@ -35,16 +35,27 @@ const shot = (p, n) => p.screenshot({ path: path.join(OUT, n + '.png') });
   await p.waitForTimeout(400);
   console.log('setup form:', await p.locator('#adSc').count(), 'preset cases:', await p.locator('#adCase option').count(),
               'fixed dims:', await p.locator('.adrow .adim').count(), 'adv:', await p.locator('#adAdv').count());
+  console.log('任务栏 Teams 入口:', await p.locator('#osbar [data-go="teams"]').count(),
+              '| 开窗后点亮:', await p.locator('#osbar [data-go="teams"].on').count(),
+              '| PPT 窗里已无牌桌:', await p.locator('#winPPT #dreamGame').count() === 0 ? 'YES' : 'NO');
+  // 会议窗是自由高度的 .dwin：舞台不许内滚，手牌不许被托盘切掉
   const geoOf = () => p.evaluate(() => {
-    const s = document.querySelector('#winPPT .paper2'), g = document.querySelector('#dreamGame');
-    if (!s || !g) return null;
-    const v = g.closest('.view');
-    return { slide: s.clientHeight,
-             bottom: Math.round(g.getBoundingClientRect().bottom - v.getBoundingClientRect().top) };
+    const s = document.querySelector('#tmStage');
+    if (!s) return null;
+    const tray = document.querySelector('#tmTray'), cards = [...document.querySelectorAll('#dreamHand .qcard')];
+    let handOK = true;
+    if (tray && cards.length && tray.offsetParent){
+      const tr = tray.getBoundingClientRect();
+      handOK = [cards[0], cards[cards.length - 1]].every(c => {
+        const r = c.getBoundingClientRect();
+        return r.top >= tr.top - 1 && r.bottom <= tr.bottom + 1;
+      });
+    }
+    return { over: s.scrollHeight - s.clientHeight, handOK };
   });
   const H = {};
   H.setup = await geoOf();
-  console.log('setup height:', JSON.stringify(H.setup));
+  console.log('setup 舞台:', JSON.stringify(H.setup));
   await shot(p, '02-setup');
 
   // 雇一个座位 + 一个军师 → 应弹收银台
@@ -68,7 +79,7 @@ const shot = (p, n) => p.screenshot({ path: path.join(OUT, n + '.png') });
               'dreamcards class:', await p.evaluate(() => document.body.classList.contains('dreamcards')));
   await shot(p, '03-round1-hand');
   H.play = await geoOf();
-  console.log('play height:', JSON.stringify(H.play));
+  console.log('play 舞台:', JSON.stringify(H.play));
 
   // 屏幕上的调用计数 == 实际抓到的请求数
   const badge = await p.locator('#dreamGame .acount').first().textContent();
@@ -123,7 +134,7 @@ const shot = (p, n) => p.screenshot({ path: path.join(OUT, n + '.png') });
     await p.click('#salTab tr:nth-child(4) td:nth-child(2)');
     await p.waitForTimeout(300);
     console.log('evidence:', JSON.stringify(await p.evaluate(() => AD.evi)));
-    await p.evaluate(() => goFeature('review'));
+    await p.evaluate(() => goFeature('teams'));
     await p.waitForTimeout(500);
     await shot(p, '05-evidence');
   }
@@ -170,14 +181,14 @@ const shot = (p, n) => p.screenshot({ path: path.join(OUT, n + '.png') });
   console.log('records:', JSON.stringify(await p.evaluate(() => AREC)));
   await shot(p, '06-decision');
   H.done = await geoOf();
-  console.log('done height:', JSON.stringify(H.done));
+  console.log('done 舞台:', JSON.stringify(H.done));
 
   // 卷宗架
   await p.click('[data-ad="files"]');
   await p.waitForTimeout(400);
   console.log('卷宗架 entries:', await p.locator('.adfiles .fi').count());
   H.files = await geoOf();
-  console.log('files height:', JSON.stringify(H.files));
+  console.log('files 舞台:', JSON.stringify(H.files));
   await shot(p, '06b-files');
   await p.click('[data-ad="reset"]');
   await p.waitForTimeout(300);
@@ -194,7 +205,7 @@ const shot = (p, n) => p.screenshot({ path: path.join(OUT, n + '.png') });
   await shot(p, '07-bill');
 
   // 剧本局回归
-  await p.evaluate(() => goFeature('review'));
+  await p.evaluate(() => goFeature('teams'));
   await p.waitForTimeout(300);
   await p.click('#dreamGame [data-dmode="script"]');
   await p.waitForTimeout(400);
@@ -212,8 +223,10 @@ const shot = (p, n) => p.screenshot({ path: path.join(OUT, n + '.png') });
     sys.every(s => DIMWORDS.filter(w => s.includes(w)).length === 1) ? 'YES' : 'NO');
   console.log('维度分布:', DIMWORDS.map((w, i) => ['钱', '人', '时机', '最坏'][i] + '×' + sys.filter(s => s.includes(w)).length).join(' '));
 
-  console.log('\n=== 高度（16:9 可视区上限 ' + (H.setup && H.setup.slide) + 'px）===');
-  Object.entries(H).forEach(([k, g]) => console.log(' ', k, g && g.bottom, g && g.bottom <= g.slide ? 'OK' : 'OVERFLOW'));
+  console.log('\n=== 会议窗自检（舞台不许内滚 · 手牌不许被托盘切掉）===');
+  Object.entries(H).forEach(([k, g]) => console.log(' ', k,
+    g && ('溢出 ' + g.over + 'px · 手牌 ' + (g.handOK ? 'OK' : 'CLIPPED')),
+    g && g.over <= 2 && g.handOK ? 'OK' : 'FAIL'));
 
   console.log('\n=== ERRORS (' + errs.length + ') ===');
   errs.slice(0, 20).forEach(e => console.log(' ', e));

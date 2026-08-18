@@ -1,5 +1,5 @@
 // 职场 MBTI · Outlook「人才盘点问卷 + 投票按钮」
-// 真 Outlook 的 Vote 功能就是「一封邮件两个投票按钮，投完跳下一封」——问卷和它是同一个控件。
+// 真 Outlook 的 Vote 功能就是「一封邮件几个投票按钮，投完跳下一封」——问卷和它是同一个控件。
 // 左边四个文件夹 = 四个维度，阅读窗格底部的跟踪条边答边滑。
 (function () {
   'use strict';
@@ -15,80 +15,299 @@
   ];
 
   // ---- 16 封投票邮件，四维交替出，四根条一起滑 ----
-  // pa = 选 A 的人占比（真 Outlook 投票邮件投完就能看统计，这里的百分比本身就是包袱）
+  // op = 四个投票选项：t 文案 / w 权重 / p 得票占比（四项相加 100）
+  // w 有强弱之分：±2 是把话说死，±1 是留了余地。四个选项因此不是两组同义词，
+  // 而是同一件事的四种力度，这样四选一才比二选一多出信息。
+  // p 本身就是包袱——真 Outlook 投票邮件投完就能看统计，「多少人和你一样」才是笑点。
+  // 选项顺序逐题反向排（单数题从卷到躺，双数题从躺到卷），免得从头到尾闭眼点第一个。
   var Q = [
-    { ax: 0, fr: '王总', sj: '关于本周部门例会发言安排', n: 412, pa: 38,
+    { ax: 0, fr: '王总', sj: '关于本周部门例会发言安排', n: 412,
       bd: '例会还有 12 分钟，议题是上季度复盘。你手上那个项目跑赢目标 30%，但从头到尾没在任何一场会上出现过。',
-      a: '我改一页 PPT，会上讲五分钟', b: '数据都在系统里，有心的人查得到' },
-    { ax: 1, fr: '产品组', sj: '本周需求排期确认（今天下班前回复）', n: 388, pa: 57,
+      op: [
+        { t: '我改一页 PPT，会上讲五分钟', w: 2, p: 22 },
+        { t: '提前把数据发群里，会上等人问', w: 1, p: 31 },
+        { t: '只发给王总一个人，他要提就提', w: -1, p: 27 },
+        { t: '数据都在系统里，有心的人查得到', w: -2, p: 20 }
+      ] },
+    { ax: 1, fr: '产品组', sj: '本周需求排期确认（今天下班前回复）', n: 388,
       bd: '这版排期排到周五。按你的手速，周三就能收工。确认后同步全组，改不了了。',
-      a: '把周四周五填满，多做一个优化', b: '就按周五，多出来的两天是我的' },
-    { ax: 2, fr: '质量部', sj: '[P0] 线上事故复盘 - 需明确责任人', n: 401, pa: 44,
+      op: [
+        { t: '就按周五交，多出来的两天是我的', w: -2, p: 25 },
+        { t: '按周五交，中间那两天松一松', w: -1, p: 33 },
+        { t: '周三就交，剩下两天接点别的活', w: 1, p: 24 },
+        { t: '周四周五填满，再多做一个优化', w: 2, p: 18 }
+      ] },
+    { ax: 2, fr: '质量部', sj: '[P0] 线上事故复盘 - 需明确责任人', n: 401,
       bd: '昨晚线上炸了，起因是一行配置写错。提交记录显示这周有三个人动过它，其中一个是你。',
-      a: '先说是我，查清楚了再补充', b: '先把三次提交记录贴到群里' },
-    { ax: 3, fr: '王总', sj: '关于明年组织架构调整的一点设想', n: 376, pa: 41,
+      op: [
+        { t: '先说是我，查清楚了再补充', w: 2, p: 21 },
+        { t: '先认我那次提交的部分', w: 1, p: 30 },
+        { t: '把三次提交记录原样贴到群里', w: -1, p: 32 },
+        { t: '不是我那次，我有截图', w: -2, p: 17 }
+      ] },
+    { ax: 3, fr: '王总', sj: '关于明年组织架构调整的一点设想', n: 376,
       bd: '明年可能拆一个新组出来。王总说「做得好的人有机会带」，然后就没有然后了。',
-      a: '连夜写一份新组规划发给他', b: '记下来，这半年好好干' },
+      op: [
+        { t: '等公告出来再说，说了也不算', w: -2, p: 21 },
+        { t: '记下来，这半年好好干', w: -1, p: 34 },
+        { t: '找他聊聊这个组该怎么搭', w: 1, p: 26 },
+        { t: '连夜写一份新组规划发给他', w: 2, p: 19 }
+      ] },
 
-    { ax: 0, fr: '张工', sj: 'Re: 方案 v3 的一处逻辑问题', n: 395, pa: 46,
+    { ax: 0, fr: '张工', sj: 'Re: 方案 v3 的一处逻辑问题', n: 395,
       bd: '张工说你方案 v3 的逻辑有问题，可能得推翻重来。这封邮件抄送了全组、王总，以及不知道为什么抄送的 HR。',
-      a: '回复全体，把来龙去脉讲清楚', b: '私聊他讲明白，群里一个字不回' },
-    { ax: 1, fr: '考勤系统', sj: '[系统自动] 你的打卡记录 - 上周', n: 430, pa: 63,
+      op: [
+        { t: '回复全体，把来龙去脉讲清楚', w: 2, p: 24 },
+        { t: '回复全体，只贴结论和修正版', w: 1, p: 28 },
+        { t: '私聊他讲明白，群里一个字不回', w: -1, p: 33 },
+        { t: '不回，下一版出来自然没人提', w: -2, p: 15 }
+      ] },
+    { ax: 1, fr: '考勤系统', sj: '[系统自动] 你的打卡记录 - 上周', n: 430,
       bd: '上周你平均 19:42 走，部门平均 20:15。本邮件由系统自动发送，抄送直属上级，无需回复。',
-      a: '这周把这 33 分钟补回来', b: '很好，下周争取 18:30 走' },
-    { ax: 2, fr: '客户成功部', sj: 'Re: 客户投诉交付延期两周', n: 383, pa: 52,
+      op: [
+        { t: '很好，下周争取 18:30 走', w: -2, p: 23 },
+        { t: '照旧，19:42 已经够了', w: -1, p: 34 },
+        { t: '手上的活干完再走，不看表', w: 1, p: 27 },
+        { t: '这周把这 33 分钟补回来', w: 2, p: 16 }
+      ] },
+    { ax: 2, fr: '客户成功部', sj: 'Re: 客户投诉交付延期两周', n: 383,
       bd: '客户投诉交付晚了两周。实际上是他们改了三次需求，三份变更单都躺在你邮箱里，签字齐全。',
-      a: '我先跟客户道个歉，责任回头再算', b: '把三份变更单原样转给客户' },
-    { ax: 3, fr: '行政部', sj: '[全员] 公司三年愿景发布会 - 周三 15:00', n: 447, pa: 29,
+      op: [
+        { t: '我先跟客户道个歉，责任回头再算', w: 2, p: 22 },
+        { t: '先认延期，再说明变更单的事', w: 1, p: 31 },
+        { t: '把三份变更单原样转给客户', w: -1, p: 29 },
+        { t: '让他们自己去问签字的那位', w: -2, p: 18 }
+      ] },
+    { ax: 3, fr: '行政部', sj: '[全员] 公司三年愿景发布会 - 周三 15:00', n: 447,
       bd: '周三下午三点全员参加，公布未来三年战略目标。去年那场的三年战略，今年已经没人提了。',
-      a: '准备两个问题，会上举手', b: '认真听，认真记，认真鼓掌' },
+      op: [
+        { t: '带电脑去，边听边干自己的活', w: -2, p: 26 },
+        { t: '认真听，认真记，认真鼓掌', w: -1, p: 38 },
+        { t: '听完写份纪要发给组里', w: 1, p: 22 },
+        { t: '准备两个问题，会上举手', w: 2, p: 14 }
+      ] },
 
-    { ax: 0, fr: 'HR 李姐', sj: '周六团建活动报名（自愿，不强制）', n: 421, pa: 51,
+    { ax: 0, fr: 'HR 李姐', sj: '周六团建活动报名（自愿，不强制）', n: 421,
       bd: '本周六爬山，自愿报名，不强制。补充两句：王总也去，HR 会在群里发合影。',
-      a: '报名，并在群里回一句期待', b: '已读不回，周六睡到十一点' },
-    { ax: 1, fr: '王总', sj: '周末有个紧急上线，需要一位同学顶一下', n: 399, pa: 34,
+      op: [
+        { t: '报名，并在群里回一句期待', w: 2, p: 20 },
+        { t: '报名，群里只回一个「好」', w: 1, p: 29 },
+        { t: '先看看谁报了再决定', w: -1, p: 32 },
+        { t: '已读不回，周六睡到十一点', w: -2, p: 19 }
+      ] },
+    { ax: 1, fr: '王总', sj: '周末有个紧急上线，需要一位同学顶一下', n: 399,
       bd: '客户那边催得很急，周末得有人守着。群里发了两遍，二十六个人，无人应答，已经过去四十分钟。',
-      a: '我来，顺手把这块彻底理清', b: '再等十分钟，总有人先举手' },
-    { ax: 2, fr: '同组小李', sj: '你带的那个实习生出事了', n: 368, pa: 58,
+      op: [
+        { t: '装作没看见，周末不看群', w: -2, p: 22 },
+        { t: '再等十分钟，总有人先举手', w: -1, p: 36 },
+        { t: '我来，弄完就下班，不多干', w: 1, p: 25 },
+        { t: '我来，顺手把这块彻底理清', w: 2, p: 17 }
+      ] },
+    { ax: 2, fr: '同组小李', sj: '你带的那个实习生出事了', n: 368,
       bd: '你带的实习生把测试库删了。他现在坐在工位上，一动不动，已经四十分钟没说过话。',
-      a: '我没交代清楚，算我的', b: '权限是运维给的，先找运维' },
-    { ax: 3, fr: 'HR 李姐', sj: 'Re: 关于今年的涨薪窗口', n: 436, pa: 36,
+      op: [
+        { t: '我没交代清楚，算我的', w: 2, p: 26 },
+        { t: '我跟他一起去说，两个人担', w: 1, p: 30 },
+        { t: '权限是运维给的，先找运维', w: -1, p: 27 },
+        { t: '他自己删的，让他自己讲', w: -2, p: 17 }
+      ] },
+    { ax: 3, fr: 'HR 李姐', sj: 'Re: 关于今年的涨薪窗口', n: 436,
       bd: '今年窗口比较紧，整体幅度不会大。「但表现特别突出的，公司会特殊考虑。」这句话她说得很轻。',
-      a: '做一份价值说明，主动约谈', b: '那我等年底评估' },
+      op: [
+        { t: '涨不涨都这样，先干着', w: -2, p: 15 },
+        { t: '那我等年底评估', w: -1, p: 32 },
+        { t: '找直属上级先探个口风', w: 1, p: 30 },
+        { t: '做一份价值说明，主动约谈', w: 2, p: 23 }
+      ] },
 
-    { ax: 0, fr: '同组小李', sj: '你的方案刚在会上被点名了', n: 372, pa: 43,
+    { ax: 0, fr: '同组小李', sj: '你的方案刚在会上被点名了', n: 372,
       bd: '刚才开会老板说这个思路不错，问是谁做的。我说是你。他「哦」了一声，翻到了下一页。',
-      a: '会后发封邮件，同步细节和进展', b: '他记得最好，不记得也就算了' },
-    { ax: 1, fr: 'HR 李姐', sj: '下月内部技术分享会讲师招募', n: 390, pa: 47,
+      op: [
+        { t: '会后发封邮件，同步细节和进展', w: 2, p: 21 },
+        { t: '找机会当面跟他补一句', w: 1, p: 27 },
+        { t: '他记得最好，不记得也就算了', w: -1, p: 33 },
+        { t: '别提了，提了显得我在邀功', w: -2, p: 19 }
+      ] },
+    { ax: 1, fr: 'HR 李姐', sj: '下月内部技术分享会讲师招募', n: 390,
       bd: '还缺一位讲师。不强制，但「计入年度积极性评估」这八个字是加粗的。',
-      a: '报名，顺便把三年积累整理成体系', b: '坐第一排听，听众也是参与' },
-    { ax: 2, fr: 'HR 李姐', sj: '季度目标未达成说明（周五前提交）', n: 408, pa: 39,
+      op: [
+        { t: '那天正好有个会，去不了', w: -2, p: 22 },
+        { t: '坐第一排听，听众也是参与', w: -1, p: 34 },
+        { t: '报名，讲个现成的旧话题', w: 1, p: 26 },
+        { t: '报名，顺便把三年积累整理成体系', w: 2, p: 18 }
+      ] },
+    { ax: 2, fr: 'HR 李姐', sj: '季度目标未达成说明（周五前提交）', n: 408,
       bd: '目标没达成，需要交一页说明，周五前，存入个人档案，永久保存，本人签字。',
-      a: '写自己执行上的三个问题', b: '写资源不足与外部环境变化' },
-    { ax: 3, fr: '产品组', sj: '新项目立项评审 - 请确认是否接手', n: 361, pa: 45,
+      op: [
+        { t: '写自己执行上的三个问题', w: 2, p: 20 },
+        { t: '写两条自己的，加一条客观的', w: 1, p: 33 },
+        { t: '写资源不足与外部环境变化', w: -1, p: 30 },
+        { t: '写目标本身就定得不合理', w: -2, p: 17 }
+      ] },
+    { ax: 3, fr: '产品组', sj: '新项目立项评审 - 请确认是否接手', n: 361,
       bd: '这个项目做成了是公司级战果。会上也明确说了：资源自己找，不额外配人，不额外给钱。',
-      a: '先讲清它能长成什么样，资源自然会来', b: '有资源我就做，没资源我不吹' }
+      op: [
+        { t: '这种项目谁接谁倒霉，不接', w: -2, p: 20 },
+        { t: '有资源我就做，没资源我不吹', w: -1, p: 33 },
+        { t: '接，边做边要资源', w: 1, p: 28 },
+        { t: '先讲清它能长成什么样，资源自然会来', w: 2, p: 19 }
+      ] }
   ];
 
-  // ---- 16 型：外号 / 刻薄评语 / 适合的工位 / 天敌型号 ----
+  // ---- 16 型人格报告 ----
+  // nm 外号 / cm 盘点系统的评语（刻薄那句） / st 建议工位 / fo 天敌 / bd 搭子
+  // tg 三个标签 / sk 超能力 / bg 致命 bug / sy 口头禅 / rt 出场率（16 型相加 = 100）
   var TYPES = {
-    PJBH: { nm: '卷王发动机', cm: '你不是在工作，你是在给整层楼制造 KPI。别人加班是被逼的，你加班是自愿的，这是你最可怕的地方。', st: '正对老板办公室的玻璃门，光线充足，随时可被看见。', fo: 'YTSC' },
-    PJBC: { nm: '靠谱接盘侠', cm: '老板画的每张饼你都信，还主动帮他把面粉买了。会说、会做、还背锅，唯一的问题是没人告诉过你这样很亏。', st: '会议室隔壁，方便随叫随到。', fo: 'PJSH' },
-    PJSH: { nm: '甩锅演说家', cm: '你的 PPT 比你的产出漂亮十倍，你的锅比你的功劳跑得快十倍。开会时你是主角，出事时你是观众。', st: '茶水间旁边，全公司信息流通最快的位置。', fo: 'YJBC' },
-    PJSC: { nm: '向上管理专家', cm: '你信老板的饼，也让老板信你的饼，锅从来只在别人手上。你不是在打工，你是在演一部关于打工的连续剧。', st: '老板工位斜后方两米，听得见电话但不用接。', fo: 'YTSH' },
-    PTBH: { nm: '嘴强王者', cm: '方案你能讲三小时，正文一行没写。你画的饼确实很香，可惜香味全部来自你自己的想象。', st: '靠窗，风景好，适合思考人生和下一份工作。', fo: 'YJBC' },
-    PTBC: { nm: '热心老实人', cm: '谁都能使唤你，谁都不记得你。你相信公司说的一切，包括年会抽奖是随机的。', st: '打印机旁边，方便帮所有人取文件。', fo: 'PJSH' },
-    PTSH: { nm: 'PPT 艺术家', cm: '一年做了 87 页 PPT，落地 0 个。但你的动画转场是全公司最好的，这一点没有人否认。', st: '正对会议室大屏，随时可以投屏。', fo: 'YJBC' },
-    PTSC: { nm: '会议室常驻民', cm: '你的日历满得像春运车票，可没有一件事是你在做。你在每个群里都说话，在每个项目里都不担责。', st: '会议室最里面那张椅子，进出都要绕过你。', fo: 'YJBH' },
-    YJBH: { nm: '沉默造饼人', cm: '你不吭声，但你的方案总能改变方向。别人抢话的时候你在改文档，最后大家用的是你的版本。', st: '角落双屏位，背后是墙，谁都看不见你的屏幕。', fo: 'PJSH' },
-    YJBC: { nm: '老黄牛', cm: '全公司最靠得住的人，也是涨薪最慢的人。你以为苦劳会被看见，可惜看见的人正忙着写自己的述职报告。', st: '储物柜和消防栓之间，位置固定，十年没变过。', fo: 'PTSH' },
-    YJSH: { nm: '暗线操盘手', cm: '话不多，事全成，锅永远在别人那里。你从不争，但你想要的从来都拿到了。', st: '靠近财务那一排，能听见预算的动静。', fo: 'YJBH' },
-    YJSC: { nm: '闷头执行者', cm: '你是最标准的那颗螺丝钉：不问为什么，只问什么时候交。你的问题不是能力，是从不为自己说一句话。', st: '工位号最靠后那个，网线是全公司最长的。', fo: 'PJSH' },
-    YTBH: { nm: '隐形设计师', cm: '你有想法，但懒得推。你的好点子最后都出现在别人的述职报告里，连标题都没改。', st: '楼梯间旁边，安静，方便随时下楼。', fo: 'PTSH' },
-    YTBC: { nm: '工位隐身人', cm: '你什么都不说、什么都不争，却总是出现在背锅名单上。你不是低调，你是不设防。', st: '消防通道尽头，Wi-Fi 最弱，但一整天没人来。', fo: 'PJSH' },
-    YTSH: { nm: '摸鱼哲学家', cm: '你早就看穿了这一切：饼是假的，KPI 是编的，团建是加班。你只是懒得说破而已。', st: '绿植后面，摄像头照不到的那半格。', fo: 'PJBH' },
-    YTSC: { nm: '带薪呼吸大师', cm: '不卷、不争、不背、不信。你把上班这件事还原成了它本来的样子：一段有工资的时间。', st: '任何工位。你在哪都一样。', fo: 'PJBH' }
+    PJBH: {
+      nm: '卷王发动机', fo: 'YTSC', bd: 'YJBC', rt: 4.1,
+      cm: '你不是在工作，你是在给整层楼制造 KPI。别人加班是被逼的，你加班是自愿的，这是你最可怕的地方。',
+      st: '正对老板办公室的玻璃门，光线充足，随时可被看见。',
+      tg: ['自愿加班', '进度条挂身上', '老板的充电宝'],
+      sk: '一个人能把全组的排期往前拽两周。',
+      bg: '别人歇一天你就慌，一慌就只会更卷。',
+      sy: '这个我今晚弄完，明早你就能看到。'
+    },
+    PJBC: {
+      nm: '靠谱接盘侠', fo: 'PJSH', bd: 'YJBH', rt: 9.2,
+      cm: '老板画的每张饼你都信，还主动帮他把面粉买了。会说、会做、还背锅，唯一的问题是没人告诉过你这样很亏。',
+      st: '会议室隔壁，方便随叫随到。',
+      tg: ['来者不拒', '饼来就吃', '背锅体质'],
+      sk: '嘴上答应完，事是真的能落地。',
+      bg: '不会说「不行」，更不会说「这是我做的」。',
+      sy: '没事，我来吧。'
+    },
+    PJSH: {
+      nm: '甩锅演说家', fo: 'YJBC', bd: 'PTSC', rt: 7.4,
+      cm: '你的 PPT 比你的产出漂亮十倍，你的锅比你的功劳跑得快十倍。开会时你是主角，出事时你是观众。',
+      st: '茶水间旁边，全公司信息流通最快的位置。',
+      tg: ['开会主角', '出事观众', '嘴比手快'],
+      sk: '五分钟能把一件还没做的事讲成里程碑。',
+      bg: '锅甩得太熟练，熟练到大家都看出来了。',
+      sy: '这个当时我提过风险的。'
+    },
+    PJSC: {
+      nm: '向上管理专家', fo: 'YTSH', bd: 'PJSH', rt: 3.6,
+      cm: '你信老板的饼，也让老板信你的饼，锅从来只在别人手上。你不是在打工，你是在演一部关于打工的连续剧。',
+      st: '老板工位斜后方两米，听得见电话但不用接。',
+      tg: ['老板视角', '双向画饼', '零锅在手'],
+      sk: '老板的心思，你比老板自己早知道半小时。',
+      bg: '一换老板，技能树要重点一遍。',
+      sy: '我理解一下您的意思啊——'
+    },
+    PTBH: {
+      nm: '嘴强王者', fo: 'YJBC', bd: 'YJSC', rt: 6.8,
+      cm: '方案你能讲三小时，正文一行没写。你画的饼确实很香，可惜香味全部来自你自己的想象。',
+      st: '靠窗，风景好，适合思考人生和下一份工作。',
+      tg: ['方案三小时', '正文第一行', '饼香四溢'],
+      sk: '再空的项目，从你嘴里出来都像明年能上市。',
+      bg: '讲完就散场，散场就没了。',
+      sy: '我先讲一下大方向。'
+    },
+    PTBC: {
+      nm: '热心老实人', fo: 'PJSH', bd: 'YJBH', rt: 8.7,
+      cm: '谁都能使唤你，谁都不记得你。你相信公司说的一切，包括年会抽奖是随机的。',
+      st: '打印机旁边，方便帮所有人取文件。',
+      tg: ['有求必应', '谁都能使唤', '年会必信'],
+      sk: '全公司的疑难杂事，最后都在你这儿解决。',
+      bg: '解决完，没人知道是你解决的。',
+      sy: '这个我熟，我帮你看看。'
+    },
+    PTSH: {
+      nm: 'PPT 艺术家', fo: 'YJBC', bd: 'YJSC', rt: 5.9,
+      cm: '一年做了 87 页 PPT，落地 0 个。但你的动画转场是全公司最好的，这一点没有人否认。',
+      st: '正对会议室大屏，随时可以投屏。',
+      tg: ['转场大师', '87 页 0 落地', '对齐强迫症'],
+      sk: '一页 PPT 能把没做的事讲得很有画面。',
+      bg: '关掉投屏，画面就没了。',
+      sy: '这版还没美化，先看结构。'
+    },
+    PTSC: {
+      nm: '会议室常驻民', fo: 'YJBH', bd: 'PJSH', rt: 6.3,
+      cm: '你的日历满得像春运车票，可没有一件事是你在做。你在每个群里都说话，在每个项目里都不担责。',
+      st: '会议室最里面那张椅子，进出都要绕过你。',
+      tg: ['日历春运', '群里都有你', '项目里没有你'],
+      sk: '同时出现在六个会里，一个都不缺席。',
+      bg: '一整天下来，产出是六份会议纪要。',
+      sy: '这个我们拉个会对齐一下。'
+    },
+    YJBH: {
+      nm: '沉默造饼人', fo: 'PJSH', bd: 'PJBC', rt: 2.8,
+      cm: '你不吭声，但你的方案总能改变方向。别人抢话的时候你在改文档，最后大家用的是你的版本。',
+      st: '角落双屏位，背后是墙，谁都看不见你的屏幕。',
+      tg: ['不抢话', '在改文档', '最后用你那版'],
+      sk: '所有人吵完，方向是你那份文档定的。',
+      bg: '你不说，功劳就跟着文档一起匿名。',
+      sy: '（没说话，直接发了个新版本）'
+    },
+    YJBC: {
+      nm: '老黄牛', fo: 'PTSH', bd: 'PJBH', rt: 11.4,
+      cm: '全公司最靠得住的人，也是涨薪最慢的人。你以为苦劳会被看见，可惜看见的人正忙着写自己的述职报告。',
+      st: '储物柜和消防栓之间，位置固定，十年没变过。',
+      tg: ['全公司最稳', '涨薪最慢', '述职最短'],
+      sk: '交到你手上的事，从来没有掉过。',
+      bg: '你以为苦劳会被看见，看见的人正忙着写自己的述职。',
+      sy: '嗯，好，我知道了。'
+    },
+    YJSH: {
+      nm: '暗线操盘手', fo: 'YJBH', bd: 'YTSC', rt: 1.9,
+      cm: '话不多，事全成，锅永远在别人那里。你从不争，但你想要的从来都拿到了。',
+      st: '靠近财务那一排，能听见预算的动静。',
+      tg: ['话少', '事全成', '锅在别处'],
+      sk: '不争一句，但你想要的从来都拿到了。',
+      bg: '太顺了，顺到没人知道该谢你还是防你。',
+      sy: '要不……先按你说的来？'
+    },
+    YJSC: {
+      nm: '闷头执行者', fo: 'PJSH', bd: 'PTBH', rt: 9.6,
+      cm: '你是最标准的那颗螺丝钉：不问为什么，只问什么时候交。你的问题不是能力，是从不为自己说一句话。',
+      st: '工位号最靠后那个，网线是全公司最长的。',
+      tg: ['不问为什么', '只问什么时候交', '工位最靠后'],
+      sk: '需求再离谱，你都能在 deadline 前交出来。',
+      bg: '从不为自己说一句话，连交付时间都是别人定的。',
+      sy: '好的，什么时候要？'
+    },
+    YTBH: {
+      nm: '隐形设计师', fo: 'PTSH', bd: 'YTSH', rt: 4.7,
+      cm: '你有想法，但懒得推。你的好点子最后都出现在别人的述职报告里，连标题都没改。',
+      st: '楼梯间旁边，安静，方便随时下楼。',
+      tg: ['有想法', '懒得推', '点子在别人述职里'],
+      sk: '你随口一句，是别人想一周的方案。',
+      bg: '想完就完了，连个文档都懒得建。',
+      sy: '其实有个更简单的做法……算了。'
+    },
+    YTBC: {
+      nm: '工位隐身人', fo: 'PJSH', bd: 'YTSH', rt: 5.2,
+      cm: '你什么都不说、什么都不争，却总是出现在背锅名单上。你不是低调，你是不设防。',
+      st: '消防通道尽头，Wi-Fi 最弱，但一整天没人来。',
+      tg: ['不争不辩', '不设防', '背锅名单常客'],
+      sk: '一整天没人来找你，安静是真安静。',
+      bg: '安静到出事时第一个被想起来。',
+      sy: '啊？这个是我负责的吗。'
+    },
+    YTSH: {
+      nm: '摸鱼哲学家', fo: 'PJBH', bd: 'YTSC', rt: 7.1,
+      cm: '你早就看穿了这一切：饼是假的，KPI 是编的，团建是加班。你只是懒得说破而已。',
+      st: '绿植后面，摄像头照不到的那半格。',
+      tg: ['早就看穿', '懒得说破', '摄像头死角'],
+      sk: '一眼看出哪些事根本不用做。',
+      bg: '看穿了也不说，于是大家继续做。',
+      sy: '你觉得这事三个月后还有人记得吗。'
+    },
+    YTSC: {
+      nm: '带薪呼吸大师', fo: 'PJBH', bd: 'YTSH', rt: 5.3,
+      cm: '不卷、不争、不背、不信。你把上班这件事还原成了它本来的样子：一段有工资的时间。',
+      st: '任何工位。你在哪都一样。',
+      tg: ['不卷不争', '不背不信', '有工资的时间'],
+      sk: '心态稳到公布裁员名单那天你在安心吃饭。',
+      bg: '稳到简历三年没更新过。',
+      sy: '到点了，我先走了。'
+    }
   };
+
+  // 出场率越低越稀有。分档说法比光给个百分比有意思
+  function rarity(rt) {
+    return rt < 3 ? '稀有型号' : rt < 5 ? '不太常见' : rt < 8 ? '随处可见' : '公司主力';
+  }
 
   // 每维答满四题时，盘点专员在批注栏说一句（前半句是评语，后半句是翻译）
   var REMARK = [
@@ -113,6 +332,19 @@
     ['头顶一张发光的大饼', '眼前吊着一张小饼']
   ];
 
+  // 真 MBTI 双射：话↔E/I · 卷↔J/P · 锅↔F/T · 饼↔N/S。
+  // 代号是 话-卷-锅-饼，转 MBTI 要重排成 话-饼-锅-卷。
+  var MB = { P: 'E', Y: 'I', J: 'J', T: 'P', B: 'F', S: 'T', H: 'N', C: 'S' };
+  var MBNM = {
+    ENFJ: '主人公', ESFJ: '执政官', ENTJ: '指挥官', ESTJ: '总经理',
+    ENFP: '竞选者', ESFP: '表演者', ENTP: '辩论家', ESTP: '企业家',
+    INFJ: '提倡者', ISFJ: '守卫者', INTJ: '建筑师', ISTJ: '物流师',
+    INFP: '调停者', ISFP: '探险家', INTP: '逻辑学家', ISTP: '鉴赏家'
+  };
+  function toMBTI(c) {
+    return MB[c[0]] + MB[c[3]] + MB[c[2]] + MB[c[1]];
+  }
+
   K.ready(function () {
     if (typeof registerGame !== 'function') return;
 
@@ -120,8 +352,8 @@
       id: 'winMBTI', app: 'mail', go: 'mbti',
       title: '人才盘点问卷 - zhuangzhou@paopao.work - Outlook',
       style: 'left:190px;top:84px;width:900px;height:566px',
-      tile: ['格', '职场MBTI', '四维盘点', '#0F6CBD', 'icons/it-mbti.png'],
-      hall: { nm: '职场MBTI', by: '官方', tip: 64, ic: 'it-mbti' }
+      tile: ['格', '话卷锅饼测试', 'MBTI 职场版', '#0F6CBD', 'icons/it-mbti.png'],
+      hall: { nm: '话卷锅饼测试', by: '官方', tip: 64, ic: 'it-mbti' }
     });
 
     var h = K.shell({
@@ -132,7 +364,7 @@
     if (!h) return;
 
     var sv = h.save, hud = h.hud, sfx = h.sfx, fx = h.fx;
-    var ans = [], idx = 0, st = 'intro';
+    var ans = [], idx = 0, st = 'intro', trkOff = false;
 
     h.css(
       '&{--word-blue:#0F6CBD}' +
@@ -156,7 +388,7 @@
 
       // 阅读窗格
       '.mb-read{display:flex;flex-direction:column;min-width:0;overflow:auto}' +
-      '.mb-hd{padding:14px 24px 11px;border-bottom:1px solid var(--rule,#EDEBE9);display:flex;gap:12px}' +
+      '.mb-hd{padding:12px 24px 9px;border-bottom:1px solid var(--rule,#EDEBE9);display:flex;gap:12px}' +
       '.mb-hd .av{width:34px;height:34px;border-radius:50%;flex:none;margin-top:3px;color:#fff;' +
       '  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}' +
       '.mb-hd .tx{flex:1;min-width:0}' +
@@ -166,10 +398,11 @@
       // InfoBar：真 Outlook 投票邮件顶部就是这么一条
       '.mb-info{background:#FFF4CE;border-bottom:1px solid #F0DFA0;padding:7px 24px;font-size:11.5px;color:#6B5A20}' +
       '.mb-info.vd{background:#DFF6E4;border-bottom-color:#B4E0BE;color:#2F6B3C}' +
-      '.mb-body{padding:16px 24px;font-size:13.5px;line-height:2.05;color:var(--ink,#222);font-family:var(--serif)}' +
-      '.mb-vote{display:flex;flex-direction:column;gap:8px;padding:2px 24px 10px}' +
+      '.mb-body{padding:14px 24px;font-size:13.5px;line-height:2.05;color:var(--ink,#222);font-family:var(--serif)}' +
+      // 四个选项要一屏塞得下，行距比两个选项时紧一档
+      '.mb-vote{display:flex;flex-direction:column;gap:6px;padding:2px 24px 10px}' +
       '.mb-op{display:block;width:100%;text-align:left;font-size:13px;line-height:1.6;cursor:pointer;' +
-      '  padding:10px 13px;border-radius:3px;font-family:var(--ui,inherit);color:var(--ink,#222);' +
+      '  padding:8px 13px;border-radius:3px;font-family:var(--ui,inherit);color:var(--ink,#222);' +
       '  background:#fff;border:1px solid #C9CDD4;position:relative;overflow:hidden}' +
       '.mb-op:hover{border-color:#0F6CBD;background:#F3F8FD}' +
       '.mb-op.pick{border-color:#0F6CBD;background:#E1EDF9;color:#0F6CBD;font-weight:600}' +
@@ -182,13 +415,26 @@
       '.mb-op .pc{float:right;font-family:var(--mono,monospace);font-size:11.5px;color:#0F6CBD;opacity:0;' +
       '  transition:opacity .3s}' +
       '.mb-op.rev .pc{opacity:1}' +
-      '.mb-stat{padding:0 24px 14px;font-size:11px;color:var(--ink-3,#8A8A8A);min-height:16px}' +
+      '.mb-stat{padding:0 24px 10px;font-size:11px;color:var(--ink-3,#8A8A8A);min-height:16px}' +
       '.mb-stat b{color:#0F6CBD;font-weight:600}' +
 
       // 跟踪：投票统计条，中线锚定，左右两极
-      '.mb-track{margin-top:auto;border-top:1px solid var(--rule,#EDEBE9);background:#FAFAFA;padding:9px 24px 11px}' +
-      '.mb-track .tt{font-size:10.5px;color:var(--ink-3,#8A8A8A);letter-spacing:1px;margin-bottom:6px}' +
-      '.mb-tk{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-3,#8A8A8A);margin-bottom:5px}' +
+      // 四选项把正文撑高了，四根条改成两列两行，底部这块占的高度直接减半
+      '.mb-track{margin-top:auto;border-top:1px solid var(--rule,#EDEBE9);background:#FAFAFA;padding:7px 24px 8px;' +
+      '  display:grid;grid-template-columns:1fr 1fr;column-gap:20px}' +
+      '.mb-track .tt{grid-column:1/-1}' +
+      '.mb-track .tt{font-size:10.5px;color:var(--ink-3,#8A8A8A);letter-spacing:1px;margin-bottom:6px;' +
+      '  display:flex;align-items:center}' +
+      '.mb-track .tt button{margin-left:auto;font-family:var(--ui,inherit);font-size:10.5px;letter-spacing:0;' +
+      '  color:var(--ink-3,#8A8A8A);background:none;border:0;padding:2px 5px;border-radius:2px;cursor:pointer}' +
+      '.mb-track .tt button:hover{color:#0F6CBD;background:#EDF4FB}' +
+      // 收起后只剩标题那一行，正文区顺势变高
+      '.mb-track.off{padding-bottom:9px}' +
+      '.mb-track.off .tt{margin-bottom:0}' +
+      '.mb-track.off .mb-tk,.mb-track.off .mb-tx{display:none}' +
+      '.mb-track .mb-to{display:none}' +
+      '.mb-track.off .mb-to{display:block}' +
+      '.mb-tk{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-3,#8A8A8A);margin-bottom:3px}' +
       '.mb-tk u{text-decoration:none;width:34px;text-align:right;flex:none}' +
       '.mb-tk s{text-decoration:none;width:34px;flex:none}' +
       '.mb-tk .tb{flex:1;position:relative;height:7px;border-radius:4px;background:#E6E6E6;overflow:hidden}' +
@@ -208,6 +454,18 @@
       '.mb-row{display:flex;gap:18px;align-items:flex-start;margin:6px 0 14px}' +
       '.mb-kv{flex:1;min-width:0;font-size:12.5px;line-height:2.1;color:var(--ink-2,#555)}' +
       '.mb-kv span{color:var(--ink-3,#8A8A8A);display:inline-block;width:74px}' +
+
+      // 人格标签：三个小签，SBTI 那种一眼扫完的标签条
+      '.mb-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}' +
+      '.mb-tags em{font-style:normal;font-size:11px;line-height:1;padding:5px 9px;border-radius:10px;' +
+      '  background:#EAF3FB;color:#0F6CBD;border:1px solid #CFE3F5}' +
+      // 超能力 / 致命 bug / 口头禅：报告里最好玩的三行，左边一个小色块分正负
+      '.mb-spec{border-left:3px solid #EDEBE9;padding:2px 0 2px 12px;margin:2px 0 14px}' +
+      '.mb-spec>div{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;line-height:1.95;color:var(--ink,#222)}' +
+      '.mb-spec span{color:var(--ink-3,#8A8A8A);flex:none;width:60px}' +
+      '.mb-spec q{quotes:none;color:#0F6CBD;font-family:var(--serif)}' +
+      '.mb-spec i{width:6px;height:6px;border-radius:50%;flex:none;margin-top:8px}' +
+      '.mb-spec i.up{background:#3C8C4E}.mb-spec i.dn{background:#C77D2E}.mb-spec i.sy{background:#0F6CBD}' +
 
       // 附件「你的人格画像.png」= CSS 画的证件照，零图片
       '.mb-att{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--rule,#EDEBE9);' +
@@ -242,6 +500,10 @@
       '.mb-photo .cd{position:absolute;left:0;right:0;bottom:0;background:rgba(15,108,189,.94);color:#fff;' +
       '  font-family:var(--mono,monospace);font-size:13px;letter-spacing:4px;text-align:center;padding:4px 0;z-index:6}' +
       '.mb-photo .pp{position:absolute;z-index:5}' +
+      // 纸雕画像到位就整张换掉，CSS 剪影和道具全部让位
+      '.mb-photo.pic{background-size:contain;background-position:center top;background-repeat:no-repeat}' +
+      '.mb-photo.pic .fig,.mb-photo.pic .col,.mb-photo.pic .bdg,.mb-photo.pic .pp{display:none}' +
+      '.mb-photo.pic::before{display:none}' +
 
       // 话·拍：说话气泡，里面三个点在动
       '.mb-photo .p-P{right:8px;top:26px;background:#fff;border:1px solid #C3CBD5;border-radius:9px;' +
@@ -295,39 +557,65 @@
       '@keyframes mb-dangle{0%,100%{transform:rotate(-11deg)}50%{transform:rotate(11deg)}}' +
 
       '.mb-cap{font-size:11px;color:var(--ink-3,#8A8A8A);line-height:1.8;margin-top:7px;width:150px}' +
+      // 立绘有男女两版，让用户自己挑；挑完站内画像和四张分享卡一起换
+      '.mb-sex{display:flex;width:150px;margin-top:7px;border:1px solid #C9CDD4;border-radius:3px;overflow:hidden}' +
+      '.mb-sex button{flex:1;font-family:var(--ui,inherit);font-size:11.5px;padding:4px 0;cursor:pointer;' +
+      '  background:#fff;border:0;border-left:1px solid #C9CDD4;color:var(--ink-2,#555)}' +
+      '.mb-sex button:first-child{border-left:0}' +
+      '.mb-sex button:hover{background:#F3F8FD;color:#0F6CBD}' +
+      '.mb-sex button.on{background:#E1EDF9;color:#0F6CBD;font-weight:600}' +
       '.mb-act{display:flex;gap:8px;align-items:center;padding-top:6px}' +
       '.mb-act .hint{font-size:11.5px;color:var(--ink-3,#8A8A8A)}'
     );
 
     // ---------- 计分 ----------
+    // ans[i] 存的是选项下标，0 也是合法答案，所以「答没答」一律走 has()，不能用真假判断
+    function has(i) { return ans[i] != null; }
     function axVal(a) {
       var v = 0;
       for (var i = 0; i < Q.length; i++) {
-        if (Q[i].ax === a && ans[i]) v += ans[i] === 'a' ? 1 : -1;
+        if (Q[i].ax === a && has(i)) v += Q[i].op[ans[i]].w;
       }
       return v;
     }
     function axDone(a) {
       var n = 0;
-      for (var i = 0; i < Q.length; i++) if (Q[i].ax === a && ans[i]) n++;
+      for (var i = 0; i < Q.length; i++) if (Q[i].ax === a && has(i)) n++;
+      return n;
+    }
+    // 每维几道题由题库决定，别的地方一律问它，改题量不用改别处
+    function axTotal(a) {
+      var n = 0;
+      for (var i = 0; i < Q.length; i++) if (Q[i].ax === a) n++;
+      return n;
+    }
+    // 满分：一题最重压 2 分，所以强度的分母是题数的两倍，不是题数
+    function axMax(a) {
+      var n = 0;
+      for (var i = 0; i < Q.length; i++) {
+        if (Q[i].ax !== a) continue;
+        var top = 0;
+        for (var k = 0; k < Q[i].op.length; k++) top = Math.max(top, Math.abs(Q[i].op[k].w));
+        n += top;
+      }
       return n;
     }
     function answered() {
       var n = 0;
-      for (var i = 0; i < Q.length; i++) if (ans[i]) n++;
+      for (var i = 0; i < Q.length; i++) if (has(i)) n++;
       return n;
     }
     // 未答满的维度用 ? 占位 —— 状态栏能看着型号一位位定下来
     function code(partial) {
       return AX.map(function (x, a) {
-        if (partial && axDone(a) < 4) return '?';
+        if (partial && axDone(a) < axTotal(a)) return '?';
         return axVal(a) > 0 ? x.pos : x.neg;
       }).join('');
     }
 
     // ---------- HUD ----------
     function paintTool() {
-      if (st === 'intro') return hud.tool('<button class="rbtn gold mb-start">开始填写</button>', '共 16 项 · 约两分钟');
+      if (st === 'intro') return hud.tool('<button class="rbtn gold mb-start">开始填写</button>', '共 ' + Q.length + ' 项 · 两分钟填完');
       if (st === 'over') return hud.tool(
         '<button class="rbtn gold mb-bub">转成泡泡</button>' +
         '<button class="rbtn mb-again">重新盘点</button>' +
@@ -364,21 +652,30 @@
       AX.forEach(function (x, a) {
         var b = box.querySelector('[data-tk="' + a + '"] b');
         if (!b) return;
-        var v = axVal(a), w = Math.abs(v) / 4 * 50;
+        var v = axVal(a), w = Math.abs(v) / axMax(a) * 50;
         b.style.left = (v >= 0 ? 50 : 50 - w) + '%';
         b.style.width = w + '%';
       });
     }
+    // 统计条收起来的状态跟着存档走，翻下一封不会又弹出来
+    function toggleTrack() {
+      trkOff = !trkOff;
+      sv.set('trk', trkOff ? 1 : 0);
+      var box = h.states.play.querySelector('.mb-track');
+      if (box) box.classList.toggle('off', trkOff);
+      sfx.play('click');
+    }
+
     function paintFold() {
       var box = h.states.play.querySelector('.mb-fold');
       if (!box) return;
       AX.forEach(function (x, a) {
         var b = box.querySelector('[data-ax="' + a + '"]');
         if (!b) return;
-        var n = axDone(a);
+        var n = axDone(a), tt = axTotal(a);
         b.classList.toggle('on', Q[idx].ax === a);
-        b.classList.toggle('done', n === 4);
-        b.querySelector('i').textContent = n + '/4';
+        b.classList.toggle('done', n === tt);
+        b.querySelector('i').textContent = n + '/' + tt;
       });
     }
 
@@ -388,7 +685,7 @@
         '<div class="mb-grid">' +
         '<div class="mb-fold"><div class="gp">人才盘点 2026Q3</div>' +
         AX.map(function (x, a) {
-          return '<b data-ax="' + a + '">' + K.esc(x.fold) + '<i>0/4</i></b>';
+          return '<b data-ax="' + a + '">' + K.esc(x.fold) + '<i>0/' + axTotal(a) + '</i></b>';
         }).join('') +
         '<div class="gp">说明</div><b style="color:#8A8A8A">未投票的不归档</b></div>' +
         '<div class="mb-read">' +
@@ -397,7 +694,10 @@
         '<div class="mb-body"></div>' +
         '<div class="mb-vote"></div>' +
         '<div class="mb-stat"></div>' +
-        '<div class="mb-track"><div class="tt">跟踪 · 投票统计</div>' +
+        '<div class="mb-track' + (trkOff ? ' off' : '') + '">' +
+        '<div class="tt">跟踪 · 投票统计' +
+        '<button class="mb-tx" title="收起统计条">关闭</button>' +
+        '<button class="mb-to" title="展开统计条">展开</button></div>' +
         AX.map(function (x, a) {
           return '<div class="mb-tk" data-tk="' + a + '"><u>' + K.esc(x.nn) + '</u>' +
             '<i class="tb"><b></b></i><s>' + K.esc(x.pn) + '</s></div>';
@@ -407,10 +707,10 @@
 
     function ask(silent) {
       var q = Q[idx], read = h.states.play.querySelector('.mb-read');
-      var picked = ans[idx];
-      h.states.play.querySelector('.mb-info').className = 'mb-info' + (picked ? ' vd' : '');
-      h.states.play.querySelector('.mb-info').textContent = picked
-        ? '你在 ' + stamp() + ' 投了「' + (picked === 'a' ? q.a : q.b) + '」票。可以重新选择。'
+      var picked = has(idx) ? ans[idx] : -1;
+      h.states.play.querySelector('.mb-info').className = 'mb-info' + (picked >= 0 ? ' vd' : '');
+      h.states.play.querySelector('.mb-info').textContent = picked >= 0
+        ? '你在 ' + stamp() + ' 投了「' + q.op[picked].t + '」票。可以重新选择。'
         : '请单击下面的一项进行投票。你的答复将计入本维度统计。';
       var av = h.states.play.querySelector('.mb-hd .av');
       av.style.background = AVA[q.fr] || '#6E7B87';
@@ -420,11 +720,12 @@
         '<b>' + K.esc(q.fr) + '</b>　发送时间：2026/8/10（周一） 9:' + (12 + idx) + '<br>' +
         '收件人：<b>庄周</b>　　维度：' + K.esc(AX[q.ax].fold) + '　　重要性：高';
       h.states.play.querySelector('.mb-body').textContent = q.bd;
-      h.states.play.querySelector('.mb-vote').innerHTML =
-        '<button class="mb-op" data-o="a"><i></i><em>投票 A</em><span>' + K.esc(q.a) + '</span><span class="pc"></span></button>' +
-        '<button class="mb-op" data-o="b"><i></i><em>投票 B</em><span>' + K.esc(q.b) + '</span><span class="pc"></span></button>';
+      h.states.play.querySelector('.mb-vote').innerHTML = q.op.map(function (o, i) {
+        return '<button class="mb-op" data-o="' + i + '"><i></i><em>投票 ' + 'ABCD'.charAt(i) + '</em>' +
+          '<span>' + K.esc(o.t) + '</span><span class="pc"></span></button>';
+      }).join('');
       if (read) read.scrollTop = 0;
-      if (picked) reveal(picked, true);
+      if (picked >= 0) reveal(picked, true);
       else h.states.play.querySelector('.mb-stat').textContent = '';
       paintFold(); paintTrack(); paintAll();
       if (!silent) {
@@ -437,18 +738,21 @@
     function reveal(o, silent) {
       var q = Q[idx];
       K.qa('.mb-op', h.states.play).forEach(function (b) {
-        var isA = b.dataset.o === 'a', pct = isA ? q.pa : 100 - q.pa;
-        b.classList.toggle('pick', b.dataset.o === o);
+        var i = +b.dataset.o, pct = q.op[i].p;
+        b.classList.toggle('pick', i === o);
         b.classList.add('rev');
         b.querySelector('.pc').textContent = pct + '%';
         if (silent) b.querySelector('i').style.transition = 'none';
         b.querySelector('i').style.width = pct + '%';
         if (silent) void b.offsetWidth, b.querySelector('i').style.transition = '';
       });
-      var mine = o === 'a' ? q.pa : 100 - q.pa;
+      // 四选一没有「过半」可言，就按名次说话：你选的这项在四项里排第几
+      var mine = q.op[o].p, rank = 0;
+      for (var k = 0; k < q.op.length; k++) if (q.op[k].p > mine) rank++;
       h.states.play.querySelector('.mb-stat').innerHTML =
         '共 ' + q.n + ' 人已投票。和你投了同一项的有 <b>' + mine + '%</b>。' +
-        (mine >= 55 ? '（你和大多数人一样。）' : mine <= 42 ? '（你是少数派。）' : '（这题全公司都在犹豫。）');
+        (rank === 0 ? '（这是本题得票最高的一项。）' :
+          rank === 3 ? '（四项里最少人选的，就是你这项。）' : '（这题全公司都在犹豫。）');
     }
 
     function stamp() {
@@ -459,17 +763,17 @@
 
     // ---------- 投票 ----------
     function vote(o) {
-      var q = Q[idx], first = !ans[idx];
+      var q = Q[idx], first = !has(idx);
       ans[idx] = o;
       sv.set('ans', ans);
       sfx.play('click');
       reveal(o);
       h.states.play.querySelector('.mb-info').className = 'mb-info vd';
       h.states.play.querySelector('.mb-info').textContent =
-        '你在 ' + stamp() + ' 投了「' + (o === 'a' ? q.a : q.b) + '」票。可以重新选择。';
+        '你在 ' + stamp() + ' 投了「' + q.op[o].t + '」票。可以重新选择。';
       paintFold(); paintTrack(); paintAll();
 
-      if (first && axDone(q.ax) === 4) {
+      if (first && axDone(q.ax) === axTotal(q.ax)) {
         var r = REMARK[q.ax], up = axVal(q.ax) > 0;
         hud.note(up ? r[0] : r[2], up ? r[1] : r[3], 'good');
       }
@@ -479,8 +783,8 @@
       setTimeout(function () {
         if (st !== 'play') return;
         var n = -1, i;
-        for (i = idx + 1; i < Q.length; i++) if (!ans[i]) { n = i; break; }
-        if (n < 0) for (i = 0; i < Q.length; i++) if (!ans[i]) { n = i; break; }
+        for (i = idx + 1; i < Q.length; i++) if (!has(i)) { n = i; break; }
+        if (n < 0) for (i = 0; i < Q.length; i++) if (!has(i)) { n = i; break; }
         if (n < 0) return;
         idx = n;
         ask();
@@ -496,12 +800,52 @@
     }
 
     // ---------- 人格画像：四维各挂一件道具，16 型 16 张脸，零图片 ----------
+    // 性别版本一次测试里只掷一次骰子：站内画像和下载的分享卡必须是同一个人。
+    var picSex = null;
+    function sexOf() {
+      if (!picSex) picSex = sv.get('sex') || (Math.random() < .5 ? 'm' : 'f');
+      sv.set('sex', picSex);
+      return picSex;
+    }
+    var picSeq = 0;
     function photo(c) {
       var props = c.split('').map(function (ch) { return '<div class="pp p-' + ch + '">' + (ch === 'P' ? '<s></s><s></s><s></s>' : ch === 'T' ? 'Z<em>z</em>' : '') + '</div>'; }).join('');
-      return '<div class="mb-photo">' + props +
+      var box = '<div class="mb-photo">' + props +
         '<div class="fig"></div><div class="col"></div><div class="bdg"></div>' +
         '<div class="cd">' + c + '</div></div>';
+      // 纸雕画像探到就换装，探不到保持 CSS 剪影（单机版 file:// 走这条兜底）
+      // 认领用自增序号而不是型号：intro 的示例图和 over 的结论图会同时在 DOM 里，
+      // 按型号认领会让先画的那张被后完成的探测刷成别人的脸。
+      var key = c + '-' + sexOf(), tag = 'p' + (++picSeq);
+      var probe = new Image();
+      probe.onload = function () {
+        K.qa('.mb-photo[data-c="' + tag + '"]').forEach(function (el) {
+          el.classList.add('pic');
+          el.style.backgroundImage = 'url(assets/mbti/paper/' + key + '.png)';
+        });
+      };
+      probe.src = 'assets/mbti/paper/' + key + '.png';
+      return box.replace('class="mb-photo"', 'class="mb-photo" data-c="' + tag + '"');
     }
+    // 性别开关：改的是同一个 picSex，所以画像和四张分享卡一起跟着换
+    function sexPick() {
+      var s = sexOf();
+      return '<div class="mb-sex">' +
+        '<button class="mb-sx' + (s === 'm' ? ' on' : '') + '" data-sx="m">男版</button>' +
+        '<button class="mb-sx' + (s === 'f' ? ' on' : '') + '" data-sx="f">女版</button></div>';
+    }
+    function setSex(s) {
+      if (sexOf() === s) return;
+      picSex = s;
+      sv.set('sex', s);
+      // 场上所有画像都重画：代号写在 .cd 里，照它原来的型号换人
+      K.qa('.mb-photo', h.win).forEach(function (el) {
+        el.parentNode.innerHTML = photo(el.querySelector('.cd').textContent);
+      });
+      K.qa('.mb-sx', h.win).forEach(function (b) { b.classList.toggle('on', b.dataset.sx === s); });
+      sfx.play('click');
+    }
+
     // 画像说明：把四件道具翻译成人话，评委一眼看懂这张图为什么长这样
     function caption(c) {
       return c.split('').map(function (ch, a) {
@@ -514,25 +858,39 @@
       st = 'over';
       var c = code(false), t = TYPES[c];
       var rows = AX.map(function (x, a) {
-        var v = axVal(a), up = v > 0;
+        var v = axVal(a), up = v > 0, mx = axMax(a);
         return '<div><span>' + K.esc(x.fold) + '</span>倾向 <b>' + (up ? x.pn : x.nn) + '</b>（' + (up ? x.pos : x.neg) +
-          '）　强度 ' + Math.abs(v) + '/4</div>';
+          '）' + (mx > 1 ? '　强度 ' + Math.abs(v) + '/' + mx : '') + '</div>';
       }).join('');
       h.states.over.innerHTML =
         '<div class="mb-pane" id="mbOver">' +
         '<div class="h1">Re: 2026 Q3 人才盘点问卷 - 盘点结论</div>' +
         '<div class="mt"><b>人才发展部 · 盘点系统</b>　发送时间：' + stamp() + '<br>' +
         '收件人：<b>庄周</b>　　抄送：直属上级　　附件：1 项</div>' +
-        '<p class="mb-p">16 项投票已全部收到。经四维测算，你的职场型号为：</p>' +
+        '<p class="mb-p">' + Q.length + ' 项投票已全部收到。经四维测算，你的职场型号为：</p>' +
         '<div class="mb-row"><div class="mb-kv"><div class="mb-code">' + c + '</div>' +
-        '<div style="font-size:15px;color:#222;font-weight:700;margin:4px 0 10px">' + K.esc(t.nm) + '</div>' +
+        '<div style="font-size:15px;color:#222;font-weight:700;margin:4px 0 6px">' + K.esc(t.nm) + '</div>' +
+        '<div class="mb-tags">' + t.tg.map(function (g) { return '<em>' + K.esc(g) + '</em>'; }).join('') + '</div>' +
         rows +
         '<div><span>建议工位</span>' + K.esc(t.st) + '</div>' +
+        '<div><span>对照 MBTI</span>约等于 <b>' + toMBTI(c) + '</b>「' + MBNM[toMBTI(c)] + '」</div>' +
+        '<div><span>出场率</span><b>' + t.rt + '%</b>　1000 个同事里有 ' + Math.round(t.rt * 10) + ' 个你（' + rarity(t.rt) + '）</div>' +
         '<div><span>天敌型号</span><b>' + t.fo + '</b>「' + K.esc(TYPES[t.fo].nm) + '」，不建议与其组成二人小组</div>' +
+        '<div><span>最佳搭子</span><b>' + t.bd + '</b>「' + K.esc(TYPES[t.bd].nm) + '」，两个人凑一起活能干完</div>' +
         '</div>' +
-        '<div><div id="mbPic">' + photo(c) + '</div><div class="mb-cap">' + K.esc(caption(c)) + '</div></div></div>' +
+        '<div><div id="mbPic">' + photo(c) + '</div>' + sexPick() +
+        '<div class="mb-cap">' + K.esc(caption(c)) + '</div></div></div>' +
+        // 超能力 / bug / 口头禅：报告最好玩的三行，单拎出来排，不埋在正文里
+        '<div class="mb-spec">' +
+        '<div><i class="up"></i><span>超能力</span>' + K.esc(t.sk) + '</div>' +
+        '<div><i class="dn"></i><span>致命 bug</span>' + K.esc(t.bg) + '</div>' +
+        '<div><i class="sy"></i><span>口头禅</span><q>「' + K.esc(t.sy) + '」</q></div>' +
+        '</div>' +
         '<p class="mb-p">' + K.esc(t.cm) + '</p>' +
-        '<div style="padding:6px 0 12px"><span class="mb-att" id="mbAtt"><i></i>你的人格画像.png（48 KB）</span></div>' +
+        '<div style="padding:6px 0 12px;display:flex;flex-wrap:wrap;gap:6px">' +
+        '<span class="mb-att mb-dl"><i></i>职场名片_正反面.png（1160×1410）</span>' +
+        '<span class="mb-cap" style="width:auto;align-self:center">正面是你的画像，反面是人格报告，一张图发出去。</span>' +
+        '</div>' +
         '<div class="mb-act"><button class="rbtn gold mb-bub">转成泡泡，发到水面</button>' +
         '<button class="rbtn mb-again">重新盘点</button>' +
         '<span class="hint">同型号的人会来戳你。</span></div>' +
@@ -554,7 +912,7 @@
         '<div class="mt"><b>HR 李姐</b>　发送时间：2026/8/10（周一） 9:05<br>' +
         '收件人：<b>全体员工</b>　　重要性：高　　需要答复：是</div>' +
         '<p class="mb-p">各位同事：</p>' +
-        '<p class="mb-p">附上本季度人才盘点问卷，共 <b>16 项</b>，每项两个选项，' +
+        '<p class="mb-p">附上本季度人才盘点问卷，共 <b>' + Q.length + ' 项</b>，每项四个选项，' +
         '直接点邮件里的投票按钮即可，投完自动跳下一封。全部完成后系统会自动出结论。</p>' +
         '<p class="mb-p">本次盘点覆盖四个维度：<b>话</b>（说不说）、<b>卷</b>（拼不拼）、' +
         '<b>锅</b>（背不背）、<b>饼</b>（信不信），组合为 16 种职场型号。</p>' +
@@ -581,7 +939,7 @@
       st = 'play';
       if (!keep) { ans = []; sv.set('ans', ans); hud.clearNotes(); }
       idx = 0;
-      for (var i = 0; i < Q.length; i++) if (!ans[i]) { idx = i; break; }
+      for (var i = 0; i < Q.length; i++) if (!has(i)) { idx = i; break; }
       hud.note('盘点系统', '共 ' + Q.length + ' 项，投完自动跳下一封。左侧四个文件夹是四个维度，右下角跟踪条会跟着你的选择滑动。', '');
       shellPlay();
       h.go('play');
@@ -598,16 +956,34 @@
       if (t.classList.contains('mb-prev')) return nav(-1);
       if (t.classList.contains('mb-next')) return nav(1);
       if (t.classList.contains('mb-fin')) { sfx.play('click'); return end(); }
-      if (t.classList.contains('mb-op')) return vote(t.dataset.o);
-      if (t.id === 'mbAtt') {
+      if (t.classList.contains('mb-op')) return vote(+t.dataset.o);
+      if (t.classList.contains('mb-sx')) return setSex(t.dataset.sx);
+      if (t.classList.contains('mb-tx') || t.classList.contains('mb-to')) return toggleTrack();
+      if (t.classList.contains('mb-dl')) {
         sfx.play('stamp');
         fx.pop(h.states.over.querySelector('.mb-photo'));
-        hud.toast('人格画像.png 已保存到「图片」', 'mbti');
+        var pc = code(false), pt = TYPES[pc];
+        if (typeof personaCard === 'function') {
+          personaCard({
+            code: pc, nm: pt.nm, fo: pt.fo, foNm: TYPES[pt.fo].nm, sex: sexOf(),
+            bd: pt.bd, bdNm: TYPES[pt.bd].nm, rt: pt.rt, rr: rarity(pt.rt),
+            tg: pt.tg, sk: pt.sk, bg: pt.bg, sy: pt.sy,
+            mb: toMBTI(pc) + '「' + MBNM[toMBTI(pc)] + '」', st: pt.st,
+            // 名片上用产品自己的四维叫法（话卷锅饼），不用左边文件夹那套 HR 黑话；
+            // 「造饼/信饼」在「饼」后面再带个饼字是重复的，只留头一个字
+            ax: AX.map(function (x, a) {
+              var v = axVal(a), d = '话卷锅饼'.charAt(a), p = v > 0 ? x.pn : x.nn;
+              return { d: d, p: p.length > 1 && p.charAt(p.length - 1) === d ? p.charAt(0) : p, v: Math.abs(v), mx: axMax(a) };
+            })
+          }, function () { hud.toast('名片已存下来了，正反两面加二维码，发得出去。', 'mbti'); });
+        } else {
+          hud.toast('职场名片.png 已保存到「图片」', 'mbti');
+        }
         return;
       }      if (t.classList.contains('mb-bub')) {
         var c = code(false), ty = TYPES[c];
         if (typeof mk === 'function') {
-          mk('测出来我的职场型号是 ' + c + '「' + ty.nm + '」：' + ty.cm.slice(0, 24) + '…', 'fun', 12, 'user', '职场MBTI');
+          mk('测出来我的职场型号是 ' + c + '「' + ty.nm + '」：' + ty.cm.slice(0, 24) + '…', 'fun', 12, 'user', '话卷锅饼测试');
           if (typeof sync === 'function') sync();
         }
         sfx.play('coin');
@@ -627,7 +1003,13 @@
     };
 
     var saved = sv.get('ans', null);
-    if (saved && saved.length) ans = saved.slice(0, Q.length);
+    // 老存档存的是 'a'/'b'，选项改成四个之后对不上号，宁可让人重测也不能算错分
+    if (saved && saved.length && saved.every(function (v) { return v == null || (typeof v === 'number' && v >= 0 && v < 4); })) {
+      ans = saved.slice(0, Q.length);
+    } else if (saved) {
+      sv.set('ans', []);
+    }
+    trkOff = !!sv.get('trk', 0);
     intro();
   });
 })();

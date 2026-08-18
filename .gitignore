@@ -16,3 +16,6 @@ public/app.html.bak
 public/assets/orig-full/
 public/_pctest.html
 docs/shots-persona/_probe.png
+qr-matrix-tmp.json
+qr-verify-tmp.cjs
+public/assets/mbti/_rej-*

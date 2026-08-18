@@ -43,7 +43,7 @@ const SHELLS = [
     tabs: WORD_TABS, ribbon: null, view: null },
   { id: 'excel', title: '2026年度预算表.xlsx - Excel',
     tabs: ['开始', '插入', '页面布局', '公式', '数据', '审阅'], ribbon: XL_RIBBON, view: 'home' },
-  { id: 'ppt',   title: 'Q3复盘汇报.pptx - PowerPoint',
+  { id: 'ppt',   title: '组织架构调整_说明.pptx - PowerPoint',
     tabs: ['开始', '插入', '设计', '切换', '动画', '幻灯片放映'], ribbon: PPT_RIBBON, view: 'review' },
   { id: 'mail',  title: '收件箱 - zhuangzhou@paopao.work - Outlook',
     tabs: ['开始', '发送/接收', '文件夹', '视图', '帮助'], ribbon: MAIL_RIBBON, view: 'mail' },
@@ -299,7 +299,7 @@ function pickSlide(i) {
   $$('#pptRail .sl').forEach(x => x.classList.toggle('on', +x.dataset.i === i));
   $('#pptNote').textContent = SLIDES[i].n;
   $('#slideTitle').textContent = SLIDES[i].t;
-  $('#slideSub').textContent = `Q3 复盘汇报 · 第 ${i + 1} 节 · 共 ${SLIDES.length} 节`;
+  $('#slideSub').textContent = `组织架构调整 · 第 ${i + 1} 节 · 共 ${SLIDES.length} 节`;
   const pc = $('#pptCnt'); if (pc) pc.textContent = `幻灯片 ${i + 1}/${SLIDES.length}　中文(中国)`;
 }
 
@@ -996,7 +996,7 @@ function pptSync() {
     slide = dreamShown < Math.ceil(total / 2) ? 2 : 3;
   }
   $('#slideTitle').textContent = title;
-  $('#slideSub').textContent = `Q3 复盘汇报 · 放映中 · 第 ${Math.min(slide + 1, SLIDES.length)}/${SLIDES.length} 页 · 第 ${Math.min(dreamShown, total)}/${total} 句`;
+  $('#slideSub').textContent = `组织架构调整 · 放映中 · 第 ${Math.min(slide + 1, SLIDES.length)}/${SLIDES.length} 页 · 第 ${Math.min(dreamShown, total)}/${total} 句`;
   $('#pptNote').textContent = note;
   $$('#pptRail .sl').forEach(x => x.classList.toggle('on', +x.dataset.i === slide));
   const w = document.querySelector('#winPPT');

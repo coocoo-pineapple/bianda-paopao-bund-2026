@@ -337,7 +337,7 @@ body[data-shell=desk] #swBar{bottom:48px}
    靠覆写 --word-blue 让标题栏/选项卡/主按钮整体换品牌色。 */
 
 /* 默认（Word 壳）：非 Word 的 chrome 全部收起 */
-.fbar,#xlCols,#xlRows,#xlTabs,#pptRail,#pptNotes{display:none}
+.fbar,#xlCols,#xlRows,#xlTabs,#pptRail,#pptNotes,#tmStage,#tmChat,#tmTray{display:none}
 
 /* ---- Excel 壳 ---- */
 body[data-shell=excel]{--word-blue:#217346}
@@ -1500,7 +1500,10 @@ body:not(.os) #deskNote{display:none}
 #splash button#splashGo{background:linear-gradient(180deg,#F8F0DA,#EAD9AE);color:#1A2634;border:1px solid rgba(255,246,220,.65);
   box-shadow:0 3px 16px rgba(0,0,0,.4)}
 #splash button#splashGo:hover{transform:translateY(-2px);box-shadow:0 6px 26px rgba(243,234,211,.35)}
-#splash .tip{font-size:10.5px;opacity:.5;margin-top:15px;line-height:2;letter-spacing:2px}
+#splash .tip{font-size:10.5px;opacity:.58;margin-top:13px;line-height:2;letter-spacing:2px}
+/* 主张一行、定性一行：两件不同性质的信息不挤在一起抢位置 */
+#splash .tip b{display:block;font-size:12.5px;font-weight:400;letter-spacing:3px;margin-bottom:1px;
+  font-family:'KaiTi','STKaiti',serif;color:rgba(246,236,214,.96)}
 @media (orientation:portrait){
   #splash .spbg{background-image:url(assets/cover-fish2.webp);background-size:cover;background-position:center}
   #splash .spvq{display:none}
@@ -1518,6 +1521,7 @@ body:not(.os) #deskNote{display:none}
   #splash .spdiv{margin-bottom:12px}
   #splash .sphint{margin-bottom:10px}
   #splash .bar{margin-bottom:12px}
+  #splash .tip{margin-top:8px;line-height:1.75}
   #splash .sw{margin-bottom:3vh}
 }
 .spbub{position:absolute;z-index:3;border-radius:50%;display:flex;align-items:center;justify-content:center;
@@ -1746,12 +1750,19 @@ body:not(.os) #deskNote{display:none}
 .dtabs b.on{background:#C43E1C;border-color:#C43E1C;color:#fff}
 .dtabs b:not(.on):hover{border-color:#C43E1C;color:#C43E1C}
 .adform .adlb{font-size:11px;color:#8A6B42;margin:8px 0 4px;letter-spacing:.5px}
+/* 行内下拉：贴在小标题右边，不单独占一行高度 */
+.adform .acase{border:1px solid #C9A876;border-radius:3px;background:rgba(253,251,246,.9);
+  font-family:inherit;font-size:10px;color:#4A3A22;padding:0 3px;max-width:220px;outline:none;vertical-align:middle}
 .adform .ta{font-size:12.5px}
 .adrow{display:flex;gap:6px;margin-bottom:5px}
 .adrow input{border:1px solid var(--rule);border-radius:3px;padding:5px 8px;font-family:inherit;font-size:12px;outline:none}
 .adrow input:focus{border-color:#E0A08E}
 .adrow .anm{width:96px;flex:0 0 auto}
 .adrow .aid{flex:1}
+/* 身份栏不再是输入框：维度是机制，写死在牌面上，顺便省掉一列 */
+.adrow .adim{flex:1;min-width:0;font-size:9.5px;line-height:1.35;color:#8A6B42;align-self:center;
+  border-left:3px solid var(--dc,#8A6B42);padding-left:5px;overflow:hidden}
+.adrow .adim b{display:block;font-size:11px;color:#4A3A22;font-family:var(--serif)}
 /* 组局页要塞进 16:9 幻灯片的可视区（约 417px），行距整体收紧 */
 .adform.tight{padding:6px 11px}
 .adform.tight .muted{font-size:10.5px;line-height:1.5}
@@ -1780,28 +1791,23 @@ body:not(.os) #deskNote{display:none}
 .dcast.shuffling .cardw:nth-child(4) .idcard{animation-delay:.6s}
 @keyframes shuf{0%,100%{transform:rotateY(180deg) translateY(0)}50%{transform:rotateY(180deg) translateY(-7px)}}
 /* 桌面提示条：牌桌上方那行小字 */
-.dhint{text-align:center;font-size:10.5px;color:rgba(226,238,250,.92);letter-spacing:.3px;margin:0 auto 6px;max-width:560px;
-  background:linear-gradient(90deg,transparent,rgba(8,20,36,.62) 12%,rgba(8,20,36,.62) 88%,transparent);
-  border-radius:9px;padding:3px 10px;text-shadow:0 1px 2px rgba(4,10,20,.8)}
+.dhint{text-align:center;font-size:11px;color:rgba(226,238,250,.92);letter-spacing:.3px;margin:0 auto 7px;max-width:760px;
+  background:linear-gradient(90deg,transparent,rgba(8,20,36,.62) 10%,rgba(8,20,36,.62) 90%,transparent);
+  border-radius:9px;padding:4px 12px;text-shadow:0 1px 2px rgba(4,10,20,.8);line-height:1.6}
 .dhint b{color:#F5C56B;font-weight:400}
 .dseat{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:7px}
-/* 梦蝶局这一页给牌桌腾地方：抬头和引文压扁，整局要一屏看完 */
+/* 幻灯片的抬头一直是压扁的，别的页也靠它塞进 16:9，留着 */
 #winPPT #slideHead{padding:2px 0 8px;margin-bottom:9px}
 #winPPT #slideHead .st{font-size:21px}
 #winPPT #slideHead .ss{margin-top:3px}
-#winPPT #v-review > .zz{margin-top:4px;line-height:1.6;font-size:12px}
-#winPPT #v-review > .card > .hd{padding-top:7px;padding-bottom:7px}
-#dreamGame .adg{max-height:90px;overflow:auto;padding:8px 11px;margin-top:7px}
-#dreamGame .adg .agh{margin-bottom:5px}
-#dreamGame .adg .agi{margin-bottom:5px}
-/* 卡牌局比剧本局高一截：这一页的引文和抬头再让出 26px，
-   否则牌桌下沿会被 16:9 的可视区切掉（.paper2 能滚，但一滚就露馅） */
-body.dreamai #winPPT #v-review > .zz{margin:2px 0 0;font-size:11px;line-height:1.4}
-body.dreamai #winPPT #v-review > .card > .hd{padding-top:4px;padding-bottom:4px}
-body.dreamai #dreamGame{padding-bottom:8px}
-body.dreamai .dhint{margin-bottom:4px}
-body.dreamai .dcast{margin-bottom:5px}
-body.dreamai .dlog{max-height:46px}
+#dreamGame .adg{padding:8px 12px;margin-top:7px}
+#dreamGame .adg .agh{margin-bottom:5px;font-size:12px}
+/* 结算四行：一维一行，署名压在行尾 */
+#dreamGame .adg .agi.one{display:flex;gap:8px;align-items:baseline;margin-bottom:4px}
+#dreamGame .adg .agi.one .t{flex:1;min-width:0;font-size:12px;line-height:1.65;color:var(--ink)}
+#dreamGame .adg .agi.one .t b{margin-right:5px;color:#7A5A2E}
+#dreamGame .adg .agi.one .tl{flex:0 0 auto;font-size:10px;color:#96552E}
+#dreamGame .adg .tell{margin-top:7px;padding-top:6px;font-size:11.5px;line-height:1.7}
 /* AI 猜测面板：真实的可能，按可能性配长短条 */
 .adg{border:1px solid #E4D2A8;background:#FDF9EE;border-radius:4px;padding:10px 12px;margin-top:9px}
 .adg .agh{font-size:12px;font-weight:700;color:#7A5A2E;letter-spacing:.5px;margin-bottom:7px}
@@ -1821,66 +1827,156 @@ body.dreamai .dlog{max-height:46px}
    桌游的六个分区全部落在办公控件上：手牌进 PPT 备注区（本来就是「只有讲者
    看得见」），费用是会议分钟，牌库在 Excel 薪资表，密语走钉钉。
    这里只管样式；回合逻辑在文件末尾的卡牌引擎里。 */
-/* 破绽槽：贴在身份牌底边，三格 = 时间 / 数字 / 立场。只有对色的质询牌点得亮 */
-.idcard .dslot{position:absolute;left:5px;right:5px;bottom:2px;display:flex;gap:2px;z-index:2}
-.idcard .dslot i{flex:1;height:4px;border-radius:1px;font-style:normal;background:rgba(122,90,46,.2);
+/* 代价格：贴在身份牌底边，三格 = 这一维已经收到几条代价。
+   浅色 = 只有他自己说的那条；深色 = 有别的 agent 交叉评过，这一格才算硬 */
+.idcard .dcost{position:absolute;left:5px;right:5px;bottom:2px;display:flex;gap:2px;z-index:2}
+.idcard .dcost i{flex:1;height:4px;border-radius:1px;font-style:normal;background:rgba(122,90,46,.2);
   box-shadow:inset 0 0 0 .5px rgba(122,90,46,.4);transition:background .4s,box-shadow .4s}
-.idcard .dslot i.on{box-shadow:inset 0 0 0 .5px rgba(255,255,255,.55),0 0 8px var(--sc);animation:slotin .5s ease-out}
-.idcard .dslot i.t.on{background:#3F8F88;--sc:rgba(79,168,160,.9)}
-.idcard .dslot i.n.on{background:#C75B2A;--sc:rgba(199,91,42,.9)}
-.idcard .dslot i.f.on{background:#7B5FB0;--sc:rgba(139,111,192,.9)}
+.idcard .dcost i.on{background:var(--dc,#8A6B42);opacity:.42;animation:slotin .5s ease-out}
+.idcard .dcost i.on.hard{opacity:1;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.55),0 0 8px var(--dc,#8A6B42)}
 @keyframes slotin{0%{transform:scaleY(3.4);opacity:.2}100%{transform:scaleY(1);opacity:1}}
-/* 三格全亮 = 锤穿，牌面镶红边 */
-.idcard.nailed .cface{box-shadow:0 6px 16px rgba(4,10,20,.5),0 0 0 2px #C0503F,0 0 18px rgba(192,80,63,.5),inset 0 1px 0 rgba(255,255,255,.5)}
-/* 选好了牌，正在挑打谁 */
+/* 这一维被别人交叉评过 = 硬，牌面镶一圈 */
+.idcard.hard .cface{box-shadow:0 6px 16px rgba(4,10,20,.5),0 0 0 2px #3F8F88,0 0 18px rgba(63,143,136,.45),inset 0 1px 0 rgba(255,255,255,.5)}
+/* 选好了发起人，正在挑质问谁 */
 .idcard[data-aim]{cursor:pointer}
 .idcard[data-aim]:hover{transform:translateY(-7px) rotate(-1.2deg)}
 .idcard[data-aim]:hover .cface{box-shadow:0 10px 22px rgba(4,10,20,.5),0 0 0 2px rgba(245,197,107,.9),0 0 18px rgba(245,197,107,.55)}
-/* 被闭麦：这一轮他不说话 */
-.idcard.gagged .cface{filter:grayscale(.7) brightness(.72)}
-.idcard.gagged .cface::after{content:'闭麦';position:absolute;top:4px;right:4px;font-size:8px;color:#fff;
-  background:#5A5A62;border-radius:2px;padding:0 3px;z-index:2}
+/* 常驻调用计数：多智能体架构的展示位，评委不用问，屏幕在替我们答 */
+.dhint .acount{display:inline-block;margin-left:7px;padding:0 6px;border-radius:8px;font-style:normal;
+  background:rgba(63,143,136,.92);color:#EAF6F4;font-size:9.5px;letter-spacing:.3px}
 /* 每张牌自己的诚实角标：这句是真模型说的，还是脚本兜的 */
 .idcard .csrc{position:absolute;top:4px;left:4px;font-size:7.5px;font-style:normal;line-height:1.5;
   border-radius:2px;padding:0 3px;z-index:2;background:rgba(122,90,46,.16);color:#7A5A2E}
 .idcard .csrc.real{background:#3F8F88;color:#fff}
 
-/* 手牌区 = PPT 备注区。备注区在 .paper2 外面，所以怎么排都撑不破 16:9 那张幻灯片 */
-body.dreamcards #pptNotes{flex-direction:row;align-items:stretch;gap:10px;padding:8px 12px}
-body.dreamcards #pptNotes .nt,body.dreamcards #pptNotes .nb{display:none}
-#dreamHand{display:none;flex:1;min-width:0;gap:10px}
-body.dreamcards #dreamHand{display:flex}
+/* ---- Teams 会议壳 --------------------------------------------
+   舞台是自由高度的 .dwb，不再是 16:9 幻灯片：四个 agent 各占一格，
+   字幕挂在宫格下面，手牌收进只有你看得见的私密托盘。 */
+#winTeams .dwb{background:#1F1F23;display:flex;flex-direction:row;padding:0}
+#tmBar{background:#292929;border-bottom-color:#3D3D42;color:#D8D8DC;gap:9px}
+#tmBar .rec,#tmBar .mic,#tmBar .cam{font-size:10.5px;color:#B4B4BC;border:1px solid #4A4A52;border-radius:11px;padding:1px 9px}
+#tmBar .rec{color:#F2A0A0;border-color:#7A3E3E}
+#tmBar .rec::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:#D74F4F;margin-right:5px;
+  vertical-align:middle;animation:tmrec 1.6s ease-in-out infinite}
+@keyframes tmrec{0%,100%{opacity:.35}50%{opacity:1}}
+#tmBar b{font-weight:400;font-size:11.5px;color:#EAEAEE;margin-left:5px}
+#tmBar i{font-style:normal;font-size:10px;letter-spacing:.3px;background:rgba(80,89,201,.9);color:#EEF0FF;border-radius:9px;padding:1px 8px}
+#tmBar button{background:#C0503F;border-color:#C0503F;color:#fff}
+#tmBar button:hover{background:#D4604E;border-color:#D4604E}
+#winTeams .dwf{background:#292929;border-top-color:#3D3D42;color:#9A9AA2}
+#tmStage{display:block;flex:1;min-width:0;overflow:auto;padding:12px 14px}
+#tmChat{display:flex;flex:0 0 232px;background:#252528;border-left:1px solid #3D3D42;flex-direction:column;overflow:hidden}
+#tmChat .tch{flex:0 0 auto;font-size:11.5px;color:#EAEAEE;padding:8px 11px 7px;border-bottom:1px solid #3D3D42}
+#tmChat .tch i{display:block;font-style:normal;font-size:9.5px;color:#8A8A94;margin-top:2px;letter-spacing:.3px}
+#tmChat .tcb{flex:1;overflow:auto;padding:9px 11px}
+#tmChat .tcm{background:#31313A;border-radius:6px;padding:6px 9px;margin-bottom:7px}
+#tmChat .tcm .w{font-size:9.5px;color:#9AA6E0;margin-bottom:2px}
+#tmChat .tcm .t{font-size:11px;color:#DCDCE2;line-height:1.65}
+#tmChat .tcm.sys{background:transparent;border:1px dashed #4A4A52;padding:5px 8px}
+#tmChat .tcm.sys .t{color:#8A8A94;font-size:10px}
+/* 参会者宫格：2×2，一格一个 agent */
+#winTeams .dcast{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 10px;perspective:1100px}
+#winTeams .cardw{width:auto;height:144px;perspective:900px}
+#winTeams .idcard .cface{background:linear-gradient(158deg,#2E3440,#232830);border-color:#454C5A;border-radius:8px}
+#winTeams .idcard .cface::before{border-color:rgba(255,255,255,.07)}
+#winTeams .idcard .cback{background:linear-gradient(158deg,#232830,#181C23);border-color:#454C5A;border-radius:8px}
+#winTeams .idcard .fig{top:34px;width:42px;height:42px;background:#5059C9}
+#winTeams .idcard .fig::after{top:40px;width:70px;height:32px;border-radius:22px 22px 0 0;background:#5059C9}
+#winTeams .idcard b{bottom:26px;font-size:14px;color:#EDEDF2}
+#winTeams .idcard em{bottom:11px;font-size:10px;color:#9AA0AE}
+#winTeams .idcard .wing{top:22px;width:20px;height:26px}
+#winTeams .idcard .wing.l{left:calc(50% - 33px)}
+#winTeams .idcard .wing.r{right:calc(50% - 33px)}
+/* 正在发言：Teams 紫描边 + 一圈呼吸，纯 CSS，不用定时器 */
+#winTeams .idcard.speaking{transform:none;z-index:3}
+#winTeams .idcard.speaking .cface{box-shadow:0 0 0 2px #7B83EB,0 0 22px rgba(123,131,235,.5);animation:tmspk 1.5s ease-in-out infinite}
+@keyframes tmspk{0%,100%{box-shadow:0 0 0 2px #7B83EB,0 0 14px rgba(123,131,235,.35)}
+  50%{box-shadow:0 0 0 3px #7B83EB,0 0 26px rgba(123,131,235,.62)}}
+#winTeams .dcast.hasfocus .idcard:not(.speaking):not(.liar){filter:brightness(.72)}
+#winTeams .dcast.deal .idcard{transform:translateY(-18px);opacity:0}
+#winTeams .dcast.deal.dealt .idcard{transform:none;opacity:1;transition:transform .45s cubic-bezier(.3,.9,.4,1),opacity .45s;transition-delay:var(--dd,0s)}
+#winTeams .dcast.shuffling .idcard{transform:none;animation:tmwait 1.6s ease-in-out infinite}
+@keyframes tmwait{0%,100%{opacity:.42}50%{opacity:.9}}
+#winTeams .idcard[data-aim]:hover{transform:translateY(-3px)}
+#winTeams .idcard[data-aim]:hover .cface{box-shadow:0 0 0 2px #F5C56B,0 0 18px rgba(245,197,107,.5)}
+#winTeams .idcard.hard .cface{box-shadow:0 0 0 2px #3F8F88,0 0 16px rgba(63,143,136,.4)}
+/* 揭底：id 选择器把上面那身深色压过了骗子牌的红，这儿再红回来 */
+#winTeams .idcard.liar .cface{background:linear-gradient(155deg,#7A2E22,#4A1C14);border-color:#C0503F;
+  box-shadow:0 0 0 2px #C0503F,0 0 20px rgba(192,80,63,.45)}
+#winTeams .idcard.liar .fig,#winTeams .idcard.liar .fig::after{background:#E0A08E}
+#winTeams .idcard.liar b{color:#F6DCD4}
+#winTeams .idcard.liar em{color:#D6A79C}
+#winTeams .idcard.liar .cface .stamp{color:#FFE2DA;border-color:#FFE2DA;background:rgba(122,46,34,.5);text-shadow:none}
+#winTeams .idcard.mybet .cface{box-shadow:0 0 0 2px #7B83EB,0 0 18px rgba(123,131,235,.42)}
+#winTeams .idcard .dcost{left:9px;right:9px;bottom:5px}
+#winTeams .idcard .dcost i{height:5px;background:rgba(255,255,255,.12);box-shadow:none}
+#winTeams .idcard .csrc{top:7px;left:7px;font-size:8.5px;background:rgba(255,255,255,.14);color:#C6C6CE}
+#winTeams .idcard .csrc.real{background:#3F8F88;color:#fff}
+/* 实时字幕：宫格下面那条黑底白字 */
+#winTeams .dspeech{max-width:none;background:rgba(18,18,22,.92);border:1px solid #3D3D42;border-radius:6px;
+  padding:8px 14px;margin:0 0 8px;box-shadow:none}
+#winTeams .dspeech::before{border-bottom-color:rgba(18,18,22,.92)}
+#winTeams .dspeech .dw{font-size:10px;color:#9AA6E0}
+#winTeams .dspeech .dt2{font-size:13px;color:#EDEDF2;line-height:1.7}
+#winTeams .dlog{max-width:none;max-height:64px}
+/* 回放揭底那张牌：四条破绽也得和宫格一起塞进舞台，不许内滚 */
+#winTeams .adg{margin-top:6px;padding:8px 12px}
+#winTeams .adg .agi{margin-bottom:5px}
+#winTeams .adg .tell{margin-top:6px;padding-top:5px}
+#winTeams #dreamGame{background:none;padding:0}
+#winTeams .dhint{max-width:none}
+/* 会议窗的页签是 Teams 紫，不是 PPT 那个橙红 */
+#winTeams .dtabs b{background:#2E2E34;border-color:#4A4A52;color:#B4B4BC}
+#winTeams .dtabs b.on{background:#5059C9;border-color:#5059C9;color:#fff}
+#winTeams .dtabs b:not(.on):hover{border-color:#7B83EB;color:#C4C9F5}
+/* 组局表单不用再为幻灯片省高度了：会议窗有的是地方 */
+#winTeams .adform.tight{padding:11px 14px}
+#winTeams .adform.tight .muted{font-size:11px;line-height:1.7}
+#winTeams .adform.tight .adlb{margin:8px 0 4px;font-size:11px}
+#winTeams .adform.tight .adrow{gap:6px;margin-bottom:5px}
+#winTeams .adform.tight .adrow input,#winTeams .adform.tight .adrow select{padding:5px 8px;font-size:12px}
+#winTeams .adform.tight .ta{font-size:12.5px;padding:7px 9px}
+#winTeams .adform.tight textarea.ta{line-height:1.65}
+#winTeams .adform.tight .rbtn{margin-top:9px!important;padding:5px 15px}
+#winTeams .adfiles{max-height:none}
+/* 私密托盘：与会者看不到这一栏 */
+#tmTray{flex:0 0 auto;height:122px;background:#232326;border-top:1px solid #3D3D42;display:none;
+  flex-direction:column;padding:5px 12px 8px}
+#tmTray .tt{flex:0 0 auto;font-size:9.5px;letter-spacing:.6px;color:#D6A65C;margin-bottom:5px}
+#tmTray .tt::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:#D6A65C;margin-right:6px;vertical-align:middle}
+body.dreamcards #tmTray{display:flex}
+#dreamHand{display:flex;flex:1;min-width:0;gap:10px;align-items:stretch}
 /* 左栏：本轮还剩几分钟 + 军师横置牌 */
-#dreamHand .qside{flex:0 0 auto;width:120px;display:flex;flex-direction:column;justify-content:space-between;gap:5px}
-.qtimer{font-family:var(--serif);font-size:10.5px;color:var(--ink-3);letter-spacing:.4px}
-.qtimer b{display:block;font-size:18px;color:#C43E1C;font-weight:700;line-height:1.15;font-family:var(--serif)}
-.qtimer .qbar{height:3px;border-radius:2px;background:#E6E2D6;margin-top:3px;overflow:hidden}
+#dreamHand .qside{flex:0 0 auto;width:128px;display:flex;flex-direction:column;justify-content:space-between;gap:5px}
+.qtimer{font-family:var(--serif);font-size:10.5px;color:#9A9AA2;letter-spacing:.4px}
+.qtimer b{display:block;font-size:19px;color:#F5C56B;font-weight:700;line-height:1.15;font-family:var(--serif)}
+.qtimer .qbar{height:3px;border-radius:2px;background:#3A3A42;margin-top:3px;overflow:hidden}
 .qtimer .qbar i{display:block;height:100%;background:linear-gradient(90deg,#F5C56B,#C75B2A);transition:width .45s ease}
 /* 军师：横置 = 支援位，桌游的通用语言 */
-.advisor{display:flex;align-items:center;gap:5px;border:1px solid #C9A876;border-radius:4px;padding:3px 5px;
-  background:linear-gradient(150deg,#F5ECD4,#E0C99C);box-shadow:0 2px 6px rgba(4,10,20,.22)}
-.advisor .av{width:15px;height:15px;border-radius:50%;background:#3A4450;flex:0 0 auto}
-.advisor .tx{font-size:9px;color:#7A5A2E;line-height:1.3;min-width:0;overflow:hidden}
-.advisor .tx b{display:block;font-size:10px;color:#4A3A22;font-family:var(--serif);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.advisor.empty{background:none;border-style:dashed;border-color:#CFC7B4;box-shadow:none}
-.advisor.empty .tx{color:var(--ink-3)}
-/* 质询牌：比身份牌小一号，横排，费用印在左上角 */
-#dreamHand .qrow{flex:1;min-width:0;display:flex;gap:7px;overflow-x:auto;align-items:flex-start;padding-bottom:2px}
-.qcard{flex:0 0 auto;width:94px;height:72px;border-radius:5px;position:relative;cursor:pointer;text-align:left;
-  font-family:inherit;border:1px solid #C9A876;background:linear-gradient(155deg,#F5ECD4,#E4D0A6);padding:15px 7px 5px;
-  box-shadow:0 2px 7px rgba(4,10,20,.26);transition:transform .18s,box-shadow .18s}
-.qcard:hover{transform:translateY(-4px);box-shadow:0 7px 16px rgba(4,10,20,.4)}
-.qcard.on{transform:translateY(-6px);box-shadow:0 8px 18px rgba(4,10,20,.45),0 0 0 2px #C43E1C}
+.advisor{display:flex;align-items:center;gap:5px;border:1px solid #4A4A52;border-radius:4px;padding:3px 5px;
+  background:#31313A}
+.advisor .av{width:15px;height:15px;border-radius:50%;background:#5059C9;flex:0 0 auto}
+.advisor .tx{font-size:9px;color:#9A9AA2;line-height:1.3;min-width:0;overflow:hidden}
+.advisor .tx b{display:block;font-size:10px;color:#DCDCE2;font-family:var(--serif);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.advisor.empty{background:none;border-style:dashed;border-color:#4A4A52}
+.advisor.empty .tx{color:#7A7A84}
+/* 质询牌：横排，费用印在左上角 */
+#dreamHand .qrow{flex:1;min-width:0;display:flex;gap:8px;overflow-x:auto;align-items:stretch;padding-bottom:2px}
+.qcard{flex:0 0 auto;width:104px;border-radius:6px;position:relative;cursor:pointer;text-align:left;
+  font-family:inherit;border:1px solid #4A4A52;background:linear-gradient(158deg,#33343E,#2A2B33);padding:17px 8px 7px;
+  box-shadow:0 2px 7px rgba(0,0,0,.3);transition:transform .18s,box-shadow .18s}
+.qcard:hover{transform:translateY(-4px);box-shadow:0 7px 16px rgba(0,0,0,.45)}
+.qcard.on{transform:translateY(-6px);box-shadow:0 8px 18px rgba(0,0,0,.5),0 0 0 2px #7B83EB}
 .qcard:disabled{cursor:not-allowed;opacity:.4;transform:none;box-shadow:none}
-.qcard .cost{position:absolute;top:3px;left:5px;font-size:9px;font-style:normal;color:#fff;background:#8A6B42;border-radius:2px;padding:0 4px}
-.qcard .kind{position:absolute;top:4px;right:5px;width:8px;height:8px;border-radius:2px;background:var(--qc,#8A6B42)}
-.qcard b{display:block;font-family:var(--serif);font-size:12.5px;color:#4A3A22;line-height:1.2}
-.qcard span{display:block;font-size:8.5px;color:#8A6B42;line-height:1.35;margin-top:2px}
-/* 证据牌：从 Excel 取回来的那张，纸色不一样，一眼看出不是系统发的 */
-.qcard.evi{background:linear-gradient(155deg,#E9F1ED,#CCDDD4);border-color:#7FA894}
-.qcard.evi b{font-size:10px;line-height:1.25}
-.qcard.evi span{color:#4E7A68}
-#dreamHand .qnil{font-size:10.5px;color:var(--ink-3);align-self:center;line-height:1.7}
+.qcard .cost{position:absolute;top:4px;left:6px;font-size:9px;font-style:normal;color:#fff;background:#5059C9;border-radius:2px;padding:0 4px}
+.qcard .kind{position:absolute;top:5px;right:6px;width:8px;height:8px;border-radius:2px;background:var(--qc,#8A6B42)}
+.qcard b{display:block;font-family:var(--serif);font-size:13px;color:#EDEDF2;line-height:1.2}
+.qcard span{display:block;font-size:9px;color:#9A9AA2;line-height:1.4;margin-top:3px}
+/* 证据牌：从 Excel 取回来的那张，一眼看出不是系统发的 */
+.qcard.evi{background:linear-gradient(158deg,#2C3B36,#222E2A);border-color:#4E7A68}
+.qcard.evi b{font-size:10.5px;line-height:1.3}
+.qcard.evi span{color:#7FA894}
+#dreamHand .qnil{font-size:11px;color:#9A9AA2;align-self:center;line-height:1.7}
 
 /* ---- 机器人工坊抽屉：默认收着，不跟主戏抢一屏 ---- */
 #wsCard.collapsed .bd{display:none}
@@ -2143,7 +2239,7 @@ body.dreamcards #dreamHand{display:flex}
 
     <div id="slideHead">
       <div class="st" id="slideTitle">化蝶 · 梦蝶局</div>
-      <div class="ss" id="slideSub">Q3 复盘汇报 · 第 1 节 · 机器人身份局实录</div>
+      <div class="ss" id="slideSub">组织架构调整 · 第 1 节 · 四维代价议事实录</div>
     </div>
 
     <!-- ============ 开始 · 泡泡广场 ============ -->
@@ -2390,9 +2486,12 @@ body.dreamcards #dreamHand{display:flex}
 
     <!-- ============ 审阅 · 化蝶 ============ -->
     <div class="view" id="v-review">
-      <h3 class="sec">化蝶 · 梦蝶局<small>午休加映场 · 四个分身替主人练识人</small></h3>
+      <h3 class="sec">化蝶 · 梦蝶局<small>午休加映场 · 四个分身各看一片叶子</small></h3>
       <div class="zz"><span class="zq">「周与胡蝶，则必有分矣。此之谓物化」——《庄子 · 齐物论》</span><span class="zh">分身、马甲、壳——换一个形态，就挣脱一个处境</span></div>
-      <div class="card" style="margin-top:2px"><h4>梦蝶局 · 机器人身份局<small>其中一个是假猎头，押中他</small></h4><div class="bd" id="dreamGame"></div></div>
+      <div class="card" style="margin-top:2px"><h4>梦蝶局 · 四片叶子买代价<small>指派一个 agent 去质问另一个，把他漏掉的代价撬出来</small></h4><div class="bd">
+        <p class="muted">这一局搬进 Microsoft Teams 了——四个分身各占一格，实时字幕在下面，你的手牌在只有你看得见的那一栏。</p>
+        <button class="rbtn pri" data-goteams>进会议室</button>
+      </div></div>
       <div class="split" style="margin-top:14px">
         <div style="flex:1">
           <div class="card"><h4>机器人水域 · 问答流<small>@一个机器人，免费 3 问</small></h4><div class="bd">
@@ -2468,6 +2567,16 @@ body.dreamcards #dreamHand{display:flex}
 <div id="pptNotes">
   <div class="nt">备注</div>
   <div class="nb" id="pptNote">这一页是自动生成的备注区。放映时每句台词的破绽实时标在这里，揭底后逐条回放。</div>
+</div>
+
+<!-- ============ 壳 chrome：Teams 会议（开机即被搬进 #winTeams） ============ -->
+<div id="tmStage"><div id="dreamGame"></div></div>
+<div id="tmChat">
+  <div class="tch">会议聊天<i>私密 · 仅你可见</i></div>
+  <div class="tcb" id="tmChatBody"></div>
+</div>
+<div id="tmTray">
+  <div class="tt">只有你看得见 · 与会者看不到这一栏</div>
   <div id="dreamHand"></div>
 </div>
 
@@ -2527,7 +2636,7 @@ body.dreamcards #dreamHand{display:flex}
     <div class="sphint" id="spHint">大鱼来了？吹颗泡泡，把自己变大</div>
     <div class="bar" style="display:none"><i id="splashBar"></i></div>
     <div class="spact"><button id="spBlow">吹颗泡泡</button><button id="splashGo">直接假装上班</button></div>
-    <div class="tip">一个由 AI 机器人共同维护的职场情报与技能交换社区 · Ctrl+空格 老板键</div>
+    <div class="tip"><b>说出来的会变大，憋着的不会</b>职场情报互换 · 技能交易 · AI 分身替你出面 · Ctrl+空格 老板键</div>
   </div>
 </div>
 
@@ -3567,33 +3676,35 @@ boot();
 
 /* A1 */
 const DREAM_PLAYS = [
-  {title:'内推的那位', cast:{'一叶障目':'猎头 Anna', '匠石':'前同事老王', '老庖':'HR 小林','井底之蛙':'求职者'}, liar:'一叶障目', lines:[
-    {who:'井底之蛙',tx:'大家先说说，最近有没有靠谱岗位？'},
-    {who:'匠石',tx:'我前同事那边正缺一个产品负责人。'},
-    {who:'老庖',tx:'我们 HR 只看公开流程，不收任何费用。'},
-    {who:'一叶障目',tx:'我手里有个年薪翻倍的坑，今天就能安排面试。',tell:'这话你在哪儿听过：先给远超市场价的数字制造稀缺感。'},
-    {who:'匠石',tx:'不用急，先把 JD 和公司全名发出来。'},
+  {title:'内推的那位', cast:{'一叶障目':'猎头 Anna', '匠石':'前同事老王', '老庖':'HR 小林','井底之蛙':'求职者'},
+   dims:{'一叶障目':'money','匠石':'people','老庖':'timing','井底之蛙':'worst'}, liar:'一叶障目', lines:[
+    {who:'井底之蛙',tx:'我先把最坏那一下摆出来：这份工作真丢了，我手里还剩几个月。'},
+    {who:'匠石',tx:'我那边确实缺人。可你得先想清楚，走了以后谁替你说话。'},
+    {who:'老庖',tx:'流程有先后。正经岗位先发 JD 再谈钱，顺序反了就是信号。'},
+    {who:'一叶障目',tx:'年薪翻倍，今天就能安排面试。',tell:'这话你在哪儿听过：只报一个数字，别的一律不谈。'},
+    {who:'匠石',tx:'数字我不看。我看的是这家谁在带，你去了谁认你。'},
     {who:'一叶障目',tx:'公司暂时保密，签了保密协议才能透露。',tell:'这话你在哪儿听过：用保密为由回避公司与职位信息。'},
-    {who:'老庖',tx:'候选人不需要先交培训费或押金。'},
-    {who:'井底之蛙',tx:'那就走招聘官网投递，别走私人链接。'},
+    {who:'老庖',tx:'面试之前先签保密协议？这个时间点不对，正规流程没有这一步。'},
+    {who:'井底之蛙',tx:'那就走招聘官网投递，别走私人链接——退路得自己留。'},
     {who:'一叶障目',tx:'流程费 399 元，入职后全额返还，很快的。',tell:'这话你在哪儿听过：以可退费用为名索取转账。'},
-    {who:'匠石',tx:'正规面试不会把钱作为门槛。'},
-    {who:'老庖',tx:'我查到官网没有这个岗位，大家留意。',tell:'破绽核验：公开渠道查不到职位。'},
-    {who:'井底之蛙',tx:'看来答案已经很明显了。'}
+    {who:'井底之蛙',tx:'先问最坏：钱交出去人不见了，我找谁去。'},
+    {who:'老庖',tx:'我查了官网，这个岗位在这个时间点根本没开。',tell:'破绽核验：公开渠道查不到职位，时间线也对不上。'},
+    {who:'匠石',tx:'四个人各看一头，只有他那一头从头到尾只有钱。'}
   ]},
-  {title:'表哥的项目', cast:{'井底之蛙':'求职者', '匠石':'老同学','老庖':'HR 背调员','一叶障目':'投资表哥'}, liar:'一叶障目', lines:[
-    {who:'井底之蛙',tx:'最近有人拉我做副业，说是内部项目。'},
-    {who:'匠石',tx:'先问清楚合同主体和退出方式。'},
-    {who:'老庖',tx:'背调只会通过正式邮箱联系，不在群里收资料。'},
+  {title:'表哥的项目', cast:{'井底之蛙':'求职者', '匠石':'老同学','老庖':'HR 背调员','一叶障目':'投资表哥'},
+   dims:{'一叶障目':'money','匠石':'people','老庖':'timing','井底之蛙':'worst'}, liar:'一叶障目', lines:[
+    {who:'井底之蛙',tx:'有人拉我做副业。我先算最坏：这笔钱打水漂，我撑不撑得住。'},
+    {who:'匠石',tx:'看人。拉你的这位，真出了事你还找得到他吗。'},
+    {who:'老庖',tx:'正经顺序是先看合同主体，再谈打款——反过来就是有问题。'},
     {who:'一叶障目',tx:'我这项目稳赚，内部名额只剩两个。',tell:'这话你在哪儿听过：承诺稳赚并制造名额紧张。'},
-    {who:'井底之蛙',tx:'能给一份工商信息和风险说明吗？'},
+    {who:'井底之蛙',tx:'"稳赚"这两个字，说的就是最坏那一下没人兜。'},
     {who:'一叶障目',tx:'先转 2000 元锁定席位，资料随后发。',tell:'这话你在哪儿听过：先转账再给材料，顺序反常。'},
-    {who:'匠石',tx:'投资不该用个人收款码，也不会催你马上决定。'},
-    {who:'老庖',tx:'背调环节更不会让候选人替公司垫款。'},
+    {who:'老庖',tx:'先款后料，这个先后顺序本身就是破绽。'},
+    {who:'匠石',tx:'投资不用个人收款码，也不会催你今天就定。'},
     {who:'一叶障目',tx:'你们不信我？这是亲戚才给的渠道。',tell:'这话你在哪儿听过：用亲情和信任替代可验证信息。'},
-    {who:'井底之蛙',tx:'那就把项目名放到公开渠道核验。'},
-    {who:'匠石',tx:'查不到主体就先停手，别被情绪推着走。'},
-    {who:'老庖',tx:'我的结论：不付款、不提供身份证原件。'}
+    {who:'井底之蛙',tx:'那就把项目名放到公开渠道核验，查不到就先停手。'},
+    {who:'老庖',tx:'所有的"今天最后一天"都是他自己造出来的。',tell:'破绽核验：紧迫感来自对方，不来自事实。'},
+    {who:'匠石',tx:'他那一头只有钱和情分，另外三头一片空白。'}
   ]}
 ];
 let dreamIndex=0, dreamTimer=null, dreamShown=0, dreamBet='', dreamBetAsked=false, dreamPaused=false, dreamSettled=false;
@@ -3603,7 +3714,7 @@ function dreamStop(){
   dreamRender();
 }
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && document.querySelector('#winPPT.playing')) { e.preventDefault(); dreamStop(); }
+  if (e.key === 'Escape' && document.querySelector('#winTeams.playing')) { e.preventDefault(); dreamStop(); }
 });
 /* ---- 牌桌共用件：一排身份卡，牌背入席，谁说话谁的牌浮起来 ---- */
 const DWC = ['#D98E2B','#4FA8A0','#8B6FC0','#9BB24A'];
@@ -3612,14 +3723,13 @@ function dreamCastHTML(roles, o){
   o = o || {};
   const cls = 'dcast' + (o.deal ? ' deal' : '') + (o.shuffling ? ' shuffling' : '');
   return '<div class="' + cls + '">' + roles.map((r, i) => {
-    const nm = r[0], role = r[1] || '', wc = DWC[i % 4];
+    const nm = r[0], dim = o.dims ? DIMOF[r[1]] : null, role = dim ? dim.nm : (r[1] || ''), wc = DWC[i % 4];
     const bet = o.canBet ? ' data-dream-bet="' + esc(nm) + '" title="押他是假猎头"' : '';
-    /* 卡牌局多出来的三件：可指向的目标 / 三色破绽槽 / 每张牌自己的诚实角标 */
-    const aim = o.aim ? ' data-aim="' + esc(nm) + '" title="把选中的质询牌打给他"' : '';
-    const sl = o.slots && o.slots[nm];
-    const nailed = sl && sl.t && sl.n && sl.f;
-    const c = (o.liar === nm ? ' liar' : '') + (o.bet === nm ? ' mybet' : '')
-      + (nailed ? ' nailed' : '') + (o.gag === nm ? ' gagged' : '');
+    /* 卡牌局多出来的三件：可指向的目标 / 底边四段代价条 / 每张牌自己的诚实角标 */
+    const aim = o.aim ? ' data-aim="' + esc(nm) + '" title="' + esc(o.aimTip || '把这一格交给他') + '"' : '';
+    const cs = o.slots && o.slots[r[1]];
+    const hard = cs && cs.some(x => x.by !== nm);
+    const c = (o.liar === nm ? ' liar' : '') + (o.bet === nm ? ' mybet' : '') + (hard ? ' hard' : '');
     const src = o.srcOf && o.srcOf[nm];
     return '<div class="cardw"><div class="idcard' + c + '" style="--dd:' + (i * .16).toFixed(2) + 's"' + bet + aim + '>'
       + '<div class="cback"></div><div class="cface">'
@@ -3630,9 +3740,10 @@ function dreamCastHTML(roles, o){
       + '<i class="fig"></i><b>' + esc(nm) + '</b><em>' + esc(role) + '</em>'
       + (o.liar === nm ? '<i class="stamp">' + esc(o.stamp || '假猎头') + '</i>' : '')
       + (o.bet === nm ? '<i class="mytag">我押他</i>' : '')
-      + (sl ? '<i class="dslot"><i class="t' + (sl.t ? ' on' : '') + '" title="时间对不上"></i>'
-          + '<i class="n' + (sl.n ? ' on' : '') + '" title="数字对不上"></i>'
-          + '<i class="f' + (sl.f ? ' on' : '') + '" title="立场对不上"></i></i>' : '')
+      + (cs ? '<i class="dcost" style="--dc:' + (dim ? dim.qc : '#8A6B42') + '" title="'
+          + esc(role + '这一格已收到 ' + cs.length + ' 条代价' + (hard ? '，别人交叉评过 = 硬' : '，只有他自己说的 = 软')) + '">'
+          + [0, 1, 2].map(j => '<i class="' + (cs[j] ? 'on' : '')
+              + (cs[j] && cs[j].by !== nm ? ' hard' : '') + '"></i>').join('') + '</i>' : '')
       + '</div></div></div>';
   }).join('') + '</div>';
 }
@@ -3671,15 +3782,16 @@ function dreamRender(){
   const p=DREAM_PLAYS[dreamIndex], rows=p.lines.slice(0,dreamShown);
   const fin = dreamShown>=p.lines.length;
   const canBet = dreamBetAsked&&!dreamBet;
-  const roles = Object.entries(p.cast);
+  /* 回放局和 AI 局同一套宫格：一个人一维，名字不动，身份栏换成他看得见的那一维 */
+  const roles = Object.keys(p.cast).map(n => [n, p.dims[n]]);
   const cur = rows.length ? rows[rows.length-1] : null;
   const idle = !dreamTimer && !dreamPaused && !fin && !rows.length;
   const deal = dreamDeal; dreamDeal = false;
   const si = (!fin && cur) ? roles.findIndex(r => r[0] === cur.who) : -1;
-  let h = '<div class="dhint">脚本模拟 · '+esc(p.title)+' · 四张身份卡只看得到公开发言，看不到彼此的底'
-    + (canBet ? '　<b>点一张卡，押他是假猎头</b>' : '') + '</div>';
-  h += dreamCastHTML(roles, { canBet, bet:dreamBet, liar: fin?p.liar:'', deal, shuffling: idle });
-  if (cur && !fin) h += dreamSpeech(cur.who, p.cast[cur.who], cur.tx);
+  let h = '<div class="dhint">会议录制回放 · '+esc(p.title)+' · 脚本模拟，未调用模型　四个人各只看得见一维，谁也看不到别人的底'
+    + (canBet ? '　<b>点一格，押他是假猎头</b>' : '') + '</div>';
+  h += dreamCastHTML(roles, { dims:1, canBet, bet:dreamBet, liar: fin?p.liar:'', deal, shuffling: idle });
+  if (cur && !fin) h += dreamSpeech(cur.who, DIMOF[p.dims[cur.who]].nm, cur.tx);
   if (!fin) h += dreamLogHTML(rows.slice(0,-1).map(l => [l.who, l.tx]));
   if(fin){
     if(!dreamSettled){
@@ -3694,10 +3806,10 @@ function dreamRender(){
       + p.lines.filter(l=>l.tell).map(l =>
           '<div class="agi"><div class="t"><b>'+esc(l.who)+'</b>「'+esc(l.tx)+'」</div><div class="tl">'+esc(l.tell)+'</div></div>').join('')
       + '<div class="tell">这局的破绽已吹到水面，话术存进了资讯库——玩过的局，不白玩。</div></div>'
-      + '<div class="dseat"><button class="rbtn pri" data-dream-restart>再来一局</button></div>';
+      + '<div class="dseat"><button class="rbtn pri" data-dream-restart>换一场录制</button></div>';
   }
-  else if(dreamPaused&&!dreamBet) h+='<div class="dhint" style="margin-top:9px">牌都在桌上了——点一张，押他是假猎头，押完接着演</div>';
-  else if(idle) h+='<div class="dseat"><button class="rbtn pri" data-dream-start>开局发牌</button></div>';
+  else if(dreamPaused&&!dreamBet) h+='<div class="dhint" style="margin-top:9px">回放暂停在这儿了——点一格，押他是假猎头，押完接着放</div>';
+  else if(idle) h+='<div class="dseat"><button class="rbtn pri" data-dream-start>播放这场录制</button></div>';
   $('#dreamGame').innerHTML=h;
   dreamStage(deal, si);
 }
@@ -3705,48 +3817,60 @@ function dreamSchedule(){ dreamTimer=setInterval(()=>{ dreamShown++; const halfw
 function dreamStart(){ if(dreamTimer) return; dreamShown=0; dreamBet=''; dreamBetAsked=false; dreamPaused=false; dreamDeal=true; dreamRender(); dreamSchedule(); }
 $('#dreamGame').addEventListener('click',e=>{ if(window.dreamMode!=='script') return; const st=e.target.closest('[data-dream-start]'); if(st){ dreamSettled=false; dreamStart(); } const bt=e.target.closest('[data-dream-bet]'); if(bt){ dreamBet=bt.dataset.dreamBet; dreamBetAsked=false; dreamPaused=false; dreamRender(); dreamSchedule(); } if(e.target.closest('[data-dream-restart]')){ dreamIndex=(dreamIndex+1)%DREAM_PLAYS.length; dreamShown=0; dreamBet=''; dreamBetAsked=false; dreamPaused=false; dreamSettled=false; dreamStart(); }});
 document.addEventListener('click',e=>{ const t=e.target.closest('[data-wstoggle]'); if(t){ const c=document.getElementById('wsCard'); if(c) c.classList.toggle('collapsed'); }});
-dreamRender();
+/* 首屏这一发挪到文件末尾统一打（见末尾包装链）——回放局现在要读 DIMOF，
+   在这儿调会踩它的 TDZ，整块内联脚本会当场断掉 */
 
-/* ============ AI 梦蝶局 · 三轮质询的卡牌局 ============================
-   你不是第五个角色，是读局的人。
-   桌上四张身份牌，每张底边一条三色破绽槽（时间 / 数字 / 立场）；
-   你的手牌在 PPT 备注区——本来就是「只有讲者看得见」的地方；
-   费用是会议分钟，每轮 3 分钟，用不完作废。
-   锤穿一个人要 1+2+2=5 分钟，三轮 9 分钟只够锤穿一个：这就是取舍。
-   「亮证据」打不出去——得先切到 Excel 薪资表选一行真数据回来。
-   非骗子最多亮两格，三格全亮的只可能是一叶障目那一个。
-   四个角色各走各的 /api/ask，互相看不到底牌；哪张牌的台词来自真模型，
-   就在那张牌上单独标——诚实标注做到每张牌。 */
+/* ============ AI 梦蝶局 · 四片叶子，买代价 ============================
+   你不是第五个角色，是调度者。
+   你把自己真正的职场困境写上桌，四个 agent 各自只看得见一个维度——
+   只算钱 / 只算人 / 只算时机 / 只算最坏。他们说的都对，都是半张脸。
+   你要做的是指派一个 agent 去当面质问另一个 agent，
+   把对方那一维看不见的代价撬出来：这一格才从软变硬。
+   费用是会议分钟，每轮 3 分钟，用不完作废；九分钟买不齐八项代价，这就是取舍。
+   四个座位各走各的 /api/ask，system 里只有自己那一维，看不到别人的视角；
+   哪张牌的台词来自真模型，就在那张牌上单独标——诚实标注做到每张牌。 */
 /* 默认就落在卡牌局：三轮质询、手牌、跨窗口取证都在这一边，
    剧本局退成「看一遍别人怎么打」的样例，留在第二个页签 */
 window.dreamMode = 'ai';
 const ROUNDS = 3, SEAT_PRICE = '¥29', ADV_PRICE = '¥99';
-const QC = {
-  ask : { nm:'追问',   cost:1, slot:'n', qc:'#C75B2A', tip:'逼他给一个具体数字', act:'当面追问一个具体数字' },
-  old : { nm:'翻旧账', cost:2, slot:'t', qc:'#3F8F88', tip:'拿他先前的话对质',   act:'翻旧账，拿他前面说过的话当面对质' },
-  evi : { nm:'亮证据', cost:2, slot:'f', qc:'#7B5FB0', tip:'先去表里取一行数',   act:'当面甩出一行真实数据' },
-  mute: { nm:'闭麦',   cost:3, slot:'*', qc:'#8A6B42', tip:'让他这轮别说话',     act:'被要求这一轮不要发言' }
-};
-const SLOTN  = { t:'时间对不上', n:'数字对不上', f:'立场对不上' };
-const FLAWTX = { t:'你的时间线有一处对不上', n:'你给不出经得起查的数字', f:'你的立场和你嘴上说的不一致' };
-const WHYTX  = { t:'时间线一改再改，先后顺序对不上', n:'关键数字始终给不出，只给形容词', f:'嘴上一个立场，做的是另一个' };
-/* 军师：专长决定他擅长哪张牌（那张便宜 1 分钟），并且额外解锁「闭麦」 */
-const ADVISORS = [
-  ['气泡水','HR 话术观察','ask'], ['大鱼','组织变化分析','old'],
-  ['泡面','技术岗位风向','evi'], ['馍馍','办公室见闻','mute'],
-  ['十年 HRD','招聘话术','ask'], ['外企转国企的人','规则与流程','old'], ['被裁两次的产品','现金流与备选','evi']
+/* 四个维度是机制，不是角色设定——身份栏写死，改了局就散了 */
+const DIMS = [
+  { k:'money',  nm:'只算钱',   see:'数字、补偿、成本、系数', blind:'你难不难受、谁会记住你',
+    qc:'#C75B2A', ask:'这笔账，你只算了钱' },
+  { k:'people', nm:'只算人',   see:'关系、印象、谁记着谁',   blind:'划不划算',
+    qc:'#3F8F88', ask:'人情这一头，你替他算过吗' },
+  { k:'timing', nm:'只算时机', see:'时间窗口、先后顺序',     blind:'这么做对不对',
+    qc:'#7B5FB0', ask:'时机这一头，你压根没看' },
+  { k:'worst',  nm:'只算最坏', see:'兜底、现金流、退路',     blind:'这事概率有多小',
+    qc:'#8A6B42', ask:'最坏那一下，你兜得住吗' }
 ];
+const DIMOF = {}; DIMS.forEach(d => DIMOF[d.k] = d);
+/* 预置困境：不想现写的人直接选一条。第一条就是老剧本局那个场景 */
+const CASES = [
+  '内推的那位说包能翻倍，但要我先交三千块流程费，说走完流程就退',
+  '组里空降了一个新领导，第一天就找每个人单独聊，说是"随便聊聊"',
+  '公司要我调去外地新部门，说是升一级，但没写进合同',
+  '老东家想让我回去，工资加两千，我现在这家刚熬过试用期',
+  '手上项目做了一半，领导让我把它交给新人，我去接一个没人愿意接的'
+];
+/* 军师：专长决定他替你盯哪一维（那一维的质问便宜 1 分钟），并且每轮多 1 分钟 */
+const ADVISORS = [
+  ['气泡水','HR 话术观察','people'], ['大鱼','组织变化分析','timing'],
+  ['泡面','技术岗位风向','money'], ['馍馍','办公室见闻','worst'],
+  ['十年 HRD','招聘话术','people'], ['外企转国企的人','规则与流程','timing'], ['被裁两次的产品','现金流与备选','worst']
+];
+const LIVE_MAX = 4;
 const AD = {
   st: 'setup', busy: false, timer: null, src: '',
-  sc: '组里空降了一个新领导，第一天就找每个人单独聊，说是"随便聊聊"',
-  roles: [['气泡水','空降的新领导'],['大鱼','带组八年的老员工'],['泡面','手握核心模块的骨干'],['馍馍','转正答辩在下周的实习生']],
+  sc: CASES[0],
+  roles: [['气泡水','money'],['大鱼','people'],['泡面','timing'],['馍馍','worst']],
   from: ['', '', '', ''], adv: null,
-  liar: '', truth: {}, slots: {}, bank: {}, srcOf: {}, quote: {},
-  round: 0, min: 0, hand: [], sel: '', gag: '', evi: null, liveUsed: false,
+  slots: {}, bank: {}, srcOf: {}, last: {},
+  round: 0, min: 0, sel: '', evi: null, calls: 0, live: 0,
   lines: [], shown: 0, note: '',
-  bet: '', settled: false, res: null
+  call: '', settled: false, res: null
 };
-const DTABS = m => `<div class="dtabs"><b class="${m==='ai'?'on':''}" data-dmode="ai">开局 · 自己出题</b><b class="${m==='script'?'on':''}" data-dmode="script">看一局样例</b></div>`;
+const DTABS = m => `<div class="dtabs"><b class="${m==='ai'?'on':''}" data-dmode="ai">开局 · 自己出题</b><b class="${m==='script'?'on':''}" data-dmode="script">看一局回放</b></div>`;
 
 const dreamRenderScript = dreamRender;
 dreamRender = function(){
@@ -3766,13 +3890,18 @@ function adWait(ms, fn){
   }, ms);
 }
 const adMax = () => AD.adv ? 4 : 3;
-const adCost = k => Math.max(1, QC[k].cost - (AD.adv && AD.adv[2] === k ? 1 : 0));
-function adHand(){
-  const h = ['ask', 'old'];
-  if (AD.evi) h.push('evi');
-  if (AD.adv) h.push('mute');
-  return h;
+/* 跨座位质问 2′，同座位深挖 1′，亮证据 2′；军师盯的那一维便宜 1′ */
+function adCost(by, tg){
+  if (by === 'evi') return 2;
+  if (by === tg) return 1;
+  const d = adDimOf(tg);
+  return Math.max(1, 2 - (AD.adv && AD.adv[2] === d ? 1 : 0));
 }
+const adDimOf = nm => (AD.roles.find(r => r[0] === nm) || [])[1] || '';
+const adCells = k => AD.slots[k] || [];
+const adHard = k => adCells(k).some(x => x.by !== adNameOf(k));
+const adNameOf = k => (AD.roles.find(r => r[1] === k) || [])[0] || '';
+const adHardN = () => DIMS.filter(d => AD.slots[d.k] && adHard(d.k)).length;
 
 /* ---------- 组局：四个座位各自选谁来演 ---------- */
 /* 分身战绩跟着名字走——这就是它的简历，也是「凭什么值 99 元」的答案 */
@@ -3780,7 +3909,7 @@ const AREC = {};
 function adRec(nm){ return AREC[nm] || (AREC[nm] = { lie: 0, caught: 0, spot: 0 }); }
 function adRecHTML(nm){
   const r = adRec(nm);
-  return '<i class="arec" title="对局战绩 · 骗过 ' + r.lie + ' 人 / 被识破 ' + r.caught + ' 次 / 识破他人 ' + r.spot + ' 次">'
+  return '<i class="arec" title="对局战绩 · 发言 ' + r.lie + ' 次 / 被质问 ' + r.caught + ' 次 / 质问他人 ' + r.spot + ' 次">'
     + r.lie + '·' + r.caught + '·' + r.spot + '</i>';
 }
 function adSetupHTML(){
@@ -3788,55 +3917,66 @@ function adSetupHTML(){
     '<option value="mine"' + (AD.from[i] === 'mine' ? ' selected' : '') + '>我的机器人 · 免费</option>',
     '<option value="hire"' + (AD.from[i] === 'hire' ? ' selected' : '') + '>雇别人的分身 · ' + SEAT_PRICE + '</option>'].join('');
   return '<div class="adform tight">'
-    + '<div class="muted">四只蝴蝶各自入席，一个座位一次独立调用，谁也看不到别人的底——三轮质询，把撒谎的那个钉在桌上。</div>'
-    + '<div class="adlb">场景（发生了什么）</div>'
+    + '<div class="adlb">你现在真拿不定主意的那件事　'
+    + '<select id="adCase" class="acase"><option value="-1">— 或挑一条现成的 —</option>'
+    + CASES.map((c, i) => '<option value="' + i + '">' + esc(c.slice(0, 20)) + '</option>').join('') + '</select></div>'
     + '<textarea class="ta" id="adSc" rows="2">' + esc(AD.sc) + '</textarea>'
-    + '<div class="adlb">四个座位 · 名字 / 身份 / 谁来演（尾部三个数是这个分身的战绩：骗过·被识破·识破他人）</div>'
+    + '<div class="adlb">四个座位各自只看得见一维，说的都对、都是半张脸——你的活儿是<b>指派一个去当面质问另一个</b>'
+    + '（尾部三个数＝发言·被质问·质问他人）</div>'
     + AD.roles.map((r, i) => '<div class="adrow">'
         + '<input class="anm" id="adNm' + i + '" value="' + esc(r[0]) + '" placeholder="名字">'
-        + '<input class="aid" id="adId' + i + '" value="' + esc(r[1]) + '" placeholder="身份 / 立场">'
-        + '<select class="aid" id="adFr' + i + '" style="flex:0 0 128px">' + srcOpt(i) + '</select>'
+        + '<span class="aid adim" style="--dc:' + DIMOF[r[1]].qc + '" title="看得见' + esc(DIMOF[r[1]].see)
+        + '，看不见' + esc(DIMOF[r[1]].blind) + '"><b>' + esc(DIMOF[r[1]].nm)
+        + '</b>见' + esc(DIMOF[r[1]].see) + '　盲' + esc(DIMOF[r[1]].blind) + '</span>'
+        + '<select class="aid" id="adFr' + i + '" style="flex:0 0 118px">' + srcOpt(i) + '</select>'
         + adRecHTML(r[0]) + '</div>').join('')
-    + '<div class="adlb">军师（横置在你面前 · 每轮一条钉钉私聊 + 解锁「闭麦」 + 每轮多 1 分钟）</div>'
-    + '<select class="ta" id="adAdv">'
-    + '<option value="-1">不雇 · 免费</option>'
+    + '<div class="adlb">军师（每轮一条钉钉私聊 + 他盯的那一维便宜 1 分钟 + 每轮多 1 分钟）　'
+    + '<select id="adAdv" class="acase"><option value="-1">不雇 · 免费</option>'
     + ADVISORS.map((a, i) => '<option value="' + i + '"' + (AD.adv && AD.adv[0] === a[0] ? ' selected' : '') + '>'
         + esc(a[0]) + ' · ' + esc(a[1]) + ' · ' + ADV_PRICE + '</option>').join('')
-    + '</select>'
-    + '<button class="rbtn pri" data-ad="start" style="margin-top:7px">开局发牌</button>'
+    + '</select></div>'
+    + '<button class="rbtn pri" data-ad="start">开局发牌</button>'
     + '<button class="rbtn" data-ad="files" style="margin-left:6px">卷宗架</button>'
-    + '<span class="muted" style="margin-left:8px">「周与胡蝶，则必有分矣」——雇来的分身，你也看不到它的底</span></div>';
+    + '<span class="muted" style="margin-left:8px">一叶障目，说的是每个人只看得见一片叶子</span></div>';
 }
 
-/* ---------- 手牌：渲染进 PPT 备注区的兄弟节点，绝不碰 #pptNote ---------- */
+/* ---------- 手牌：渲染进 PPT 备注区的兄弟节点，绝不碰 #pptNote ----------
+   手牌 = 你手里的四个顾问。打出一张，再点桌上另一个座位：
+   那就是 A 当面质问 B，B 那一格记上一条，署名 A。 */
 function adHandRender(){
   const el = $('#dreamHand'); if (!el) return;
   const on = window.dreamMode === 'ai' && AD.st === 'play';
   document.body.classList.toggle('dreamcards', on);
   if (!on){ el.innerHTML = ''; return; }
   const mx = adMax();
-  let h = '<div class="qside"><div class="qtimer">第 ' + AD.round + ' / ' + ROUNDS + ' 轮 · 本轮剩'
+  let h = '<div class="qside"><div class="qtimer">'
+    + (AD.phase === 'sign' ? '三轮打完 · 剩' : '第 ' + AD.round + ' / ' + ROUNDS + ' 轮 · 本轮剩')
     + '<b>' + AD.min + ' 分钟</b><i class="qbar"><i style="width:' + Math.round(AD.min / mx * 100) + '%"></i></i></div>';
   h += AD.adv
     ? '<div class="advisor" title="横置的军师牌 · 支援位"><div class="av"></div><div class="tx"><b>' + esc(AD.adv[0])
       + '</b>' + esc(AD.adv[1]) + '</div></div>'
     : '<div class="advisor empty"><div class="tx">军师位空着<br>没人给你递牌</div></div>';
   h += '</div><div class="qrow">';
-  if (AD.phase === 'talk'){
-    h += '<div class="qnil">他们正在各说各的——<br>说完这一轮，牌才轮到你手上。</div>';
+  if (AD.phase === 'talk' || AD.phase === 'wait1'){
+    h += '<div class="qnil">' + (AD.phase === 'wait1' ? '他正在开口——<br>这是一次现场的独立调用。'
+      : '他们正在各说各的——<br>说完这一轮，牌才轮到你手上。') + '</div>';
+  } else if (AD.phase === 'sign'){
+    h += '<div class="qnil">三轮打完了——<br>回会上签个字。</div>';
   } else {
-    h += adHand().map(k => {
-      const c = QC[k], cost = adCost(k), poor = cost > AD.min;
-      const isE = k === 'evi';
-      return '<button class="qcard' + (isE ? ' evi' : '') + (AD.sel === k ? ' on' : '') + '" data-q="' + k + '"'
-        + (poor ? ' disabled' : '') + ' title="' + esc(c.tip) + ' · 点亮「' + esc(SLOTN[c.slot] || '任意一格') + '」">'
-        + '<i class="cost">' + cost + '′</i><i class="kind" style="--qc:' + c.qc + '"></i>'
-        + '<b>' + esc(c.nm) + '</b><span>' + esc(isE && AD.evi ? AD.evi.tx : c.tip) + '</span></button>';
+    h += AD.roles.map(r => {
+      const nm = r[0], d = DIMOF[r[1]], poor = AD.min < 1;
+      return '<button class="qcard' + (AD.sel === nm ? ' on' : '') + '" data-q="' + esc(nm) + '"'
+        + (poor ? ' disabled' : '') + ' title="派' + esc(nm) + '去质问桌上另一个人 · 2′（问他自己 1′，但他只会给自己那维更好听的版本）">'
+        + '<i class="cost">2′</i><i class="kind" style="--qc:' + d.qc + '"></i>'
+        + '<b>' + esc(nm) + '</b><span>' + esc(d.nm) + ' · ' + esc(d.ask) + '</span></button>';
     }).join('');
-    if (!AD.evi) h += '<button class="qcard evi" data-q="getevi" title="去 Excel 薪资表或资讯库点一行，才拿得到这张牌">'
+    if (AD.evi) h += '<button class="qcard evi" data-q="evi" title="把这行真数据甩到某一格上，那一格直接算硬">'
+      + '<i class="cost">2′</i><i class="kind" style="--qc:#7B5FB0"></i><b>亮证据</b><span>' + esc(AD.evi.tx) + '</span></button>';
+    else h += '<button class="qcard evi" data-q="getevi" title="去 Excel 薪资表或资讯库点一行，才拿得到这张牌">'
       + '<i class="cost">取</i><i class="kind" style="--qc:#7B5FB0"></i><b>亮证据</b><span>去表里选一行真数据</span></button>';
     h += '<button class="rbtn" data-q="pass" style="flex:0 0 auto;align-self:center">过这一轮</button>';
-    if (AD.sel) h += '<div class="qnil">选好了——<br>点桌上一张牌，打给他。</div>';
+    if (AD.sel) h += '<div class="qnil">' + (AD.sel === 'evi' ? '证据在手——<br>点桌上一张牌，甩给他。'
+      : esc(AD.sel) + ' 站起来了——<br>点桌上另一张牌，让他去问。') + '</div>';
   }
   el.innerHTML = h + '</div>';
 }
@@ -3846,7 +3986,7 @@ function aiDreamRender(){
   if (AD.st === 'setup' || AD.st === 'files'){
     $('#dreamGame').innerHTML = h + (AD.st === 'files' ? adFilesHTML() : adSetupHTML());
     adHandRender();
-    if (typeof adSlideSync === 'function') adSlideSync();
+    if (typeof adMeetSync === 'function') adMeetSync();
     return;
   }
   const rows = AD.lines.slice(0, AD.shown);
@@ -3854,100 +3994,113 @@ function aiDreamRender(){
   const si = cur ? AD.roles.findIndex(r => r[0] === cur[0]) : -1;
   const deal = adDeal; adDeal = false;
   const fin = AD.st === 'done';
-  const snip = AD.sc.slice(0, 22) + (AD.sc.length > 22 ? '…' : '');
-  /* 摊牌这一屏不再重复标题：结算面板自己带「摊牌 · 谁是一叶障目」，
-     幻灯片副标题也还挂着场景——省下这一行，牌桌下沿才收得进 16:9 */
+  const snip = AD.sc.slice(0, 20) + (AD.sc.length > 20 ? '…' : '');
+  /* 常驻计数：这一行本身就是多智能体架构的展示位，评委不用问，屏幕在替他数 */
+  const cnt = '<i class="acount" title="本局已发生的独立调用次数 · 四个座位视野互相隔离">独立调用 '
+    + AD.calls + ' · 视野隔离 ' + AD.roles.length + ' 路</i>';
   if (!fin) h += '<div class="dhint">'
     + (AD.st === 'wait' ? '洗牌中'
-      : '第 ' + AD.round + ' / ' + ROUNDS + ' 轮 · 本轮剩 ' + AD.min + ' 分钟')
-    + ' · ' + esc(snip)
-    + (AD.st === 'play' && AD.phase === 'act' ? '　<b>手牌在下面的备注区——那儿只有你看得见</b>' : '') + '</div>';
+      : AD.phase === 'sign' ? '三轮打完 · 代价买到 ' + adHardN() + '/4 格'
+      : '第 ' + AD.round + ' / ' + ROUNDS + ' 轮 · 本轮剩 ' + AD.min + ' 分钟 · 代价买到 ' + adHardN() + '/4 格')
+    + ' · ' + esc(snip) + cnt
+    + (AD.st === 'play' && AD.phase === 'act' ? '　<b>手牌在下面那条私密栏</b>' : '') + '</div>';
   h += dreamCastHTML(AD.roles, {
-    deal, shuffling: AD.st === 'wait', slots: AD.slots, srcOf: AD.srcOf, gag: AD.gag,
+    deal, shuffling: AD.st === 'wait', slots: AD.slots, srcOf: AD.srcOf, dims: 1,
     aim: AD.st === 'play' && AD.phase === 'act',
-    canBet: fin ? false : false, bet: AD.bet, liar: fin ? AD.liar : '', stamp: '一叶障目'
+    aimTip: '让选中的那位去质问他',
+    bet: AD.call
   });
-  if (AD.st === 'wait') h += '<div class="adwait"><i></i><i></i><i></i>四张牌各自在对自己的台词——四次独立调用，他们看不到彼此的底…</div>';
+  if (AD.st === 'wait') h += '<div class="adwait"><i></i><i></i><i></i>四张牌各自在对自己的台词——四次独立调用，他们只看得见自己那一维…</div>';
   else {
     if (cur && !fin){
-      const role = (AD.roles.find(r => r[0] === cur[0]) || [])[1] || '';
-      h += dreamSpeech(cur[0], role, cur[1]);
+      const r = AD.roles.find(x => x[0] === cur[0]);
+      h += dreamSpeech(cur[0] + (cur[2] ? ' → ' + cur[2] : ''), r ? DIMOF[r[1]].nm : '', cur[1]);
     }
-    if (!fin) h += dreamLogHTML(rows.slice(0, -1).map(l => [l[0], l[1]]));
+    if (!fin) h += dreamLogHTML(rows.slice(0, -1).map(l => [l[0] + (l[2] ? '→' + l[2] : ''), l[1]]));
+    if (AD.phase === 'sign') h += '<div class="dseat"><span class="dhint" style="margin:0 6px 0 0">'
+      + '桌上摆着 ' + adHardN() + ' 格硬代价——现在你签一个字：</span>'
+      + ['做', '不做', '再等等'].map(s => '<button class="rbtn' + (s === '做' ? ' pri' : '') + '" data-sign="' + s + '">' + s + '</button>').join('')
+      + '</div>';
     if (fin) h += adResultHTML();
   }
   $('#dreamGame').innerHTML = h;
   dreamStage(deal, si);
   adHandRender();
-  if (typeof adSlideSync === 'function') adSlideSync();
+  if (typeof adMeetSync === 'function') adMeetSync();
 }
 
 function adResultHTML(){
   const r = AD.res || {};
-  return '<div class="adg"><div class="agh">摊牌 · ' + esc(AD.liar) + ' 是一叶障目 · ' + esc(r.head || '') + '</div>'
-    + Object.keys(AD.truth[AD.liar] || {}).filter(k => AD.truth[AD.liar][k]).map(k =>
-        '<div class="agi"><div class="t"><b>' + esc(SLOTN[k]) + '</b>'
-        + (AD.slots[AD.liar] && AD.slots[AD.liar][k] ? '　你打亮了' : '　你没打到') + '</div>'
-        + '<div class="tl">' + esc(WHYTX[k]) + '</div></div>').join('')
+  return '<div class="adg"><div class="agh">四片叶子 · ' + esc(r.head || '') + '</div>'
+    + DIMS.map(d => {
+        const cs = adCells(d.k), hard = adHard(d.k);
+        return '<div class="agi one"><span class="t"><b>' + esc(d.nm) + '</b>'
+          + (cs.length ? esc(cs[cs.length - 1].tx) : '这一格你没买 —— 也就是说你在拿它赌')
+          + '</span><span class="tl">' + (cs.length
+              ? esc(cs.map(x => x.by).join('/') + (hard ? ' · 交叉验证过' : ' · 只有他自己那一维'))
+              : '没人替你算过') + '</span></div>';
+      }).join('')
     + '<div class="tell">' + esc(r.tell || '') + '</div></div>'
     + '<div class="dseat"><button class="rbtn pri" data-ad="again">同一桌再来一局</button>'
-    + '<button class="rbtn" data-ad="reset">换个场景</button>'
+    + '<button class="rbtn" data-ad="reset">换个困境</button>'
     + '<button class="rbtn" data-ad="files">存进卷宗架</button>'
-    + '<button class="rbtn" data-ad="bill">看结算单</button></div>'
-    + '<div class="dhint" style="margin-top:7px">每张牌左上角标着它这句话是真模型生成还是脚本兜底 · 破绽已存进资讯库，玩过的局不白玩</div>';
+    + '<button class="rbtn" data-ad="bill">看完整决定书</button></div>'
+    + '<div class="dhint" style="margin-top:6px">牌左上角标着这句是真模型还是脚本兜底 · 完整决定书已进 Outlook 草稿箱</div>';
 }
 
-/* ---------- 底牌：谁在撒谎，谁身上有哪几处对不上 ----------
-   一叶障目三格全有；其余人各自最多两格——每个人都有点小心思，
-   但三格全亮的只可能是他一个，唯一解成立。 */
+/* ---------- 发牌：四个座位各绑一维，四格代价全部清空 ----------
+   没有底牌，也没有骗子——每个人说的都是真的，只是都只有半张脸。 */
 function adDeck(){
-  const rs = AD.roles, ks = ['t', 'n', 'f'];
-  AD.liar = rs[(Math.random() * rs.length) | 0][0];
-  AD.truth = {}; AD.slots = {}; AD.srcOf = {}; AD.bank = {}; AD.quote = {};
-  rs.forEach(r => {
-    const nm = r[0];
-    AD.slots[nm] = { t: 0, n: 0, f: 0 };
-    if (nm === AD.liar){ AD.truth[nm] = { t: 1, n: 1, f: 1 }; return; }
-    const pick = ks.slice().sort(() => Math.random() - .5).slice(0, (Math.random() * 3) | 0);
-    AD.truth[nm] = { t: 0, n: 0, f: 0 };
-    pick.forEach(k => AD.truth[nm][k] = 1);
-  });
+  AD.slots = {}; AD.srcOf = {}; AD.bank = {}; AD.last = {};
+  DIMS.forEach(d => AD.slots[d.k] = []);
+  AD.calls = 0; AD.live = 0;
 }
 
-/* ---------- 一个角色一次独立调用：他只拿到场景 + 自己的身份 + 自己的底 ---------- */
-function adSys(nm, role, liar, seat){
-  let p = '你在一场四人职场对话里演「' + nm + '」，身份是' + role + '。你只知道自己这一份设定，看不到别人的底牌。';
-  p += liar
-    ? '你心里藏着一件不能说的事，嘴上要把它糊过去：你的时间线对不上、你给不出经得起查的数字、你的立场和你嘴上说的不一致。你不承认，但被逼问时会露一点。'
-    : '你说的基本是真话，只是也有一点自己的小算盘，不会全盘托出。';
+/* ---------- 一个座位一次独立调用：他只拿到困境 + 自己那一维，看不到别人的视角 ---------- */
+function adSys(nm, dim, seat){
+  const d = DIMOF[dim];
+  let p = '你在一场四人职场议事里演「' + nm + '」。你只看得见一个维度：' + d.see + '。'
+    + '你完全看不见' + d.blind + '，别人问你这些，你就说那不归你管。'
+    + '你不知道另外三个人各自看的是哪一维，也看不到他们的设定。'
+    + '你说的都是真话，只是只有这一维的真话。';
   if (seat === 'mine'){
     const b = (typeof botProfile === 'function') ? botProfile() : null;
     if (b) p += '你的说话方式：' + String(b.dna).replace(/\n/g, '；').slice(0, 60) + '。' + String(b.flow).replace(/\n/g, '；').slice(0, 60) + '。';
   } else if (seat === 'hire'){
     p += '你是别人训练出来的分身，语气比在场所有人都更像一个老手，句子短、带判断。';
   }
-  p += '严格输出 4 行，每行一句台词，不超过 24 字，不要名字前缀、不要引号、不要编号：'
-    + '第1行 开场发言；第2行 被当面追问一个具体数字时的回答；第3行 被翻旧账对质时的回答；第4行 被甩出一行真实数据时的回答。全部用中文。';
+  p += '严格输出 4 行，每行一句话，不超过 24 字，不要名字前缀、不要引号、不要编号：'
+    + '第1行 从你这一维给出建议；第2行 被追问一个具体数字时的回答；第3行 被别人拿他那一维的话当面对质时的回答；'
+    + '第4行 被甩出一行真实数据时的回答。全部用中文。';
   return p.slice(0, 1900);
 }
-function adFallback(nm, role, liar){
-  return liar
-    ? ['其实没那么复杂，大家别多想，都是例行安排。',
-       '数字这种事回头我发你，现在报不准，别咬字眼。',
-       '我先前那句是另一个语境，你别断章取义。',
-       '这张表我没见过，来源要再核，先不落字。']
-    : ['我作为' + role + '，只关心这事之后，谁的位置动了。',
-       '我这边的数就摆在那儿，你要哪一项我现在念。',
-       '我说过的话你可以翻，前后是一条线。',
-       '这行数据对得上，那就按数据说话。'];
+function adFallback(nm, dim){
+  return ({
+    money : ['这事只看一件：钱多多少、什么时候到账。',
+             '照现在的口径，一年差六到八万，税前。',
+             '你说的那些我不管，我这笔账没算错。',
+             '这行数对得上，那就按数说话。'],
+    people:['你走了以后，谁替你说话，这才是问题。',
+             '数我说不上来，我只知道谁会记着这一笔。',
+             '划不划算不归我管，我管的是脸面。',
+             '数据是数据，人不是按数据记你的。'],
+    timing:['现在不是时候，再往后两个月就是另一回事。',
+             '时间窗口大概八周，过了就得重排。',
+             '对不对我不评价，我只说早晚。',
+             '这个时间点，跟我说的先后对得上。'],
+    worst :['先问最坏那一下：断了收入你能撑几个月。',
+             '按最坏算，六个月现金流，压线。',
+             '概率多小我不管，我管兜不兜得住。',
+             '这行数如果是真的，那退路比我以为的窄。']
+  })[dim] || ['……', '……', '……', '……'];
 }
 async function adAgent(i){
-  const [nm, role] = AD.roles[i];
-  const liar = nm === AD.liar;
+  const [nm, dim] = AD.roles[i];
   let four = null, src = 'script';
   try {
-    const j = await askAI('梦蝶局·' + nm, adSys(nm, role, liar, AD.from[i]),
-      '场景：' + AD.sc.slice(0, 160) + '\n现在轮到你开口。');
+    AD.calls++;
+    const j = await askAI('梦蝶局·' + nm, adSys(nm, dim, AD.from[i]),
+      '我的困境：' + AD.sc.slice(0, 160) + '\n从你这一维，先说一句。');
     if (j && j.ok && j.text){
       const ls = String(j.text).split(/\n+/)
         .map(s => s.trim().replace(/^[\-*\d.、\s]*/, '').replace(/^[^：:]{1,8}[：:]/, '').replace(/^[「"']|[」"']$/g, ''))
@@ -3955,14 +4108,20 @@ async function adAgent(i){
       if (ls.length >= 4){ four = ls.slice(0, 4); src = 'model'; }
     }
   } catch (e){ /* 网络挂了也照跑，只是标成脚本 */ }
-  if (!four) four = adFallback(nm, role, liar);
+  if (!four) four = adFallback(nm, dim);
   AD.bank[nm] = { open: four[0], r: { n: four[1], t: four[2], f: four[3] }, used: {} };
   AD.srcOf[nm] = src;
+  AD.last[nm] = four[0];
+  /* 开局这条是他自己说的，先把自己那一格填成「软」 */
+  AD.slots[dim].push({ by: nm, tx: four[0], src });
 }
 
 /* ---------- 开局：四次并发独立调用 ---------- */
 async function adEngine(){
   adDeck();
+  const tc = document.querySelector('#tmChatBody');
+  if (tc) tc.innerHTML = '<div class="tcm sys"><div class="t">会议开始 · 四位与会者各自只看得见一个维度，'
+    + '他们彼此看不到对方说了什么。这一栏只有你看得见。</div></div>';
   await Promise.all(AD.roles.map((r, i) => adAgent(i)));
   AD.src = AD.roles.some(r => AD.srcOf[r[0]] === 'model') ? 'model' : 'script';
   AD.busy = false; AD.st = 'play'; AD.round = 0; adDeal = true;
@@ -3971,15 +4130,19 @@ async function adEngine(){
 
 function adNextRound(){
   AD.round++;
-  if (AD.round > ROUNDS) return adShowdown();
-  AD.min = adMax(); AD.sel = ''; AD.gag = ''; AD.liveUsed = false; AD.phase = 'talk';
+  if (AD.round > ROUNDS) return adSign();
+  AD.min = adMax(); AD.sel = ''; AD.phase = 'talk';
   adAdvisorWhisper();
-  const speak = AD.roles.map(r => r[0]);
+  /* 第一轮四个人各自开口；后面只让还没被质问过的那几维再补一句，省时间也省调用 */
+  const speak = AD.round === 1 ? AD.roles.map(r => r[0])
+    : AD.roles.filter(r => !adHard(r[1])).map(r => r[0]).slice(0, 2);
   let ix = 0;
   const step = () => {
     if (ix >= speak.length){ AD.phase = 'act'; aiDreamRender(); return; }
     const nm = speak[ix++];
-    AD.lines.push([nm, adRoundLine(nm)]);
+    const tx = adRoundLine(nm);
+    AD.last[nm] = tx;
+    AD.lines.push([nm, tx]);
     AD.shown = AD.lines.length;
     aiDreamRender();
     adWait(950, step);
@@ -3996,120 +4159,133 @@ function adRoundLine(nm){
   return b.r[k];
 }
 
-/* ---------- 出牌：命中就点亮那一格，打空就是分钟白花 ---------- */
-async function adPlay(k, target){
-  const cost = adCost(k);
+/* ---------- 出牌：指派 by 当面质问 target ----------
+   信息在两个 agent 之间传递——发起方的 system 里没有目标那一维，
+   目标的原话是通过 user 递过去的，这就是画面上看得见的 A2A。 */
+async function adPlay(by, target){
+  const cost = adCost(by, target);
   if (cost > AD.min) return;
   AD.min -= cost; AD.sel = '';
-  const slot = QC[k].slot;
-  let hit = '', gag = false;
-  if (k === 'mute'){
-    gag = true; AD.gag = target;
-    const left = ['t', 'n', 'f'].filter(s => AD.truth[target][s] && !AD.slots[target][s]);
-    if (left.length) hit = left[(Math.random() * left.length) | 0];
-  } else if (AD.truth[target][slot] && !AD.slots[target][slot]) hit = slot;
-  if (hit) AD.slots[target][hit] = 1;
-  if (k === 'evi') AD.evi = null;   // 证据是一次性的，打完得再去取
+  const dim = adDimOf(target), d = DIMOF[dim];
+  const evi = by === 'evi';
+  const cross = !evi && by !== target;
 
-  const role = (AD.roles.find(r => r[0] === target) || [])[1] || '';
-  let tx = '', src = AD.srcOf[target];
-  if (gag){
-    tx = '（被要求这一轮不要发言，他把手机反扣在桌上）';
-  } else if (!AD.liveUsed){
-    /* 每轮只给被质询的那一个人一次现场调用——你出牌，模型当场回应 */
-    AD.liveUsed = true;
+  let tx = '', src = AD.srcOf[by] || 'script', speaker = evi ? '你' : by;
+  if (evi){
+    tx = '（把这行数按在桌上）' + AD.evi.tx;
+    src = 'model';                      // 真实数据，不是生成的
+    AD.evi = null;
+  } else if (cross && AD.live < LIVE_MAX){
+    /* 现场的一次独立调用：发起方只带着自己那一维，看着目标的原话开口 */
+    AD.live++; AD.calls++;
     AD.phase = 'wait1'; aiDreamRender();
+    const bd = adDimOf(by);
     try {
-      const j = await askAI('梦蝶局·' + target, adSys(target, role, target === AD.liar, AD.from[AD.roles.findIndex(r => r[0] === target)]),
-        '场景：' + AD.sc.slice(0, 110) + '\n你正在被' + QC[k].act
-          + (hit ? '，对方戳中了——' + FLAWTX[hit] : '，但这一下没戳到你')
-          + '。只回一句话，不超过 24 字，不要名字前缀。');
+      const j = await askAI('梦蝶局·' + by + '→' + target,
+        adSys(by, bd, AD.from[AD.roles.findIndex(r => r[0] === by)]),
+        '我的困境：' + AD.sc.slice(0, 100)
+        + '\n同桌的「' + target + '」刚才说：「' + (AD.last[target] || '') + '」'
+        + '\n从你这一维看，他这条漏了什么代价？只回一句话，不超过 26 字，不要名字前缀。');
       if (j && j.ok && j.text){
         const s = String(j.text).split(/\n+/)[0].trim().replace(/^[^：:]{1,8}[：:]/, '').replace(/^[「"']|[」"']$/g, '');
         if (s.length > 3){ tx = s.slice(0, 40); src = 'model'; }
       }
     } catch (e){ /* 降级 */ }
-    if (!tx){ tx = adPressLine(target, hit, k); src = 'script'; }
-    AD.srcOf[target] = src;
+    if (!tx){ tx = adPressLine(by, target); src = 'script'; }
+    AD.srcOf[by] = src;
+  } else if (cross){
+    const b = AD.bank[by];
+    tx = (b && b.r.t) || adPressLine(by, target);
+    src = 'script'; AD.srcOf[by] = src;   // 现场调用额度用完，照实标脚本
   } else {
+    /* 让他深挖自己那一维：只会给自己更乐观的版本，所以算软 */
     const b = AD.bank[target];
-    tx = (b && b.r[slot === '*' ? 'n' : slot]) || adPressLine(target, hit, k);
+    tx = (b && (b.r.n || b.r.f)) || adPressLine(target, target);
+    src = 'script'; AD.srcOf[target] = src;
   }
-  AD.lines.push([target, tx]);
-  /* 这一格是被哪句话露出来的，当场记下——卷宗要原话，不能事后随便抓一句凑 */
-  if (hit && target === AD.liar) AD.quote[hit] = tx;
+  /* 这一格记上一条，署名是发起方——署名不是发起方，这一格就永远是软的 */
+  AD.slots[dim].push({ by: speaker, tx, src });
+  AD.last[speaker] = tx;
+  if (!evi) adRec(speaker).spot++, adRec(target).caught++;
+
+  AD.lines.push([speaker, tx, target]);
   AD.shown = AD.lines.length;
   AD.phase = 'act';
-  if (hit && typeof osToast === 'function') osToast(target + ' 的「' + SLOTN[hit] + '」亮了');
-  const nailed = AD.roles.some(r => { const s = AD.slots[r[0]]; return s.t && s.n && s.f; });
-  if (nailed) AD.min = 0;
+  if (typeof osToast === 'function')
+    osToast('「' + d.nm + '」这一格' + (adHard(dim) ? '变硬了：' : '又记一条：') + speaker + ' 评过');
   aiDreamRender();
   if (AD.min < 1) adWait(1400, adNextRound);
 }
-function adPressLine(nm, hit, k){
-  if (hit) return ({ t: '那天的先后……我可能记岔了，不重要吧。',
-                     n: '数字回头我发你，现在报不准，别咬字眼。',
-                     f: '我立场没变，是你们理解得太窄。' })[hit];
-  return nm === AD.liar ? '这个我早说过了，你还要我说几遍。' : '这一条我经得起查，你随便翻。';
+function adPressLine(by, target){
+  const d = DIMOF[adDimOf(by)] || DIMS[0];
+  return d.ask + '——' + target + '这条，我这一维的代价他没算。';
 }
 
-/* ---------- 摊牌：分层结算，押错也带走一条 ---------- */
-function adShowdown(){ AD.st = 'done'; AD.phase = ''; AD.gag = '';
-  const s = AD.slots[AD.liar] || {}, nailed = s.t && s.n && s.f;
-  const hit = AD.bet === AD.liar;
-  const notes = ['t', 'n', 'f'].filter(k => AD.slots[AD.liar] && AD.slots[AD.liar][k])
-    .map(k => '梦蝶局破绽笔记 · ' + AD.liar + '（' + SLOTN[k] + '）：' + WHYTX[k]);
-  let head, tell, take;
-  if (nailed && hit){ head = '你把三格全打亮了，还押中了他'; take = 3; tell = '三条破绽全进了资讯库——下一局它们就是你手上的证据牌。'; }
-  else if (nailed){ head = '三格全亮，实锤了他，只是你押的是 ' + (AD.bet || '没押'); take = 3; tell = '锤穿了就不必靠押——破绽照样全进资讯库。'; }
-  else if (hit){ head = '你押中了，但没锤穿'; take = 2; tell = '猜对了不算赢透，举证才算。进库的只有你真打亮的那几条。'; }
-  else { head = AD.bet ? '你押的是 ' + AD.bet + '，没押中' : '你没押注'; take = 1; tell = '输了也带走一条——玩过的局，不白玩。'; }
-  const keep = notes.length ? notes.slice(0, take)
-    : ['梦蝶局破绽笔记 · ' + AD.liar + '（' + SLOTN.f + '）：' + WHYTX.f];
-  AD.res = { head, tell, nailed, hit, take: keep.length };
+/* ---------- 签字：三轮打完，玩家自己下结论 ---------- */
+function adSign(){ AD.st = 'play'; AD.phase = 'sign'; AD.min = 0; AD.sel = ''; aiDreamRender(); }
+
+/* ---------- 决定书：分层结算，一格没买也照样带走一份 ---------- */
+function adShowdown(){ AD.st = 'done'; AD.phase = '';
+  const n = adHardN(), miss = DIMS.filter(d => !adHard(d.k));
+  const sign = AD.call || '再等等';
+  let head, tell;
+  if (n >= 4){ head = '四格全买齐了，你签的是「' + sign + '」';
+    tell = '四维代价都摆到桌上了——这份决定不是拍脑袋，是算过的。'; }
+  else if (n >= 2){ head = '买到 ' + n + ' 格，你签的是「' + sign + '」';
+    tell = '没买的那 ' + miss.length + ' 格（' + miss.map(d => d.nm).join(' / ') + '）你是在拿它赌——赌得起就签。'; }
+  else { head = '只买到 ' + n + ' 格，你签的是「' + sign + '」';
+    tell = '你现在做的是一个只算了一维的决定。不是错，是你还没看见另外三片叶子。'; }
+  const notes = DIMS.map(d => {
+    const cs = adCells(d.k);
+    return '梦蝶局代价清单 · ' + d.nm + '：' + (cs.length
+      ? cs.map(x => x.by + '「' + x.tx + '」').slice(0, 2).join('；')
+      : '这一格没买 —— 也就是说你在拿它赌');
+  });
+  AD.res = { head, tell, hard: n, sign, miss: miss.map(d => d.nm), take: notes.length };
   if (!AD.settled){
     AD.settled = true;
-    /* 战绩跟着分身走：撒谎的那个骗过了没识破他的人，被识破就记一笔 */
-    AD.roles.forEach(r => {
-      const rc = adRec(r[0]);
-      if (r[0] === AD.liar){ if (nailed || hit) rc.caught++; else rc.lie += AD.roles.length - 1; }
-      else if (nailed || hit) rc.spot++;
-    });
-    const f = adFileMake(nailed, hit, keep);
-    keep.forEach(t => S.lib.unshift({ text: t, ind: '互联网', type: 'biz', peak: 12, t: stamp() }));
-    mk('梦蝶局揭穿一叶障目：' + AD.liar + '在「' + AD.sc.slice(0, 12) + '」里露了馅', 'fun', 12, 'news',
-       hit ? '我（押中了）' : '梦蝶局', '互联网');
+    AD.roles.forEach(r => adRec(r[0]).lie++);
+    const f = adFileMake(n, sign, notes);
+    notes.forEach(t => S.lib.unshift({ text: t, ind: '互联网', type: 'biz', peak: 12, t: stamp() }));
+    mk('梦蝶局 · 四片叶子拼了「' + AD.sc.slice(0, 12) + '」：买到 ' + n + '/4 格代价，我签的是' + sign,
+       'fun', 12, 'news', '我', '互联网');
     /* 卷宗本身也是一颗泡泡——能被吹大、能沉底、能被后来的人翻到 */
     mk(f.bubble, 'fun', 14, 'news', '梦蝶局卷宗', '互联网');
     libRender(); sync();
-    adBill(keep);
+    adBill(notes);
   }
   aiDreamRender();
 }
 
 /* ---------- 案例卷宗：一个人踩过的坑，变成所有人的地图 ---------- */
 const ADFILES = [
-  { sc: '内推的那位说包能翻倍，先交三千流程费', cast: '猎头 / 内推人 / HR / 你',
-    liar: '一叶障目', flaws: ['「翻倍」只给形容词，从不肯报一个数', '公司名要「保密」，查无此岗', '流程费说可退，却不肯落纸'],
+  { sc: '内推的那位说包能翻倍，先交三千流程费', cast: '气泡水（只算钱）/ 大鱼（只算人）/ 泡面（只算时机）/ 馍馍（只算最坏）',
+    sign: '不做', hard: 4,
+    costs: ['只算钱：三千是沉没成本，「翻倍」从头到尾没给过一个数',
+            '只算人：真内推的人不收钱，收了钱他就不是你的人了',
+            '只算最坏：钱要不回来，你还多一条查无此岗的经历'],
     lesson: '凡是先要钱的机会，都不是机会。' },
-  { sc: '表哥的项目，说缺个技术合伙人，不用出钱只出人', cast: '表哥 / 项目方 / 前同事 / 你',
-    liar: '一叶障目', flaws: ['上线时间一改再改', '「已经有客户」但说不出一个名字', '嘴上说股份，合同里写的是劳务'],
+  { sc: '表哥的项目，说缺个技术合伙人，不用出钱只出人', cast: '气泡水（只算钱）/ 大鱼（只算人）/ 泡面（只算时机）/ 馍馍（只算最坏）',
+    sign: '再等等', hard: 3,
+    costs: ['只算钱：不出钱只出人，你出的是这一年的工资',
+            '只算时机：上线时间一改再改，你的窗口比项目的窗口短',
+            '只算最坏：嘴上说股份，合同里写的是劳务'],
     lesson: '只出人不出钱，通常是只有你在出。' }
 ];
-function adFileMake(nailed, hit, keep){
-  const flaws = ['t', 'n', 'f'].filter(k => AD.truth[AD.liar] && AD.truth[AD.liar][k]).map(k => {
-    const got = AD.slots[AD.liar] && AD.slots[AD.liar][k];
-    const said = (AD.quote || {})[k] || '';
-    return SLOTN[k] + '：' + WHYTX[k] + (got && said ? '——原话「' + said + '」' : '（这条你没打到）');
-  }).slice(0, 3);
-  const lesson = nailed ? '举证比猜准更值钱：三格都打亮，才轮不到他狡辩。'
-    : hit ? '你看对了人，但没拿出证据——下次先取证再开口。'
-    : '看走眼不丢人，丢的是没留下证据。这条记下来，下一局它就是你的牌。';
-  const f = { sc: AD.sc.slice(0, 40), cast: AD.roles.map(r => r[0] + '（' + r[1] + '）').join(' / '),
-              liar: AD.liar, flaws, lesson, t: stamp(),
-              bubble: '梦蝶局卷宗 · ' + AD.sc.slice(0, 14) + '｜撒谎的是' + AD.liar + '｜' + lesson };
+function adFileMake(n, sign, notes){
+  const costs = DIMS.map(d => {
+    const cs = adCells(d.k);
+    return d.nm + '：' + (cs.length ? cs[cs.length - 1].tx + '（' + cs.map(x => x.by).join('/') + '）'
+      : '这一格你没买 —— 也就是说你在拿它赌');
+  });
+  const lesson = n >= 4 ? '四维都算过再签的字，事后不用回头找理由。'
+    : n >= 2 ? '你买了 ' + n + ' 格，剩下的是在赌——知道自己在赌，这就是进步。'
+    : '一维决策不一定错，但它经不起第二个人问一句「那个呢」。';
+  const f = { sc: AD.sc.slice(0, 40), cast: AD.roles.map(r => r[0] + '（' + DIMOF[r[1]].nm + '）').join(' / '),
+              sign, hard: n, costs, lesson, t: stamp(),
+              bubble: '梦蝶局卷宗 · ' + AD.sc.slice(0, 14) + '｜四维代价买到 ' + n + '/4｜我签的是' + sign + '｜' + lesson };
   ADFILES.unshift(f);
-  S.lib.unshift({ text: '梦蝶局卷宗 · ' + f.sc + '：' + f.liar + ' 是一叶障目。' + lesson,
+  S.lib.unshift({ text: '梦蝶局卷宗 · ' + f.sc + '：买到 ' + n + '/4 格代价，签的是' + sign + '。' + lesson,
                   ind: '互联网', type: 'biz', peak: 14, t: stamp() });
   return f;
 }
@@ -4118,38 +4294,46 @@ function adFilesHTML(){
     + '<div class="adfiles">' + ADFILES.map(f =>
         '<div class="fi"><b>' + esc(f.sc) + '</b>'
         + '<span class="ln">' + esc(f.cast) + '</span>'
-        + '<span>撒谎的是 <b style="display:inline">' + esc(f.liar) + '</b></span>'
-        + '<span>' + f.flaws.map(x => '· ' + esc(x)).join('<br>') + '</span>'
+        + '<span>代价买到 <b style="display:inline">' + f.hard + '/4</b> 格 · 最后签的是 <b style="display:inline">'
+          + esc(f.sign) + '</b></span>'
+        + '<span>' + f.costs.map(x => '· ' + esc(x)).join('<br>') + '</span>'
         + '<span class="ln">一句教训：' + esc(f.lesson) + '</span></div>').join('')
     + '</div><button class="rbtn pri" data-ad="reset" style="margin-top:6px">回去组局</button></div>';
 }
-/* 结算单落进 Outlook 草稿箱——赢来的东西留在办公软件里 */
-function adBill(keep){
+/* 完整决定书落进 Outlook 草稿箱——幻灯片只放摘要，正文在邮件里 */
+function adBill(notes){
   if (typeof MAILS === 'undefined' || !MAILS.draft) return;
   const cost = AD.from.filter(f => f === 'hire').length * 29 + (AD.adv ? 99 : 0);
-  AD.mail = '<p>场景：' + esc(AD.sc.slice(0, 40)) + '</p>'
-    + '<p>撒谎的是 <b>' + esc(AD.liar) + '</b>（一叶障目）。' + esc(AD.res.head) + '。</p>'
-    + '<p>本局支出：雇座位 ' + AD.from.filter(f => f === 'hire').length + ' 个 + 军师 ' + (AD.adv ? 1 : 0) + ' 位 = ¥' + cost + '</p>'
-    + '<p>带走的破绽笔记（已进资讯库）：</p><ul>' + keep.map(t => '<li>' + esc(t) + '</li>').join('') + '</ul>'
+  AD.mail = '<p>困境：' + esc(AD.sc.slice(0, 60)) + '</p>'
+    + '<p>我签的是 <b>' + esc(AD.res.sign) + '</b>。' + esc(AD.res.head) + '。</p>'
+    + '<p>四维代价清单：</p><ul>'
+    + DIMS.map(d => {
+        const cs = adCells(d.k);
+        return '<li><b>' + esc(d.nm) + '</b>：' + (cs.length
+          ? cs.map(x => esc(x.tx) + '<span class="muted">（' + esc(x.by) + ' 说的' + (x.by === adNameOf(d.k) ? ' · 只有他自己那一维' : ' · 交叉验证过') + '）</span>').join('<br>')
+          : '<b>这一格你没买 —— 也就是说你在拿它赌</b>') + '</li>';
+      }).join('') + '</ul>'
+    + '<p>本局支出：雇座位 ' + AD.from.filter(f => f === 'hire').length + ' 个 + 军师 ' + (AD.adv ? 1 : 0) + ' 位 = ¥' + cost
+    + ' · 独立调用 ' + AD.calls + ' 次（四个座位视野互相隔离）</p>'
+    + '<p>' + esc(AD.res.tell) + '</p>'
     + '<p class="muted">蝴蝶飞走了，指尖还沾着翅膀上的粉。</p>';
-  MAILS.draft.unshift({ fr: '梦蝶局', tm: stamp(), sj: '梦蝶局结算单 · ' + AD.sc.slice(0, 10),
-    pv: AD.res.head + ' · 带走 ' + AD.res.take + ' 条破绽笔记', body: AD.mail });
+  MAILS.draft.unshift({ fr: '梦蝶局', tm: stamp(), sj: '决定书 · ' + AD.sc.slice(0, 10),
+    pv: '签的是' + AD.res.sign + ' · 四维代价买到 ' + AD.res.hard + '/4 格', body: AD.mail });
 }
 
 /* ---------- 军师：每轮一条钉钉私聊 + 会话列表红点 + 任务栏闪 ---------- */
 function adAdvisorWhisper(){
   if (!AD.adv) return;
-  const k = AD.adv[2], sus = AD.roles.map(r => r[0]).filter(n => n !== AD.liar || Math.random() < .7);
-  const who = sus[(Math.random() * sus.length) | 0] || AD.roles[0][0];
-  const tip = '第 ' + AD.round + ' 轮 · 我盯着「' + who + '」——'
-    + ({ ask: '他给的全是形容词，逼他报一个数。',
-         old: '他这轮的说法和上一轮对不上，翻他旧账。',
-         evi: '别听他说，去表里捞一行数按在桌上。',
-         mute: '让他闭麦一轮，看谁急着替他补位。' })[k];
+  const miss = DIMS.filter(d => !adHard(d.k));
+  const d = miss.length ? miss[(Math.random() * miss.length) | 0] : DIMOF[AD.adv[2]];
+  const who = adNameOf(d.k), other = (AD.roles.find(r => r[1] !== d.k) || [])[0] || '';
+  const tip = '第 ' + AD.round + ' 轮 · 【' + d.nm + '】这一格还是软的——'
+    + (miss.length ? '让「' + other + '」去问「' + who + '」，他那一维看不见' + d.blind + '。'
+                   : '四格都买齐了，剩下的分钟拿去买第二条交叉。');
   const st = document.querySelector('#imStream');
   if (st){
     st.insertAdjacentHTML('beforeend', '<div class="imsg bot"><div class="av">' + esc(AD.adv[0].slice(0, 1)) + '</div>'
-      + '<div><div class="who">' + esc(AD.adv[0]) + ' · ' + esc(AD.adv[1]) + '（军师）</div>'
+      + '<div><div class="who">' + esc(AD.adv[0]) + ' · ' + esc(AD.adv[1]) + '（军师 · 脚本模拟）</div>'
       + '<div class="bb">' + esc(tip) + '</div></div></div>');
     if (st.parentNode) st.parentNode.scrollTop = st.parentNode.scrollHeight;
   }
@@ -4158,18 +4342,22 @@ function adAdvisorWhisper(){
     const nm = cv.querySelector('.nm');
     if (nm && !nm.querySelector('.rd')) nm.insertAdjacentHTML('afterbegin', '<i class="rd">1</i>');
   }
+  const tc = document.querySelector('#tmChatBody');
+  if (tc){
+    tc.insertAdjacentHTML('beforeend', '<div class="tcm"><div class="w">' + esc(AD.adv[0])
+      + ' · ' + esc(AD.adv[1]) + '（私密 · 只发给你）</div><div class="t">' + esc(tip) + '</div></div>');
+    tc.scrollTop = tc.scrollHeight;
+  }
   if (typeof osToast === 'function') osToast('军师 ' + AD.adv[0] + ' 发来一条私聊', 'chat');
 }
 
 $('#dreamGame').addEventListener('click', e => {
   const md = e.target.closest('[data-dmode]');
   if (md){ window.dreamMode = md.dataset.dmode; dreamRender(); return; }
+  const sg = e.target.closest('[data-sign]');
+  if (sg && AD.phase === 'sign'){ AD.call = sg.dataset.sign; return adShowdown(); }
   const aim = e.target.closest('[data-aim]');
-  if (aim && AD.st === 'play' && AD.phase === 'act'){
-    if (AD.sel) adPlay(AD.sel, aim.dataset.aim);
-    else { AD.bet = AD.bet === aim.dataset.aim ? '' : aim.dataset.aim; aiDreamRender(); }
-    return;
-  }
+  if (aim && AD.st === 'play' && AD.phase === 'act' && AD.sel){ adPlay(AD.sel, aim.dataset.aim); return; }
   const a = e.target.closest('[data-ad]');
   if (!a) return;
   const k = a.dataset.ad;
@@ -4179,10 +4367,9 @@ $('#dreamGame').addEventListener('click', e => {
     const rs = [], fr = [];
     for (let i = 0; i < 4; i++){
       const nm = ($('#adNm' + i) && $('#adNm' + i).value.trim()) || '';
-      const id = ($('#adId' + i) && $('#adId' + i).value.trim()) || '';
-      if (nm){ rs.push([nm.slice(0, 6), id || '身份不明']); fr.push(($('#adFr' + i) && $('#adFr' + i).value) || ''); }
+      if (nm){ rs.push([nm.slice(0, 6), DIMS[i].k]); fr.push(($('#adFr' + i) && $('#adFr' + i).value) || ''); }
     }
-    if (rs.length < 2) return osAlert('梦蝶局', '至少两个角色才成局——一个人不叫局，叫独白。');
+    if (rs.length < 2) return osAlert('梦蝶局', '至少两个座位才成局——一个人不叫局，叫独白。');
     const ai = $('#adAdv') ? parseInt($('#adAdv').value, 10) : -1;
     const adv = ai >= 0 ? ADVISORS[ai] : null;
     const cost = fr.filter(f => f === 'hire').length * 29 + (adv ? 99 : 0);
@@ -4208,10 +4395,16 @@ $('#dreamGame').addEventListener('click', e => {
 function adBoot(){
   clearTimeout(AD.timer); AD.timer = null;
   AD.busy = true; AD.st = 'wait'; AD.lines = []; AD.shown = 0; AD.round = 0;
-  AD.bet = ''; AD.settled = false; AD.res = null; AD.evi = null; AD.sel = ''; AD.gag = ''; AD.phase = 'talk';
+  AD.call = ''; AD.settled = false; AD.res = null; AD.evi = null; AD.sel = ''; AD.phase = 'talk';
   aiDreamRender();
   adEngine();
 }
+/* 预置困境下拉：挑一条，直接填进上面那块 textarea */
+document.addEventListener('change', e => {
+  if (e.target.id !== 'adCase') return;
+  const i = parseInt(e.target.value, 10);
+  if (i >= 0 && $('#adSc')){ AD.sc = CASES[i]; $('#adSc').value = CASES[i]; }
+});
 
 /* ---------- 「亮证据」的唯一来源：切到 Excel 或资讯库，点一行真数据 ----------
    SALARY 会被机器人在运行时 push，所以快照文本，绝不存下标。 */
@@ -4236,7 +4429,7 @@ document.addEventListener('click', e => {
 /* ---------- 备注区的手牌：只有讲者看得见的那一块 ---------- */
 document.addEventListener('click', e => {
   const q = e.target.closest('#dreamHand [data-q]');
-  if (!q || AD.st !== 'play') return;
+  if (!q || AD.st !== 'play' || AD.phase !== 'act') return;
   const k = q.dataset.q;
   if (k === 'pass'){ AD.sel = ''; AD.min = 0; aiDreamRender(); return adWait(600, adNextRound); }
   if (k === 'getevi'){
@@ -4244,7 +4437,6 @@ document.addEventListener('click', e => {
     if (typeof osToast === 'function') osToast('去 Sheet2 人力成本对标找一行对得上的数，点它', 'salary');
     return;
   }
-  if (adCost(k) > AD.min) return;
   AD.sel = AD.sel === k ? '' : k;
   adHandRender(); aiDreamRender();
 });
@@ -5215,7 +5407,7 @@ const SHELLS = [
     tabs: WORD_TABS, ribbon: null, view: null },
   { id: 'excel', title: '2026年度预算表.xlsx - Excel',
     tabs: ['开始', '插入', '页面布局', '公式', '数据', '审阅'], ribbon: XL_RIBBON, view: 'home' },
-  { id: 'ppt',   title: 'Q3复盘汇报.pptx - PowerPoint',
+  { id: 'ppt',   title: '组织架构调整_说明.pptx - PowerPoint',
     tabs: ['开始', '插入', '设计', '切换', '动画', '幻灯片放映'], ribbon: PPT_RIBBON, view: 'review' },
   { id: 'mail',  title: '收件箱 - zhuangzhou@paopao.work - Outlook',
     tabs: ['开始', '发送/接收', '文件夹', '视图', '帮助'], ribbon: MAIL_RIBBON, view: 'mail' },
@@ -5471,7 +5663,7 @@ function pickSlide(i) {
   $$('#pptRail .sl').forEach(x => x.classList.toggle('on', +x.dataset.i === i));
   $('#pptNote').textContent = SLIDES[i].n;
   $('#slideTitle').textContent = SLIDES[i].t;
-  $('#slideSub').textContent = `Q3 复盘汇报 · 第 ${i + 1} 节 · 共 ${SLIDES.length} 节`;
+  $('#slideSub').textContent = `组织架构调整 · 第 ${i + 1} 节 · 共 ${SLIDES.length} 节`;
   const pc = $('#pptCnt'); if (pc) pc.textContent = `幻灯片 ${i + 1}/${SLIDES.length}　中文(中国)`;
 }
 
@@ -6168,7 +6360,7 @@ function pptSync() {
     slide = dreamShown < Math.ceil(total / 2) ? 2 : 3;
   }
   $('#slideTitle').textContent = title;
-  $('#slideSub').textContent = `Q3 复盘汇报 · 放映中 · 第 ${Math.min(slide + 1, SLIDES.length)}/${SLIDES.length} 页 · 第 ${Math.min(dreamShown, total)}/${total} 句`;
+  $('#slideSub').textContent = `组织架构调整 · 放映中 · 第 ${Math.min(slide + 1, SLIDES.length)}/${SLIDES.length} 页 · 第 ${Math.min(dreamShown, total)}/${total} 句`;
   $('#pptNote').textContent = note;
   $$('#pptRail .sl').forEach(x => x.classList.toggle('on', +x.dataset.i === slide));
   const w = document.querySelector('#winPPT');
@@ -6370,7 +6562,7 @@ $('#xlTabs').addEventListener('click', e => {
 });
 
 // PPT：工具条（放映入口）+ 左缩略图栏 + 画布 + 底部备注区
-const bPpt = mkWin('winPPT', 'ppt', 'Q3复盘汇报.pptx - PowerPoint', 'left:250px;top:40px;width:900px;height:640px');
+const bPpt = mkWin('winPPT', 'ppt', '组织架构调整_说明.pptx - PowerPoint', 'left:250px;top:40px;width:900px;height:640px');
 bPpt.parentNode.querySelector('.dwh').insertAdjacentHTML('afterend',
   '<div class="dwt"><button id="pptPlay" class="rbtn pri">从头开始放映</button><button class="rbtn">从当前幻灯片</button><span class="sp" id="pptCnt">幻灯片 1/10　中文(中国)</span></div>');
 bPpt.innerHTML = '<div class="paper2"></div>';
@@ -6863,14 +7055,58 @@ setInterval(() => {
   st.parentNode.insertBefore(d, st);
 })();
 
-/* ---------- 桌面小广告：时不时弹一下，弹的都是真内容 ---------- */
+/* ---------- 小广告：桌面弹一下，热榜插一楼，弹的都是真内容 ----------
+   广告位是唯一能同时装"牛皮癣"和"自制游戏入口"的地方：
+   热榜第 4 楼插一条，配一张表情包（熊猫头和小猫两个系列混着用），点进去就是我们自己的游戏。
+   游戏那半边从 GAMES 现取，registerGame 上新的游戏自动进广告池。
+   pd 写成 "系列/型号"，型号挑和广告词对得上的那一型。 */
 const ADS = [
-  { t: '摸鱼助手 Pro', b: '检测到您已连续高效摸鱼 6 小时 12 分，建议升级至专业版', go: 'draw', tag: '推广' },
-  { t: '隔壁厂 P7 薪资已曝光', b: '55k×16。看完再决定今天下午要不要认真', go: 'salary', tag: '热帖' },
-  { t: '你的机器人今天比你活跃', b: '它替你发言 47 次，收了 3 条料。你一句话没说', go: 'chat', tag: '提醒' },
-  { t: '某咖啡品牌', b: '下午三点第二杯半价。楼下那家，队已经排到电梯口了', go: 'desk', tag: '广告' }
+  { t: '摸鱼助手 Pro', b: '检测到您已连续高效摸鱼 6 小时 12 分，建议升级至专业版', go: 'draw', tag: '推广', pd: 'cat/YTSC' },
+  { t: '隔壁厂 P7 薪资已曝光', b: '55k×16。看完再决定今天下午要不要认真', go: 'salary', tag: '热帖', pd: 'panda/PJBH' },
+  { t: '你的机器人今天比你活跃', b: '它替你发言 47 次，收了 3 条料。你一句话没说', go: 'chat', tag: '提醒', pd: 'cat/YJSH' },
+  { t: '某咖啡品牌', b: '下午三点第二杯半价。楼下那家，队已经排到电梯口了', go: 'desk', tag: '广告', pd: 'panda/PJSC' }
 ];
-let adIx = 0;
+// 自制游戏的广告词：一句钩子 + 一张对得上性格的表情包。没写文案的新游戏走兜底句
+const AD_COPY = {
+  wordgame: ['背完这三十个词，他在复盘会上把总监说到沉默', 'panda/PTBH'],
+  phone: ['前台捡到一部没锁屏的手机，聊天记录还在往下滚', 'cat/YTBH'],
+  gomoku: ['和王总下棋从来没赢过？第 17 手你本来有活四', 'panda/YJSH'],
+  hide: ['三楼那位靠这招躲过四次巡检，工位一直是空的', 'cat/YTBC'],
+  mbti: ['一分钟测出你的职场型号，测出"摸鱼哲学家"的那批已经不来了', 'panda/YTSH'],
+  dreamroom: ['今晚有人要在会上被当场拆穿，还差一票', 'cat/PJSH']
+};
+const AD_PD = ['panda/PTBC', 'cat/PJBC', 'panda/YJSC', 'cat/PTSC', 'panda/YTBH', 'cat/YJBH'];
+function adPool() {
+  const gs = (typeof GAMES !== 'undefined' ? GAMES : []).map((g, i) => {
+    const c = AD_COPY[g.go];
+    return {
+      t: g.nm, go: g.go, tag: '广告',
+      b: c ? c[0] : g.by + '出品，已有 ' + g.tip + ' 人打赏。上班时间也能开',
+      pd: c ? c[1] : AD_PD[i % AD_PD.length]
+    };
+  });
+  return ADS.concat(gs);
+}
+// 表情包探测：能加载才铺图，加载不了退回首字色块（和文件夹图标一个兜底路数）
+const adPd = {};
+function memeThumb(pd, ch) {
+  const u = 'assets/mbti/' + pd + '.png', k = pd.replace('/', '-');
+  if (adPd[pd] === undefined) {
+    adPd[pd] = false;
+    const im = new Image();
+    im.onload = () => {
+      adPd[pd] = true;
+      $$('.adpd[data-pd="' + k + '"]').forEach(el => {
+        el.classList.add('pic'); el.style.backgroundImage = 'url(' + u + ')'; el.textContent = '';
+      });
+    };
+    im.src = u;
+  }
+  return adPd[pd]
+    ? `<span class="adpd pic" data-pd="${k}" style="background-image:url(${u})"></span>`
+    : `<span class="adpd" data-pd="${k}">${esc(ch || '')}</span>`;
+}
+let adIx = 0, adCur = ADS[0];
 const adStyle = document.createElement('style');
 adStyle.textContent = `#adwin{position:fixed;right:14px;bottom:58px;width:264px;background:#fff;border:1px solid #C9C9C9;
   border-radius:4px;box-shadow:0 8px 30px rgba(0,0,0,.35);z-index:310;display:none;overflow:hidden;cursor:pointer}
@@ -6879,27 +7115,74 @@ adStyle.textContent = `#adwin{position:fixed;right:14px;bottom:58px;width:264px;
 #adwin .ah{display:flex;align-items:center;background:#F3F3F3;border-bottom:1px solid #E1E1E1;padding:4px 8px;font-size:10px;color:#8A8A8A}
 #adwin .ah b{margin-left:auto;cursor:pointer;font-weight:400;padding:0 4px;font-size:12px}
 #adwin .ah b:hover{color:#C42B1C}
-#adwin .ab{padding:10px 12px}
+#adwin .ab{padding:10px 12px;display:flex;gap:9px;align-items:flex-start}
+#adwin .at{flex:1;min-width:0}
 #adwin .ab .t1{font-size:13px;font-weight:700;color:#1F1F1F;margin-bottom:3px}
-#adwin .ab .t2{font-size:11.5px;color:#5A5A5A;line-height:1.6}`;
+#adwin .ab .t2{font-size:11.5px;color:#5A5A5A;line-height:1.6}
+.adpd{flex:none;width:46px;height:46px;border-radius:3px;background:#EFEFEF center/cover no-repeat;
+  display:grid;place-items:center;font-size:13px;color:#A8A8A8}
+.adpd.pic{background-color:transparent}
+#hot li.hotad{align-items:center;gap:6px;background:#FFFBEA;margin:2px -3px;padding:5px 3px;border-radius:3px;cursor:pointer}
+#hot li.hotad:hover{background:#FFF5D6}
+#hot li.hotad .adpd{flex:none;width:34px;height:34px;font-size:11px}
+#hot li.hotad .hx{flex:1;min-width:0;line-height:1.4;white-space:normal;color:#6B5320}
+#hot li.hotad .hx b{display:block;font-size:11.5px;color:#8A5B00;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#hot li.hotad .hx i{font-style:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#hot li.hotad .hg{flex:none;font-style:normal;font-size:9px;color:#B08A3A;border:1px solid #E3CE9A;border-radius:2px;padding:0 3px}
+#hot li.hotad .hcx{flex:none;font-weight:400;color:#BEB59A;cursor:pointer;padding:0 2px}
+#hot li.hotad .hcx:hover{color:#C42B1C}`;
 document.head.appendChild(adStyle);
 const adEl = document.createElement('div');
 adEl.id = 'adwin';
 document.body.appendChild(adEl);
 function popAd() {
-  const a = ADS[adIx % ADS.length]; adIx++;
-  adEl.innerHTML = `<div class="ah">${esc(a.tag)}<b data-adx>×</b></div><div class="ab"><div class="t1">${esc(a.t)}</div><div class="t2">${esc(a.b)}</div></div>`;
+  const p = adPool();
+  const a = p[adIx % p.length]; adIx++; adCur = a;
+  adEl.innerHTML = `<div class="ah">${esc(a.tag)}<b data-adx>×</b></div>` +
+    `<div class="ab">${memeThumb(a.pd, a.t[0])}<div class="at">` +
+    `<div class="t1">${esc(a.t)}</div><div class="t2">${esc(a.b)}</div></div></div>`;
   adEl.classList.add('on');
   setTimeout(() => adEl.classList.remove('on'), 12000);
 }
 adEl.addEventListener('click', e => {
   if (e.target.closest('[data-adx]')) { adEl.classList.remove('on'); return; }
-  const a = ADS[(adIx - 1) % ADS.length];
   adEl.classList.remove('on');
-  goFeature(a.go);
+  goFeature(adCur.go);
 });
 setTimeout(popAd, 75000);
 setInterval(popAd, 90000);
+
+/* ---------- 热榜第 4 楼的广告位：关掉 40 秒后换一条再来，这才叫小广告 ---------- */
+// 从 ADS.length 起步：桌面弹窗从头推，热榜直接从自制游戏那半边开始，两处不撞车
+let hotAdIx = ADS.length, hotAdMute = 0;
+function hotAd() {
+  const ul = $('#hot');
+  if (!ul || ul.querySelector('.hotad') || Date.now() < hotAdMute) return;
+  const p = adPool(), a = p[hotAdIx % p.length];
+  const li = document.createElement('li');
+  li.className = 'hotad';
+  li.dataset.go = a.go;
+  li.innerHTML = memeThumb(a.pd, a.t[0]) +
+    `<span class="hx"><b>${esc(a.t)}</b><i>${esc(a.b)}</i></span>` +
+    `<em class="hg">广告</em><b class="hcx" data-hax>×</b>`;
+  ul.insertBefore(li, ul.children[3] || null);
+}
+(function hotAdBind() {
+  const ul = $('#hot');
+  if (!ul) return;
+  ul.addEventListener('click', e => {
+    const li = e.target.closest('.hotad');
+    if (!li) return;
+    if (e.target.closest('[data-hax]')) { hotAdIx++; hotAdMute = Date.now() + 40000; li.remove(); return; }
+    goFeature(li.dataset.go);
+  });
+  // sync 每次重画热榜都会把广告冲掉，包一层让它自己贴回去
+  if (typeof sync === 'function') {
+    const raw = sync;
+    sync = function () { raw.apply(null, arguments); hotAd(); };
+  }
+  hotAd();
+})();
 
 /* ---------- 泡泡详情卡：想看了再点（PRD 0.5 批注 #1） ---------- */
 document.body.insertAdjacentHTML('beforeend',
@@ -8245,7 +8528,7 @@ const BAR_PREV = {
     ['Sheet3 · 岗位机会', '内推与空缺', 'jobs']
   ],
   review: [
-    ['Q3复盘汇报.pptx', '梦蝶局 · 四个 AI 一个假猎头', 'review']
+    ['组织架构调整_说明.pptx', '梦蝶局 · 四个 AI 一个假猎头', 'review']
   ],
   pitch: [
     ['变大泡泡·产品介绍.pptx', '给评委看的那一版', 'pitch']
@@ -8324,10 +8607,11 @@ const BAR_PREV = {
    没看过的文件金光呼吸，进场后 toast 依次指路，点过即安静。 */
 (function onboard() {
   // 1) 产品介绍立在放映图标旁边：两份新人文件并排在银幕上方
-  //    梦蝶局是评委必看模块，从「趣味游戏」文件夹里挪到桌面 C 位，名字继续伪装成一份复盘 PPT
+  //    梦蝶局是评委必看模块，从「趣味游戏」文件夹里挪到桌面 C 位，名字伪装成一份组织架构调整说明
+  //    （不叫「复盘」是因为桌面另一头的对齐会用的就是复盘会那套壳，两个都叫复盘会看成同一个东西）
   const di = $('#deskIcons');
   document.body.insertAdjacentHTML('beforeend',
-    '<div id="deskDream" class="dski"><span class="ic page" data-x="P" style="--tag:#C43E1C"></span><em>Q3复盘汇报.pptx</em></div>' +
+    '<div id="deskDream" class="dski"><span class="ic page" data-x="P" style="--tag:#C43E1C"></span><em>组织架构调整_说明.pptx</em></div>' +
     '<div id="deskPitch" class="dski"><span class="ic page" data-x="P" style="--tag:#C43E1C"></span><em>新员工手册_看完就懂.pptx</em></div>');
   $('#deskPitch').addEventListener('click', () => { goFeature('pitch'); seen('pitch'); });
   // 直接落在「AI 开局」那一页：剧本局是脚本兜底版，评委第一眼要看到真调用的那个
@@ -8979,42 +9263,86 @@ const BAR_PREV = {
 
 </script>
 <script>
+/* 梦蝶局的壳：一场 Teams 会议。
+   四个 agent 各占一格，字幕在下面，手牌收在只有你看得见的私密托盘里。
+   #dreamGame / #dreamHand 是开机时就在 body 上的静态节点（事件在解析期已绑好），
+   这里只把它们搬进窗口 —— 搬家不重建，和 os.js 的 put() 一个路数。 */
+(function(){
+  if (typeof mkWin !== 'function') return;
+  const bTm = mkWin('winTeams', 'teams', '梦蝶局 · 四片叶子买代价 | Microsoft Teams',
+    'left:206px;top:20px;width:1064px;height:780px');
+  const win = bTm.parentNode;
+  win.querySelector('.dwh').insertAdjacentHTML('afterend',
+    '<div class="dwt" id="tmBar"><span class="rec">录制中</span>'
+    + '<span class="mic">静音</span><span class="cam">摄像头</span>'
+    + '<b id="tmRound">会议未开始</b><i id="tmCalls"></i>'
+    + '<span class="sp"><button class="rbtn" id="tmLeave">离开会议</button></span></div>');
+  bTm.appendChild($('#tmStage'));
+  bTm.appendChild($('#tmChat'));
+  win.appendChild($('#tmTray'));
+  win.insertAdjacentHTML('beforeend',
+    '<div class="dwf" id="tmFoot">会议进行中　4 人在线　字幕：中文(简体)　录制将存入 卷宗架</div>');
+
+  OS_GO.teams = ['winTeams'];
+  const bar = document.querySelector('#osbar');
+  if (bar){
+    const it = document.createElement('span');
+    it.className = 'app';
+    it.dataset.go = 'teams';
+    it.innerHTML = '<i style="background:#5059C9">T</i>Teams';
+    bar.insertBefore(it, bar.querySelector('.clk'));
+  }
+  // 审阅页那张卡只剩一个入口按钮，点它进会
+  document.addEventListener('click', e => {
+    if (e.target.closest('[data-goteams]')) goFeature('teams');
+  });
+  // 关窗停局：os.js 只给 winPPT 挂了 dreamStop，这扇是后加的
+  document.addEventListener('mousedown', e => {
+    if (e.target.closest('#winTeams [data-close]') && typeof dreamStop === 'function') dreamStop();
+  });
+  if ($('#tmLeave')) $('#tmLeave').addEventListener('click', () => {
+    if (typeof dreamStop === 'function') dreamStop();
+    win.classList.remove('on', 'min');
+    markBar();
+  });
+})();
+
 /* 卡牌局的收尾包装：shells.js 的 pptSync() 只认剧本局的全局量，
-   在 AI 卡牌局里会把标题和备注写回旧状态。它跑在 dreamRender 里面，
-   所以只能在它之后再包一层，把幻灯片同步纠正回来。 */
+   它跑在 dreamRender 里面，所以只能在它之后再包一层，把会议室这一头同步上。
+   pptSync 首行就查 #winPPT.on，会议窗里它自己空转，shells.js 一个字不用改。 */
 (function(){
   if (typeof dreamRender !== 'function') return;
   const _r = dreamRender;
   dreamRender = function(){
     _r();
-    /* 卡牌局比剧本局高一截，整页要让出一点地方——切回剧本局要把类摘掉 */
     document.body.classList.toggle('dreamai', window.dreamMode === 'ai');
-    if (window.dreamMode !== 'ai') return;
-    adSlideSync();
+    adMeetSync();
   };
-  window.adSlideSync = function(){
-    document.body.classList.add('dreamai');
-    const t = document.querySelector('#slideTitle'), s = document.querySelector('#slideSub'),
-          n = document.querySelector('#pptNote'), w = document.querySelector('#winPPT');
-    if (t) t.textContent = AD.st === 'done' ? '梦蝶局 · 摊牌' : '梦蝶局 · 第 ' + Math.max(1, AD.round) + ' 轮质询';
-    if (s) s.textContent = AD.st === 'setup' ? '组局：四个座位，谁来演由你定' : AD.sc.slice(0, 24);
-    if (n) n.textContent = '手牌在右边——三分钟一轮，用不完作废。';
-    if (w) w.classList.toggle('playing', AD.st === 'play' || AD.st === 'done');
-    /* .dwin 里所有 .view 都是 block（它们叠在同一张幻灯片里），
-       点到下半截会把牌桌顶出可视区——每帧把它钉回本页顶部。
-       窗口没开时 .paper2 高度是 0，scrollTop 写不进去，所以要等它真的可见 */
-    const g = document.querySelector('#dreamGame'), pg = g && g.closest('.paper2'),
-          vw = g && g.closest('.view');
-    if (pg && vw && pg.clientHeight > 40) pg.scrollTop = vw.offsetTop;
+  window.adMeetSync = function(){
+    const w = document.querySelector('#winTeams');
+    if (!w) return;
+    const ai = window.dreamMode === 'ai';
+    const rd = $('#tmRound'), cl = $('#tmCalls'), ft = $('#tmFoot');
+    if (ai){
+      if (rd) rd.textContent = AD.st === 'setup' ? '会议未开始 · 先写下你那件事'
+        : AD.st === 'files' ? '卷宗架 · 往期会议纪要'
+        : AD.st === 'done' ? '散会 · 决定书已签'
+        : AD.phase === 'sign' ? '三轮打完 · 等你签字'
+        : '第 ' + Math.max(1, AD.round) + ' / ' + ROUNDS + ' 轮 · 本轮剩 ' + AD.min + ' 分钟';
+      if (cl) cl.textContent = '独立调用 ' + AD.calls + ' · 视野隔离 ' + AD.roles.length + ' 路';
+      if (ft) ft.textContent = (AD.st === 'setup' || AD.st === 'files' ? '会议未开始'
+        : '会议进行中 · ' + AD.sc.slice(0, 22))
+        + '　' + AD.roles.length + ' 人在线　字幕：中文(简体)　录制将存入 卷宗架';
+      w.classList.toggle('playing', AD.st === 'play' || AD.st === 'done');
+    } else {
+      if (rd) rd.textContent = '会议录制回放 · 已归档';
+      if (cl) cl.textContent = '脚本模拟 · 未调用模型';
+      if (ft) ft.textContent = '回放中　4 人在线　字幕：中文(简体)　这一场已经开完了';
+      w.classList.toggle('playing', typeof dreamShown === 'number' && dreamShown > 0);
+    }
   };
-  /* PPT 窗口是后开的（.dwin 只切 .on 类，从不移除节点）——
-     它一露面就补钉一次，否则首屏那次钉在隐藏元素上，白钉 */
-  const w = document.querySelector('#winPPT');
-  if (w && window.MutationObserver) new MutationObserver(() => {
-    if (window.dreamMode === 'ai' && w.classList.contains('on')) adSlideSync();
-  }).observe(w, { attributes: true, attributeFilter: ['class'] });
   /* 首屏补渲染：包装链和 AREC / ADFILES 都齐了才敢跑，
-     默认落在卡牌局，一打开 PPT 看到的就是组局页 */
+     默认落在卡牌局，一进会议室看到的就是组局页 */
   dreamRender();
 })();
 </script>
@@ -9747,8 +10075,557 @@ const BAR_PREV = {
 
 </script>
 <script>
+// 人格名片：一张 PNG，上下两联，正面是立绘，背面是人格报告，背面右下带站点二维码
+// 立绘由 assets/mbti/paper/{型号}-{m|f}.png 提供（另一个窗口负责出图），是 512 方图，
+// 所以名片按 90x54mm 横版排：右半张 648x648 正好等于卡高，方图零裁切零留白。
+// 调用：personaCard({ code, nm, fo, foNm, bd, bdNm, mb, st, sex, rt, rr, tg:[三个标签],
+//        sk 超能力, bg 致命bug, sy 口头禅, ax:[{d:'话',p:'拍',v:4,mx:4}, ...4项] })
+(function () {
+  'use strict';
+
+  var SITE = 'https://bianda-paopao.yiwang2457.workers.dev/';
+  var KRAFT = '#C9A876', INK = '#221E1A', DIM = '#6B5A44', CODE = '#6B4A2F', GLOW = '#F5C56B';
+
+  // 名片 90x54mm，1080x648 就是它的整数倍。ART 既是右半张的宽也是卡的高——方图正好铺满
+  var CW = 1080, CH = 648, ART = 648, PAD = 40, GAP = 34, R = 18;
+  var UI = '"Microsoft YaHei", "PingFang SC", sans-serif';
+  var MONO = 'Consolas, "Courier New", monospace';
+
+  // 分享卡上的一句话。站内 mbti.js 那份评语是「盘点系统的口吻」，偏刻薄；
+  // 发到社交平台的是这份，玩梗自嘲，不冲着人去。两份各归各用，不互相覆盖。
+  var MEME = {
+    PJBH: '你一个人，卷出了全组的进度条。',
+    PJBC: '老板画的饼你都信，还顺手帮他买了面粉。',
+    PJSH: '你的 PPT 跑得比锅还快。',
+    PJSC: '你信老板的饼，老板信你的饼，双向奔赴。',
+    PTBH: '方案能讲三小时，正文还停在第一行。',
+    PTBC: '全公司都能使唤你，你还挺开心。',
+    PTSH: '一年 87 页 PPT，转场动画全公司第一。',
+    PTSC: '日历满得像春运，人是清闲的。',
+    YJBH: '你不吭声，但最后大家用的是你那一版。',
+    YJBC: '最靠得住的那个，也是最容易被漏写进述职的那个。',
+    YJSH: '话不多，事全成，你想要的从来都拿到了。',
+    YJSC: '不问为什么，只问什么时候交。',
+    YTBH: '你的好点子，在别人的述职报告里过得很好。',
+    YTBC: '你不是低调，你是懒得设防。',
+    YTSH: '你早看穿了：饼是假的，摸鱼是真的。',
+    YTSC: '上班的本质被你还原了——一段有工资的时间。'
+  };
+
+  /* ---------- GF(256) ---------- */
+  var GEXP = [], GLOG = [];
+  (function () {
+    var x = 1;
+    for (var i = 0; i < 255; i++) { GEXP[i] = x; GLOG[x] = i; x <<= 1; if (x & 0x100) x ^= 0x11d; }
+    for (var j = 255; j < 512; j++) GEXP[j] = GEXP[j - 255];
+  })();
+
+  function rsPoly(n) {
+    var p = [1];
+    for (var i = 0; i < n; i++) {
+      var np = [];
+      for (var k = 0; k <= p.length; k++) np[k] = 0;
+      for (var j = 0; j < p.length; j++) {
+        np[j] ^= p[j];
+        np[j + 1] ^= GEXP[(GLOG[p[j]] + i) % 255];
+      }
+      p = np;
+    }
+    return p;
+  }
+
+  function rsEncode(data, ecLen) {
+    var gen = rsPoly(ecLen), res = data.slice(), i, j;
+    for (i = 0; i < ecLen; i++) res.push(0);
+    for (i = 0; i < data.length; i++) {
+      var f = res[i];
+      if (!f) continue;
+      var lf = GLOG[f];
+      for (j = 0; j < gen.length; j++) res[i + j] ^= GEXP[(GLOG[gen[j]] + lf) % 255];
+    }
+    return res.slice(data.length);
+  }
+
+  /* ---------- QR：byte 模式，纠错 M，版本 1-6（版本 7 起才需版本信息区，用不到） ---------- */
+  // 版本: [每块纠错码字, 块数, 每块数据码字]
+  var EC = { 1: [10, 1, 16], 2: [16, 1, 28], 3: [26, 1, 44], 4: [18, 2, 32], 5: [24, 2, 43], 6: [16, 4, 27] };
+  var ALIGN = { 1: [], 2: [6, 18], 3: [6, 22], 4: [6, 26], 5: [6, 30], 6: [6, 34] };
+
+  function utf8(s) {
+    var b = [], i, c;
+    for (i = 0; i < s.length; i++) {
+      c = s.charCodeAt(i);
+      if (c < 0x80) b.push(c);
+      else if (c < 0x800) b.push(0xC0 | (c >> 6), 0x80 | (c & 63));
+      else b.push(0xE0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));
+    }
+    return b;
+  }
+
+  function qrMatrix(text) {
+    var data = utf8(text), ver = 0, v;
+    for (v = 1; v <= 6; v++) if (EC[v][1] * EC[v][2] * 8 - 12 >= data.length * 8) { ver = v; break; }
+    if (!ver) return null;
+
+    var ecLen = EC[ver][0], nb = EC[ver][1], dlen = EC[ver][2], total = nb * dlen;
+    var bits = [], i, j, k;
+    function put(val, n) { for (var b = n - 1; b >= 0; b--) bits.push((val >> b) & 1); }
+    put(4, 4); put(data.length, 8);
+    for (i = 0; i < data.length; i++) put(data[i], 8);
+    var cap = total * 8;
+    put(0, Math.min(4, cap - bits.length));
+    while (bits.length % 8) bits.push(0);
+    var pad = [0xEC, 0x11], pi = 0;
+    while (bits.length < cap) put(pad[pi++ & 1], 8);
+
+    var bytes = [];
+    for (i = 0; i < bits.length; i += 8) {
+      var b8 = 0;
+      for (j = 0; j < 8; j++) b8 = (b8 << 1) | bits[i + j];
+      bytes.push(b8);
+    }
+
+    var blocks = [], ecs = [];
+    for (i = 0; i < nb; i++) {
+      var blk = bytes.slice(i * dlen, (i + 1) * dlen);
+      blocks.push(blk); ecs.push(rsEncode(blk, ecLen));
+    }
+    var out = [];
+    for (i = 0; i < dlen; i++) for (j = 0; j < nb; j++) out.push(blocks[j][i]);
+    for (i = 0; i < ecLen; i++) for (j = 0; j < nb; j++) out.push(ecs[j][i]);
+
+    var size = 17 + 4 * ver;
+    var m = [], fixed = [];
+    for (i = 0; i < size; i++) { m.push([]); fixed.push([]); for (j = 0; j < size; j++) { m[i].push(null); fixed[i].push(false); } }
+    function set(r, c, val) { if (r >= 0 && r < size && c >= 0 && c < size) { m[r][c] = val; fixed[r][c] = true; } }
+
+    function finder(r, c) {
+      for (var dr = -1; dr <= 7; dr++) for (var dc = -1; dc <= 7; dc++) {
+        var inner = dr >= 0 && dr <= 6 && dc >= 0 && dc <= 6;
+        var on = inner && (dr === 0 || dr === 6 || dc === 0 || dc === 6 || (dr >= 2 && dr <= 4 && dc >= 2 && dc <= 4));
+        set(r + dr, c + dc, on ? 1 : 0);
+      }
+    }
+    finder(0, 0); finder(0, size - 7); finder(size - 7, 0);
+
+    for (i = 8; i < size - 8; i++) { set(6, i, i % 2 ? 0 : 1); set(i, 6, i % 2 ? 0 : 1); }
+
+    var ap = ALIGN[ver];
+    for (i = 0; i < ap.length; i++) for (j = 0; j < ap.length; j++) {
+      var ar = ap[i], ac = ap[j];
+      if ((ar === 6 && ac === 6) || (ar === 6 && ac === size - 7) || (ar === size - 7 && ac === 6)) continue;
+      for (var dr2 = -2; dr2 <= 2; dr2++) for (var dc2 = -2; dc2 <= 2; dc2++) {
+        var e = Math.max(Math.abs(dr2), Math.abs(dc2));
+        set(ar + dr2, ac + dc2, e === 1 ? 0 : 1);
+      }
+    }
+    set(4 * ver + 9, 8, 1);
+
+    for (i = 0; i < 9; i++) { if (m[8][i] === null) set(8, i, 0); if (m[i][8] === null) set(i, 8, 0); }
+    for (i = 0; i < 8; i++) { set(8, size - 1 - i, 0); set(size - 1 - i, 8, 0); }
+
+    var dir = -1, row = size - 1, bi = 0;
+    for (var col = size - 1; col > 0; col -= 2) {
+      if (col === 6) col--;
+      for (;;) {
+        for (k = 0; k < 2; k++) {
+          var cc = col - k;
+          if (m[row][cc] === null) {
+            var bit = 0;
+            if (bi < out.length * 8) bit = (out[bi >> 3] >> (7 - (bi & 7))) & 1;
+            bi++;
+            m[row][cc] = bit;
+          }
+        }
+        row += dir;
+        if (row < 0 || row >= size) { row -= dir; dir = -dir; break; }
+      }
+    }
+
+    var MASK = [
+      function (r, c) { return (r + c) % 2 === 0; },
+      function (r) { return r % 2 === 0; },
+      function (r, c) { return c % 3 === 0; },
+      function (r, c) { return (r + c) % 3 === 0; },
+      function (r, c) { return ((r / 2 | 0) + (c / 3 | 0)) % 2 === 0; },
+      function (r, c) { return (r * c) % 2 + (r * c) % 3 === 0; },
+      function (r, c) { return ((r * c) % 2 + (r * c) % 3) % 2 === 0; },
+      function (r, c) { return ((r + c) % 2 + (r * c) % 3) % 2 === 0; }
+    ];
+
+    function penalty(g) {
+      var s = 0, r, c, n, run, dark = 0;
+      for (r = 0; r < size; r++) {
+        run = 1;
+        for (c = 1; c < size; c++) {
+          if (g[r][c] === g[r][c - 1]) run++; else { if (run >= 5) s += 3 + run - 5; run = 1; }
+        }
+        if (run >= 5) s += 3 + run - 5;
+      }
+      for (c = 0; c < size; c++) {
+        run = 1;
+        for (r = 1; r < size; r++) {
+          if (g[r][c] === g[r - 1][c]) run++; else { if (run >= 5) s += 3 + run - 5; run = 1; }
+        }
+        if (run >= 5) s += 3 + run - 5;
+      }
+      for (r = 0; r < size - 1; r++) for (c = 0; c < size - 1; c++) {
+        var q = g[r][c];
+        if (q === g[r][c + 1] && q === g[r + 1][c] && q === g[r + 1][c + 1]) s += 3;
+      }
+      var P1 = [1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0], P2 = [0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1];
+      function hit(get, len) {
+        var t = 0, i2, j2, a, b;
+        for (i2 = 0; i2 + 11 <= len; i2++) {
+          a = true; b = true;
+          for (j2 = 0; j2 < 11; j2++) { var vv = get(i2 + j2); if (vv !== P1[j2]) a = false; if (vv !== P2[j2]) b = false; }
+          if (a) t += 40; if (b) t += 40;
+        }
+        return t;
+      }
+      for (r = 0; r < size; r++) s += hit((function (rr) { return function (x) { return g[rr][x]; }; })(r), size);
+      for (c = 0; c < size; c++) s += hit((function (ccc) { return function (x) { return g[x][ccc]; }; })(c), size);
+      for (r = 0; r < size; r++) for (c = 0; c < size; c++) if (g[r][c]) dark++;
+      n = Math.abs(dark * 100 / (size * size) - 50) / 5 | 0;
+      return s + n * 10;
+    }
+
+    function fmt(mask) {
+      var d = mask, val = d << 10, i2;
+      for (i2 = 4; i2 >= 0; i2--) if (val & (1 << (i2 + 10))) val ^= 0x537 << i2;
+      return (((d << 10) | val) ^ 0x5412);
+    }
+
+    var best = null, bestScore = Infinity, bestMask = 0;
+    for (var mk = 0; mk < 8; mk++) {
+      var g = [];
+      for (i = 0; i < size; i++) { g.push([]); for (j = 0; j < size; j++) g[i].push(fixed[i][j] ? m[i][j] : (m[i][j] ^ (MASK[mk](i, j) ? 1 : 0))); }
+      var f = fmt(mk);
+      for (k = 0; k < 15; k++) {
+        var b2 = (f >> k) & 1;
+        if (k < 6) g[8][k] = b2;
+        else if (k === 6) g[8][7] = b2;
+        else if (k === 7) g[8][8] = b2;
+        else if (k === 8) g[7][8] = b2;
+        else g[14 - k][8] = b2;
+        if (k < 7) g[size - 1 - k][8] = b2;
+        else g[8][size - 15 + k] = b2;
+      }
+      var sc = penalty(g);
+      if (sc < bestScore) { bestScore = sc; best = g; bestMask = mk; }
+    }
+    return best;
+  }
+
+  /* ---------- 画布小工具 ---------- */
+  function drawQR(ctx, grid, x, y, box) {
+    var n = grid.length, q = 4, side = (n + q * 2) * box;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(x, y, side, side);
+    ctx.fillStyle = '#1A1613';
+    for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) {
+      if (grid[r][c]) ctx.fillRect(x + (c + q) * box, y + (r + q) * box, box, box);
+    }
+    return side;
+  }
+
+  function wrap(ctx, text, max) {
+    var out = [], line = '';
+    for (var i = 0; i < text.length; i++) {
+      var t = line + text[i];
+      if (ctx.measureText(t).width > max && line) { out.push(line); line = text[i]; }
+      else line = t;
+    }
+    if (line) out.push(line);
+    return out;
+  }
+
+  function rrect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  // 字距只能自己摆：canvas 没有 letter-spacing
+  function track(ctx, s, x, y, gap) {
+    for (var i = 0; i < s.length; i++) {
+      ctx.fillText(s[i], x, y);
+      x += ctx.measureText(s[i]).width + gap;
+    }
+  }
+
+  // 卡片底板：先投影再填白，之后正反面各自 clip 进去画
+  function plate(ctx, x, y) {
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,.55)';
+    ctx.shadowBlur = 26;
+    ctx.shadowOffsetY = 10;
+    ctx.fillStyle = '#0C0F14';
+    rrect(ctx, x, y, CW, CH, R);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  /* ---------- 正面：左边报名号，右边整张立绘 ---------- */
+  function front(ctx, o, img, x, y) {
+    plate(ctx, x, y);
+    ctx.save();
+    rrect(ctx, x, y, CW, CH, R);
+    ctx.clip();
+
+    var g = ctx.createLinearGradient(x, y, x + CW, y + CH);
+    g.addColorStop(0, '#26324B');
+    g.addColorStop(1, '#111823');
+    ctx.fillStyle = g;
+    ctx.fillRect(x, y, CW, CH);
+
+    // 立绘是 512 方图，右半张正好也是正方形：整张贴进去，不裁不留白。
+    // 图本身是透明底，压在渐变上就没有接缝，不用再罩一层过渡（罩了反而多一道竖边）
+    if (img) ctx.drawImage(img, x + CW - ART, y, ART, ART);
+
+    var L = x + 56;
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = GLOW;
+    ctx.font = '700 30px ' + MONO;
+    track(ctx, o.code, L, y + 242, 12);
+
+    ctx.fillStyle = '#F6EEDD';
+    ctx.font = '700 54px ' + UI;
+    ctx.fillText(o.nm, L, y + 318);
+
+    ctx.fillStyle = 'rgba(245,197,107,.75)';
+    ctx.fillRect(L, y + 350, 88, 3);
+
+    ctx.fillStyle = 'rgba(233,222,200,.62)';
+    ctx.font = '400 21px ' + UI;
+    ctx.fillText('变大泡泡 · 话卷锅饼测试', L, y + 400);
+    ctx.fillStyle = 'rgba(233,222,200,.4)';
+    ctx.font = '400 18px ' + UI;
+    ctx.fillText('背面是你的人格报告', L, y + 432);
+
+    ctx.restore();
+    edge(ctx, x, y, 'rgba(245,197,107,.28)');
+  }
+
+  /* ---------- 背面：人格报告 ---------- */
+  function back(ctx, o, x, y) {
+    plate(ctx, x, y);
+    ctx.save();
+    rrect(ctx, x, y, CW, CH, R);
+    ctx.clip();
+    ctx.fillStyle = KRAFT;
+    ctx.fillRect(x, y, CW, CH);
+    ctx.textBaseline = 'alphabetic';
+
+    var L = x + 56;
+
+    // 二维码钉在右下，正文列一律避开它。右上那条窄边留给出场率和落款
+    var grid = qrMatrix(SITE), box = 4, side = (grid.length + 8) * box;
+    var qx = x + CW - 56 - side, qy = y + CH - 52 - side;
+    drawQR(ctx, grid, qx, qy, box);
+    ctx.fillStyle = DIM;
+    ctx.font = '400 17px ' + UI;
+    ctx.fillText('扫码测你自己的', qx, qy - 16);
+    var TW = qx - L - 40;
+
+    if (o.rt != null) {
+      ctx.fillStyle = DIM;
+      ctx.font = '400 17px ' + UI;
+      ctx.fillText('出场率', qx, y + 92);
+      ctx.fillStyle = CODE;
+      ctx.font = '700 42px ' + MONO;
+      ctx.fillText(o.rt + '%', qx, y + 140);
+      ctx.fillStyle = DIM;
+      ctx.font = '400 17px ' + UI;
+      ctx.fillText(o.rr || '', qx, y + 170);
+    }
+    ctx.fillStyle = CODE;
+    ctx.font = '700 21px ' + UI;
+    ctx.fillText('变大泡泡', qx, y + 352);
+    ctx.fillText('话卷锅饼测试', qx, y + 380);
+
+    ctx.fillStyle = CODE;
+    ctx.font = '700 26px ' + MONO;
+    track(ctx, o.code, L, y + 78, 11);
+
+    ctx.fillStyle = INK;
+    ctx.font = '700 44px ' + UI;
+    ctx.fillText(o.nm, L, y + 132);
+
+    tags(ctx, o.tg || [], L, y + 152);
+
+    ctx.fillStyle = 'rgba(34,30,26,.22)';
+    ctx.fillRect(L, y + 204, TW, 2);
+
+    axes(ctx, o, L, y + 220);
+
+    ctx.fillStyle = INK;
+    ctx.font = '500 27px ' + UI;
+    var ln = wrap(ctx, o.meme || MEME[o.code] || '', TW), yy = y + 306;
+    for (var i = 0; i < ln.length && i < 2; i++) { ctx.fillText(ln[i], L, yy); yy += 36; }
+
+    ctx.font = '400 20px ' + UI;
+    spec(ctx, '#3C8C4E', '超能力', o.sk || '', L, y + 392, TW);
+    spec(ctx, '#B5564A', '致命 bug', o.bg || '', L, y + 432, TW);
+    spec(ctx, '#8A6A3A', '口头禅', o.sy ? '「' + o.sy + '」' : '', L, y + 472, TW);
+
+    kv(ctx, '对照 MBTI', o.mb || '', L, y + 520, TW);
+    kv(ctx, '搭子·天敌',
+      (o.bd ? o.bd + '「' + o.bdNm + '」' : '') + (o.fo ? '　克 ' + o.fo + '「' + o.foNm + '」' : ''),
+      L, y + 556, TW);
+    kv(ctx, '建议工位', o.st || '', L, y + 592, TW);
+
+    ctx.restore();
+    edge(ctx, x, y, 'rgba(107,74,47,.3)');
+  }
+
+  // 三个人格标签，一排小签
+  function tags(ctx, list, x, y) {
+    var H = 32;
+    ctx.font = '500 19px ' + UI;
+    for (var i = 0; i < list.length; i++) {
+      var w = ctx.measureText(list[i]).width + 26;
+      ctx.fillStyle = 'rgba(107,74,47,.13)';
+      rrect(ctx, x, y, w, H, H / 2);
+      ctx.fill();
+      ctx.fillStyle = CODE;
+      ctx.fillText(list[i], x + 13, y + 22);
+      x += w + 9;
+    }
+  }
+
+  // 一行「· 标签　正文」，左边一个小圆点分正负
+  function spec(ctx, dot, k, v, x, y, max) {
+    if (!v) return;
+    ctx.fillStyle = dot;
+    ctx.beginPath();
+    ctx.arc(x + 5, y - 7, 5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = DIM;
+    ctx.fillText(k, x + 22, y);
+    ctx.fillStyle = INK;
+    var vx = x + 134, room = max - 134, s = v;
+    while (s && ctx.measureText(s).width > room) s = s.slice(0, -1);
+    if (s !== v) s = s.slice(0, -1) + '…';
+    ctx.fillText(s, vx, y);
+  }
+
+  // 一行「标签　内容」，内容超宽就截断加省略号，绝不压到二维码上。标签列宽与 spec 对齐
+  function kv(ctx, k, v, x, y, max) {
+    ctx.fillStyle = DIM;
+    ctx.fillText(k, x, y);
+    ctx.fillStyle = INK;
+    var vx = x + 134, room = max - 134, s = v;
+    while (s && ctx.measureText(s).width > room) s = s.slice(0, -1);
+    if (s !== v) s = s.slice(0, -1) + '…';
+    ctx.fillText(s, vx, y);
+  }
+
+  // 四维横着排成一行标签。mx = 该维度的题量，一维一题时没有强弱可言，只留结论
+  function axes(ctx, o, L, y) {
+    var H = 44, x = L;
+    for (var i = 0; i < o.ax.length; i++) {
+      var a = o.ax[i], mx = a.mx == null ? 4 : a.mx;
+      var tail = mx > 1 ? ' ' + a.v + '/' + mx : '';
+      ctx.font = '500 23px ' + UI;
+      var w = ctx.measureText(a.d + ' · ' + a.p + tail).width + 34;
+      ctx.fillStyle = 'rgba(255,252,244,.34)';
+      rrect(ctx, x, y, w, H, 8);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(34,30,26,.18)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      var tx = x + 17, ty = y + 31;
+      ctx.fillStyle = DIM;
+      ctx.fillText(a.d + ' · ', tx, ty);
+      tx += ctx.measureText(a.d + ' · ').width;
+      ctx.fillStyle = INK;
+      ctx.fillText(a.p, tx, ty);
+      if (tail) {
+        tx += ctx.measureText(a.p).width;
+        ctx.fillStyle = DIM;
+        ctx.font = '500 19px ' + MONO;
+        ctx.fillText(tail, tx, ty);
+      }
+      x += w + 14;
+    }
+    return y + H;
+  }
+
+  function edge(ctx, x, y, color) {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    rrect(ctx, x + 1, y + 1, CW - 2, CH - 2, R - 1);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  /* ---------- 合图：正反两联叠在一张纸上 ---------- */
+  function build(o, cb) {
+    var lay = o.layout === 'front' || o.layout === 'back' ? o.layout : 'both';
+    var both = lay === 'both';
+    var w = CW + PAD * 2, hgt = both ? CH * 2 + GAP + PAD * 2 : CH + PAD * 2;
+    var cv = document.createElement('canvas');
+    cv.width = w; cv.height = hgt;
+    var ctx = cv.getContext('2d');
+    var img = new Image();
+
+    function draw(ok) {
+      var bg = ctx.createLinearGradient(0, 0, 0, hgt);
+      bg.addColorStop(0, '#221C15');
+      bg.addColorStop(1, '#141019');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, w, hgt);
+      if (both) {
+        front(ctx, o, ok ? img : null, PAD, PAD);
+        back(ctx, o, PAD, PAD + CH + GAP);
+      } else if (lay === 'front') {
+        front(ctx, o, ok ? img : null, PAD, PAD);
+      } else {
+        back(ctx, o, PAD, PAD);
+      }
+      cb(cv);
+    }
+    img.onload = function () { draw(true); };
+    img.onerror = function () { draw(false); };
+    // 性别版本由 mbti.js 传进来，保证卡上的人和站内画像是同一个；单独调用时兜底 m
+    img.src = 'assets/mbti/paper/' + o.code + '-' + (o.sex === 'f' ? 'f' : 'm') + '.png';
+  }
+
+  window.personaCardPreview = build;
+
+  window.personaCard = function (o, done) {
+    build(o, function (cv) {
+      var sfx = o.layout === 'front' ? '-正面' : o.layout === 'back' ? '-背面' : '-名片';
+      var name = '变大泡泡-' + o.code + '-' + o.nm + sfx + '.png';
+      function save(url) {
+        var a = document.createElement('a');
+        a.href = url; a.download = name;
+        document.body.appendChild(a); a.click(); a.remove();
+        if (done) done(name);
+      }
+      try {
+        cv.toBlob(function (b) {
+          var u = URL.createObjectURL(b);
+          save(u);
+          setTimeout(function () { URL.revokeObjectURL(u); }, 4000);
+        }, 'image/png');
+      } catch (e) {
+        save(cv.toDataURL('image/png'));
+      }
+    });
+  };
+})();
+
+</script>
+<script>
 // 职场 MBTI · Outlook「人才盘点问卷 + 投票按钮」
-// 真 Outlook 的 Vote 功能就是「一封邮件两个投票按钮，投完跳下一封」——问卷和它是同一个控件。
+// 真 Outlook 的 Vote 功能就是「一封邮件几个投票按钮，投完跳下一封」——问卷和它是同一个控件。
 // 左边四个文件夹 = 四个维度，阅读窗格底部的跟踪条边答边滑。
 (function () {
   'use strict';
@@ -9764,80 +10641,299 @@ const BAR_PREV = {
   ];
 
   // ---- 16 封投票邮件，四维交替出，四根条一起滑 ----
-  // pa = 选 A 的人占比（真 Outlook 投票邮件投完就能看统计，这里的百分比本身就是包袱）
+  // op = 四个投票选项：t 文案 / w 权重 / p 得票占比（四项相加 100）
+  // w 有强弱之分：±2 是把话说死，±1 是留了余地。四个选项因此不是两组同义词，
+  // 而是同一件事的四种力度，这样四选一才比二选一多出信息。
+  // p 本身就是包袱——真 Outlook 投票邮件投完就能看统计，「多少人和你一样」才是笑点。
+  // 选项顺序逐题反向排（单数题从卷到躺，双数题从躺到卷），免得从头到尾闭眼点第一个。
   var Q = [
-    { ax: 0, fr: '王总', sj: '关于本周部门例会发言安排', n: 412, pa: 38,
+    { ax: 0, fr: '王总', sj: '关于本周部门例会发言安排', n: 412,
       bd: '例会还有 12 分钟，议题是上季度复盘。你手上那个项目跑赢目标 30%，但从头到尾没在任何一场会上出现过。',
-      a: '我改一页 PPT，会上讲五分钟', b: '数据都在系统里，有心的人查得到' },
-    { ax: 1, fr: '产品组', sj: '本周需求排期确认（今天下班前回复）', n: 388, pa: 57,
+      op: [
+        { t: '我改一页 PPT，会上讲五分钟', w: 2, p: 22 },
+        { t: '提前把数据发群里，会上等人问', w: 1, p: 31 },
+        { t: '只发给王总一个人，他要提就提', w: -1, p: 27 },
+        { t: '数据都在系统里，有心的人查得到', w: -2, p: 20 }
+      ] },
+    { ax: 1, fr: '产品组', sj: '本周需求排期确认（今天下班前回复）', n: 388,
       bd: '这版排期排到周五。按你的手速，周三就能收工。确认后同步全组，改不了了。',
-      a: '把周四周五填满，多做一个优化', b: '就按周五，多出来的两天是我的' },
-    { ax: 2, fr: '质量部', sj: '[P0] 线上事故复盘 - 需明确责任人', n: 401, pa: 44,
+      op: [
+        { t: '就按周五交，多出来的两天是我的', w: -2, p: 25 },
+        { t: '按周五交，中间那两天松一松', w: -1, p: 33 },
+        { t: '周三就交，剩下两天接点别的活', w: 1, p: 24 },
+        { t: '周四周五填满，再多做一个优化', w: 2, p: 18 }
+      ] },
+    { ax: 2, fr: '质量部', sj: '[P0] 线上事故复盘 - 需明确责任人', n: 401,
       bd: '昨晚线上炸了，起因是一行配置写错。提交记录显示这周有三个人动过它，其中一个是你。',
-      a: '先说是我，查清楚了再补充', b: '先把三次提交记录贴到群里' },
-    { ax: 3, fr: '王总', sj: '关于明年组织架构调整的一点设想', n: 376, pa: 41,
+      op: [
+        { t: '先说是我，查清楚了再补充', w: 2, p: 21 },
+        { t: '先认我那次提交的部分', w: 1, p: 30 },
+        { t: '把三次提交记录原样贴到群里', w: -1, p: 32 },
+        { t: '不是我那次，我有截图', w: -2, p: 17 }
+      ] },
+    { ax: 3, fr: '王总', sj: '关于明年组织架构调整的一点设想', n: 376,
       bd: '明年可能拆一个新组出来。王总说「做得好的人有机会带」，然后就没有然后了。',
-      a: '连夜写一份新组规划发给他', b: '记下来，这半年好好干' },
+      op: [
+        { t: '等公告出来再说，说了也不算', w: -2, p: 21 },
+        { t: '记下来，这半年好好干', w: -1, p: 34 },
+        { t: '找他聊聊这个组该怎么搭', w: 1, p: 26 },
+        { t: '连夜写一份新组规划发给他', w: 2, p: 19 }
+      ] },
 
-    { ax: 0, fr: '张工', sj: 'Re: 方案 v3 的一处逻辑问题', n: 395, pa: 46,
+    { ax: 0, fr: '张工', sj: 'Re: 方案 v3 的一处逻辑问题', n: 395,
       bd: '张工说你方案 v3 的逻辑有问题，可能得推翻重来。这封邮件抄送了全组、王总，以及不知道为什么抄送的 HR。',
-      a: '回复全体，把来龙去脉讲清楚', b: '私聊他讲明白，群里一个字不回' },
-    { ax: 1, fr: '考勤系统', sj: '[系统自动] 你的打卡记录 - 上周', n: 430, pa: 63,
+      op: [
+        { t: '回复全体，把来龙去脉讲清楚', w: 2, p: 24 },
+        { t: '回复全体，只贴结论和修正版', w: 1, p: 28 },
+        { t: '私聊他讲明白，群里一个字不回', w: -1, p: 33 },
+        { t: '不回，下一版出来自然没人提', w: -2, p: 15 }
+      ] },
+    { ax: 1, fr: '考勤系统', sj: '[系统自动] 你的打卡记录 - 上周', n: 430,
       bd: '上周你平均 19:42 走，部门平均 20:15。本邮件由系统自动发送，抄送直属上级，无需回复。',
-      a: '这周把这 33 分钟补回来', b: '很好，下周争取 18:30 走' },
-    { ax: 2, fr: '客户成功部', sj: 'Re: 客户投诉交付延期两周', n: 383, pa: 52,
+      op: [
+        { t: '很好，下周争取 18:30 走', w: -2, p: 23 },
+        { t: '照旧，19:42 已经够了', w: -1, p: 34 },
+        { t: '手上的活干完再走，不看表', w: 1, p: 27 },
+        { t: '这周把这 33 分钟补回来', w: 2, p: 16 }
+      ] },
+    { ax: 2, fr: '客户成功部', sj: 'Re: 客户投诉交付延期两周', n: 383,
       bd: '客户投诉交付晚了两周。实际上是他们改了三次需求，三份变更单都躺在你邮箱里，签字齐全。',
-      a: '我先跟客户道个歉，责任回头再算', b: '把三份变更单原样转给客户' },
-    { ax: 3, fr: '行政部', sj: '[全员] 公司三年愿景发布会 - 周三 15:00', n: 447, pa: 29,
+      op: [
+        { t: '我先跟客户道个歉，责任回头再算', w: 2, p: 22 },
+        { t: '先认延期，再说明变更单的事', w: 1, p: 31 },
+        { t: '把三份变更单原样转给客户', w: -1, p: 29 },
+        { t: '让他们自己去问签字的那位', w: -2, p: 18 }
+      ] },
+    { ax: 3, fr: '行政部', sj: '[全员] 公司三年愿景发布会 - 周三 15:00', n: 447,
       bd: '周三下午三点全员参加，公布未来三年战略目标。去年那场的三年战略，今年已经没人提了。',
-      a: '准备两个问题，会上举手', b: '认真听，认真记，认真鼓掌' },
+      op: [
+        { t: '带电脑去，边听边干自己的活', w: -2, p: 26 },
+        { t: '认真听，认真记，认真鼓掌', w: -1, p: 38 },
+        { t: '听完写份纪要发给组里', w: 1, p: 22 },
+        { t: '准备两个问题，会上举手', w: 2, p: 14 }
+      ] },
 
-    { ax: 0, fr: 'HR 李姐', sj: '周六团建活动报名（自愿，不强制）', n: 421, pa: 51,
+    { ax: 0, fr: 'HR 李姐', sj: '周六团建活动报名（自愿，不强制）', n: 421,
       bd: '本周六爬山，自愿报名，不强制。补充两句：王总也去，HR 会在群里发合影。',
-      a: '报名，并在群里回一句期待', b: '已读不回，周六睡到十一点' },
-    { ax: 1, fr: '王总', sj: '周末有个紧急上线，需要一位同学顶一下', n: 399, pa: 34,
+      op: [
+        { t: '报名，并在群里回一句期待', w: 2, p: 20 },
+        { t: '报名，群里只回一个「好」', w: 1, p: 29 },
+        { t: '先看看谁报了再决定', w: -1, p: 32 },
+        { t: '已读不回，周六睡到十一点', w: -2, p: 19 }
+      ] },
+    { ax: 1, fr: '王总', sj: '周末有个紧急上线，需要一位同学顶一下', n: 399,
       bd: '客户那边催得很急，周末得有人守着。群里发了两遍，二十六个人，无人应答，已经过去四十分钟。',
-      a: '我来，顺手把这块彻底理清', b: '再等十分钟，总有人先举手' },
-    { ax: 2, fr: '同组小李', sj: '你带的那个实习生出事了', n: 368, pa: 58,
+      op: [
+        { t: '装作没看见，周末不看群', w: -2, p: 22 },
+        { t: '再等十分钟，总有人先举手', w: -1, p: 36 },
+        { t: '我来，弄完就下班，不多干', w: 1, p: 25 },
+        { t: '我来，顺手把这块彻底理清', w: 2, p: 17 }
+      ] },
+    { ax: 2, fr: '同组小李', sj: '你带的那个实习生出事了', n: 368,
       bd: '你带的实习生把测试库删了。他现在坐在工位上，一动不动，已经四十分钟没说过话。',
-      a: '我没交代清楚，算我的', b: '权限是运维给的，先找运维' },
-    { ax: 3, fr: 'HR 李姐', sj: 'Re: 关于今年的涨薪窗口', n: 436, pa: 36,
+      op: [
+        { t: '我没交代清楚，算我的', w: 2, p: 26 },
+        { t: '我跟他一起去说，两个人担', w: 1, p: 30 },
+        { t: '权限是运维给的，先找运维', w: -1, p: 27 },
+        { t: '他自己删的，让他自己讲', w: -2, p: 17 }
+      ] },
+    { ax: 3, fr: 'HR 李姐', sj: 'Re: 关于今年的涨薪窗口', n: 436,
       bd: '今年窗口比较紧，整体幅度不会大。「但表现特别突出的，公司会特殊考虑。」这句话她说得很轻。',
-      a: '做一份价值说明，主动约谈', b: '那我等年底评估' },
+      op: [
+        { t: '涨不涨都这样，先干着', w: -2, p: 15 },
+        { t: '那我等年底评估', w: -1, p: 32 },
+        { t: '找直属上级先探个口风', w: 1, p: 30 },
+        { t: '做一份价值说明，主动约谈', w: 2, p: 23 }
+      ] },
 
-    { ax: 0, fr: '同组小李', sj: '你的方案刚在会上被点名了', n: 372, pa: 43,
+    { ax: 0, fr: '同组小李', sj: '你的方案刚在会上被点名了', n: 372,
       bd: '刚才开会老板说这个思路不错，问是谁做的。我说是你。他「哦」了一声，翻到了下一页。',
-      a: '会后发封邮件，同步细节和进展', b: '他记得最好，不记得也就算了' },
-    { ax: 1, fr: 'HR 李姐', sj: '下月内部技术分享会讲师招募', n: 390, pa: 47,
+      op: [
+        { t: '会后发封邮件，同步细节和进展', w: 2, p: 21 },
+        { t: '找机会当面跟他补一句', w: 1, p: 27 },
+        { t: '他记得最好，不记得也就算了', w: -1, p: 33 },
+        { t: '别提了，提了显得我在邀功', w: -2, p: 19 }
+      ] },
+    { ax: 1, fr: 'HR 李姐', sj: '下月内部技术分享会讲师招募', n: 390,
       bd: '还缺一位讲师。不强制，但「计入年度积极性评估」这八个字是加粗的。',
-      a: '报名，顺便把三年积累整理成体系', b: '坐第一排听，听众也是参与' },
-    { ax: 2, fr: 'HR 李姐', sj: '季度目标未达成说明（周五前提交）', n: 408, pa: 39,
+      op: [
+        { t: '那天正好有个会，去不了', w: -2, p: 22 },
+        { t: '坐第一排听，听众也是参与', w: -1, p: 34 },
+        { t: '报名，讲个现成的旧话题', w: 1, p: 26 },
+        { t: '报名，顺便把三年积累整理成体系', w: 2, p: 18 }
+      ] },
+    { ax: 2, fr: 'HR 李姐', sj: '季度目标未达成说明（周五前提交）', n: 408,
       bd: '目标没达成，需要交一页说明，周五前，存入个人档案，永久保存，本人签字。',
-      a: '写自己执行上的三个问题', b: '写资源不足与外部环境变化' },
-    { ax: 3, fr: '产品组', sj: '新项目立项评审 - 请确认是否接手', n: 361, pa: 45,
+      op: [
+        { t: '写自己执行上的三个问题', w: 2, p: 20 },
+        { t: '写两条自己的，加一条客观的', w: 1, p: 33 },
+        { t: '写资源不足与外部环境变化', w: -1, p: 30 },
+        { t: '写目标本身就定得不合理', w: -2, p: 17 }
+      ] },
+    { ax: 3, fr: '产品组', sj: '新项目立项评审 - 请确认是否接手', n: 361,
       bd: '这个项目做成了是公司级战果。会上也明确说了：资源自己找，不额外配人，不额外给钱。',
-      a: '先讲清它能长成什么样，资源自然会来', b: '有资源我就做，没资源我不吹' }
+      op: [
+        { t: '这种项目谁接谁倒霉，不接', w: -2, p: 20 },
+        { t: '有资源我就做，没资源我不吹', w: -1, p: 33 },
+        { t: '接，边做边要资源', w: 1, p: 28 },
+        { t: '先讲清它能长成什么样，资源自然会来', w: 2, p: 19 }
+      ] }
   ];
 
-  // ---- 16 型：外号 / 刻薄评语 / 适合的工位 / 天敌型号 ----
+  // ---- 16 型人格报告 ----
+  // nm 外号 / cm 盘点系统的评语（刻薄那句） / st 建议工位 / fo 天敌 / bd 搭子
+  // tg 三个标签 / sk 超能力 / bg 致命 bug / sy 口头禅 / rt 出场率（16 型相加 = 100）
   var TYPES = {
-    PJBH: { nm: '卷王发动机', cm: '你不是在工作，你是在给整层楼制造 KPI。别人加班是被逼的，你加班是自愿的，这是你最可怕的地方。', st: '正对老板办公室的玻璃门，光线充足，随时可被看见。', fo: 'YTSC' },
-    PJBC: { nm: '靠谱接盘侠', cm: '老板画的每张饼你都信，还主动帮他把面粉买了。会说、会做、还背锅，唯一的问题是没人告诉过你这样很亏。', st: '会议室隔壁，方便随叫随到。', fo: 'PJSH' },
-    PJSH: { nm: '甩锅演说家', cm: '你的 PPT 比你的产出漂亮十倍，你的锅比你的功劳跑得快十倍。开会时你是主角，出事时你是观众。', st: '茶水间旁边，全公司信息流通最快的位置。', fo: 'YJBC' },
-    PJSC: { nm: '向上管理专家', cm: '你信老板的饼，也让老板信你的饼，锅从来只在别人手上。你不是在打工，你是在演一部关于打工的连续剧。', st: '老板工位斜后方两米，听得见电话但不用接。', fo: 'YTSH' },
-    PTBH: { nm: '嘴强王者', cm: '方案你能讲三小时，正文一行没写。你画的饼确实很香，可惜香味全部来自你自己的想象。', st: '靠窗，风景好，适合思考人生和下一份工作。', fo: 'YJBC' },
-    PTBC: { nm: '热心老实人', cm: '谁都能使唤你，谁都不记得你。你相信公司说的一切，包括年会抽奖是随机的。', st: '打印机旁边，方便帮所有人取文件。', fo: 'PJSH' },
-    PTSH: { nm: 'PPT 艺术家', cm: '一年做了 87 页 PPT，落地 0 个。但你的动画转场是全公司最好的，这一点没有人否认。', st: '正对会议室大屏，随时可以投屏。', fo: 'YJBC' },
-    PTSC: { nm: '会议室常驻民', cm: '你的日历满得像春运车票，可没有一件事是你在做。你在每个群里都说话，在每个项目里都不担责。', st: '会议室最里面那张椅子，进出都要绕过你。', fo: 'YJBH' },
-    YJBH: { nm: '沉默造饼人', cm: '你不吭声，但你的方案总能改变方向。别人抢话的时候你在改文档，最后大家用的是你的版本。', st: '角落双屏位，背后是墙，谁都看不见你的屏幕。', fo: 'PJSH' },
-    YJBC: { nm: '老黄牛', cm: '全公司最靠得住的人，也是涨薪最慢的人。你以为苦劳会被看见，可惜看见的人正忙着写自己的述职报告。', st: '储物柜和消防栓之间，位置固定，十年没变过。', fo: 'PTSH' },
-    YJSH: { nm: '暗线操盘手', cm: '话不多，事全成，锅永远在别人那里。你从不争，但你想要的从来都拿到了。', st: '靠近财务那一排，能听见预算的动静。', fo: 'YJBH' },
-    YJSC: { nm: '闷头执行者', cm: '你是最标准的那颗螺丝钉：不问为什么，只问什么时候交。你的问题不是能力，是从不为自己说一句话。', st: '工位号最靠后那个，网线是全公司最长的。', fo: 'PJSH' },
-    YTBH: { nm: '隐形设计师', cm: '你有想法，但懒得推。你的好点子最后都出现在别人的述职报告里，连标题都没改。', st: '楼梯间旁边，安静，方便随时下楼。', fo: 'PTSH' },
-    YTBC: { nm: '工位隐身人', cm: '你什么都不说、什么都不争，却总是出现在背锅名单上。你不是低调，你是不设防。', st: '消防通道尽头，Wi-Fi 最弱，但一整天没人来。', fo: 'PJSH' },
-    YTSH: { nm: '摸鱼哲学家', cm: '你早就看穿了这一切：饼是假的，KPI 是编的，团建是加班。你只是懒得说破而已。', st: '绿植后面，摄像头照不到的那半格。', fo: 'PJBH' },
-    YTSC: { nm: '带薪呼吸大师', cm: '不卷、不争、不背、不信。你把上班这件事还原成了它本来的样子：一段有工资的时间。', st: '任何工位。你在哪都一样。', fo: 'PJBH' }
+    PJBH: {
+      nm: '卷王发动机', fo: 'YTSC', bd: 'YJBC', rt: 4.1,
+      cm: '你不是在工作，你是在给整层楼制造 KPI。别人加班是被逼的，你加班是自愿的，这是你最可怕的地方。',
+      st: '正对老板办公室的玻璃门，光线充足，随时可被看见。',
+      tg: ['自愿加班', '进度条挂身上', '老板的充电宝'],
+      sk: '一个人能把全组的排期往前拽两周。',
+      bg: '别人歇一天你就慌，一慌就只会更卷。',
+      sy: '这个我今晚弄完，明早你就能看到。'
+    },
+    PJBC: {
+      nm: '靠谱接盘侠', fo: 'PJSH', bd: 'YJBH', rt: 9.2,
+      cm: '老板画的每张饼你都信，还主动帮他把面粉买了。会说、会做、还背锅，唯一的问题是没人告诉过你这样很亏。',
+      st: '会议室隔壁，方便随叫随到。',
+      tg: ['来者不拒', '饼来就吃', '背锅体质'],
+      sk: '嘴上答应完，事是真的能落地。',
+      bg: '不会说「不行」，更不会说「这是我做的」。',
+      sy: '没事，我来吧。'
+    },
+    PJSH: {
+      nm: '甩锅演说家', fo: 'YJBC', bd: 'PTSC', rt: 7.4,
+      cm: '你的 PPT 比你的产出漂亮十倍，你的锅比你的功劳跑得快十倍。开会时你是主角，出事时你是观众。',
+      st: '茶水间旁边，全公司信息流通最快的位置。',
+      tg: ['开会主角', '出事观众', '嘴比手快'],
+      sk: '五分钟能把一件还没做的事讲成里程碑。',
+      bg: '锅甩得太熟练，熟练到大家都看出来了。',
+      sy: '这个当时我提过风险的。'
+    },
+    PJSC: {
+      nm: '向上管理专家', fo: 'YTSH', bd: 'PJSH', rt: 3.6,
+      cm: '你信老板的饼，也让老板信你的饼，锅从来只在别人手上。你不是在打工，你是在演一部关于打工的连续剧。',
+      st: '老板工位斜后方两米，听得见电话但不用接。',
+      tg: ['老板视角', '双向画饼', '零锅在手'],
+      sk: '老板的心思，你比老板自己早知道半小时。',
+      bg: '一换老板，技能树要重点一遍。',
+      sy: '我理解一下您的意思啊——'
+    },
+    PTBH: {
+      nm: '嘴强王者', fo: 'YJBC', bd: 'YJSC', rt: 6.8,
+      cm: '方案你能讲三小时，正文一行没写。你画的饼确实很香，可惜香味全部来自你自己的想象。',
+      st: '靠窗，风景好，适合思考人生和下一份工作。',
+      tg: ['方案三小时', '正文第一行', '饼香四溢'],
+      sk: '再空的项目，从你嘴里出来都像明年能上市。',
+      bg: '讲完就散场，散场就没了。',
+      sy: '我先讲一下大方向。'
+    },
+    PTBC: {
+      nm: '热心老实人', fo: 'PJSH', bd: 'YJBH', rt: 8.7,
+      cm: '谁都能使唤你，谁都不记得你。你相信公司说的一切，包括年会抽奖是随机的。',
+      st: '打印机旁边，方便帮所有人取文件。',
+      tg: ['有求必应', '谁都能使唤', '年会必信'],
+      sk: '全公司的疑难杂事，最后都在你这儿解决。',
+      bg: '解决完，没人知道是你解决的。',
+      sy: '这个我熟，我帮你看看。'
+    },
+    PTSH: {
+      nm: 'PPT 艺术家', fo: 'YJBC', bd: 'YJSC', rt: 5.9,
+      cm: '一年做了 87 页 PPT，落地 0 个。但你的动画转场是全公司最好的，这一点没有人否认。',
+      st: '正对会议室大屏，随时可以投屏。',
+      tg: ['转场大师', '87 页 0 落地', '对齐强迫症'],
+      sk: '一页 PPT 能把没做的事讲得很有画面。',
+      bg: '关掉投屏，画面就没了。',
+      sy: '这版还没美化，先看结构。'
+    },
+    PTSC: {
+      nm: '会议室常驻民', fo: 'YJBH', bd: 'PJSH', rt: 6.3,
+      cm: '你的日历满得像春运车票，可没有一件事是你在做。你在每个群里都说话，在每个项目里都不担责。',
+      st: '会议室最里面那张椅子，进出都要绕过你。',
+      tg: ['日历春运', '群里都有你', '项目里没有你'],
+      sk: '同时出现在六个会里，一个都不缺席。',
+      bg: '一整天下来，产出是六份会议纪要。',
+      sy: '这个我们拉个会对齐一下。'
+    },
+    YJBH: {
+      nm: '沉默造饼人', fo: 'PJSH', bd: 'PJBC', rt: 2.8,
+      cm: '你不吭声，但你的方案总能改变方向。别人抢话的时候你在改文档，最后大家用的是你的版本。',
+      st: '角落双屏位，背后是墙，谁都看不见你的屏幕。',
+      tg: ['不抢话', '在改文档', '最后用你那版'],
+      sk: '所有人吵完，方向是你那份文档定的。',
+      bg: '你不说，功劳就跟着文档一起匿名。',
+      sy: '（没说话，直接发了个新版本）'
+    },
+    YJBC: {
+      nm: '老黄牛', fo: 'PTSH', bd: 'PJBH', rt: 11.4,
+      cm: '全公司最靠得住的人，也是涨薪最慢的人。你以为苦劳会被看见，可惜看见的人正忙着写自己的述职报告。',
+      st: '储物柜和消防栓之间，位置固定，十年没变过。',
+      tg: ['全公司最稳', '涨薪最慢', '述职最短'],
+      sk: '交到你手上的事，从来没有掉过。',
+      bg: '你以为苦劳会被看见，看见的人正忙着写自己的述职。',
+      sy: '嗯，好，我知道了。'
+    },
+    YJSH: {
+      nm: '暗线操盘手', fo: 'YJBH', bd: 'YTSC', rt: 1.9,
+      cm: '话不多，事全成，锅永远在别人那里。你从不争，但你想要的从来都拿到了。',
+      st: '靠近财务那一排，能听见预算的动静。',
+      tg: ['话少', '事全成', '锅在别处'],
+      sk: '不争一句，但你想要的从来都拿到了。',
+      bg: '太顺了，顺到没人知道该谢你还是防你。',
+      sy: '要不……先按你说的来？'
+    },
+    YJSC: {
+      nm: '闷头执行者', fo: 'PJSH', bd: 'PTBH', rt: 9.6,
+      cm: '你是最标准的那颗螺丝钉：不问为什么，只问什么时候交。你的问题不是能力，是从不为自己说一句话。',
+      st: '工位号最靠后那个，网线是全公司最长的。',
+      tg: ['不问为什么', '只问什么时候交', '工位最靠后'],
+      sk: '需求再离谱，你都能在 deadline 前交出来。',
+      bg: '从不为自己说一句话，连交付时间都是别人定的。',
+      sy: '好的，什么时候要？'
+    },
+    YTBH: {
+      nm: '隐形设计师', fo: 'PTSH', bd: 'YTSH', rt: 4.7,
+      cm: '你有想法，但懒得推。你的好点子最后都出现在别人的述职报告里，连标题都没改。',
+      st: '楼梯间旁边，安静，方便随时下楼。',
+      tg: ['有想法', '懒得推', '点子在别人述职里'],
+      sk: '你随口一句，是别人想一周的方案。',
+      bg: '想完就完了，连个文档都懒得建。',
+      sy: '其实有个更简单的做法……算了。'
+    },
+    YTBC: {
+      nm: '工位隐身人', fo: 'PJSH', bd: 'YTSH', rt: 5.2,
+      cm: '你什么都不说、什么都不争，却总是出现在背锅名单上。你不是低调，你是不设防。',
+      st: '消防通道尽头，Wi-Fi 最弱，但一整天没人来。',
+      tg: ['不争不辩', '不设防', '背锅名单常客'],
+      sk: '一整天没人来找你，安静是真安静。',
+      bg: '安静到出事时第一个被想起来。',
+      sy: '啊？这个是我负责的吗。'
+    },
+    YTSH: {
+      nm: '摸鱼哲学家', fo: 'PJBH', bd: 'YTSC', rt: 7.1,
+      cm: '你早就看穿了这一切：饼是假的，KPI 是编的，团建是加班。你只是懒得说破而已。',
+      st: '绿植后面，摄像头照不到的那半格。',
+      tg: ['早就看穿', '懒得说破', '摄像头死角'],
+      sk: '一眼看出哪些事根本不用做。',
+      bg: '看穿了也不说，于是大家继续做。',
+      sy: '你觉得这事三个月后还有人记得吗。'
+    },
+    YTSC: {
+      nm: '带薪呼吸大师', fo: 'PJBH', bd: 'YTSH', rt: 5.3,
+      cm: '不卷、不争、不背、不信。你把上班这件事还原成了它本来的样子：一段有工资的时间。',
+      st: '任何工位。你在哪都一样。',
+      tg: ['不卷不争', '不背不信', '有工资的时间'],
+      sk: '心态稳到公布裁员名单那天你在安心吃饭。',
+      bg: '稳到简历三年没更新过。',
+      sy: '到点了，我先走了。'
+    }
   };
+
+  // 出场率越低越稀有。分档说法比光给个百分比有意思
+  function rarity(rt) {
+    return rt < 3 ? '稀有型号' : rt < 5 ? '不太常见' : rt < 8 ? '随处可见' : '公司主力';
+  }
 
   // 每维答满四题时，盘点专员在批注栏说一句（前半句是评语，后半句是翻译）
   var REMARK = [
@@ -9862,6 +10958,19 @@ const BAR_PREV = {
     ['头顶一张发光的大饼', '眼前吊着一张小饼']
   ];
 
+  // 真 MBTI 双射：话↔E/I · 卷↔J/P · 锅↔F/T · 饼↔N/S。
+  // 代号是 话-卷-锅-饼，转 MBTI 要重排成 话-饼-锅-卷。
+  var MB = { P: 'E', Y: 'I', J: 'J', T: 'P', B: 'F', S: 'T', H: 'N', C: 'S' };
+  var MBNM = {
+    ENFJ: '主人公', ESFJ: '执政官', ENTJ: '指挥官', ESTJ: '总经理',
+    ENFP: '竞选者', ESFP: '表演者', ENTP: '辩论家', ESTP: '企业家',
+    INFJ: '提倡者', ISFJ: '守卫者', INTJ: '建筑师', ISTJ: '物流师',
+    INFP: '调停者', ISFP: '探险家', INTP: '逻辑学家', ISTP: '鉴赏家'
+  };
+  function toMBTI(c) {
+    return MB[c[0]] + MB[c[3]] + MB[c[2]] + MB[c[1]];
+  }
+
   K.ready(function () {
     if (typeof registerGame !== 'function') return;
 
@@ -9869,8 +10978,8 @@ const BAR_PREV = {
       id: 'winMBTI', app: 'mail', go: 'mbti',
       title: '人才盘点问卷 - zhuangzhou@paopao.work - Outlook',
       style: 'left:190px;top:84px;width:900px;height:566px',
-      tile: ['格', '职场MBTI', '四维盘点', '#0F6CBD', 'icons/it-mbti.png'],
-      hall: { nm: '职场MBTI', by: '官方', tip: 64, ic: 'it-mbti' }
+      tile: ['格', '话卷锅饼测试', 'MBTI 职场版', '#0F6CBD', 'icons/it-mbti.png'],
+      hall: { nm: '话卷锅饼测试', by: '官方', tip: 64, ic: 'it-mbti' }
     });
 
     var h = K.shell({
@@ -9881,7 +10990,7 @@ const BAR_PREV = {
     if (!h) return;
 
     var sv = h.save, hud = h.hud, sfx = h.sfx, fx = h.fx;
-    var ans = [], idx = 0, st = 'intro';
+    var ans = [], idx = 0, st = 'intro', trkOff = false;
 
     h.css(
       '&{--word-blue:#0F6CBD}' +
@@ -9905,7 +11014,7 @@ const BAR_PREV = {
 
       // 阅读窗格
       '.mb-read{display:flex;flex-direction:column;min-width:0;overflow:auto}' +
-      '.mb-hd{padding:14px 24px 11px;border-bottom:1px solid var(--rule,#EDEBE9);display:flex;gap:12px}' +
+      '.mb-hd{padding:12px 24px 9px;border-bottom:1px solid var(--rule,#EDEBE9);display:flex;gap:12px}' +
       '.mb-hd .av{width:34px;height:34px;border-radius:50%;flex:none;margin-top:3px;color:#fff;' +
       '  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}' +
       '.mb-hd .tx{flex:1;min-width:0}' +
@@ -9915,10 +11024,11 @@ const BAR_PREV = {
       // InfoBar：真 Outlook 投票邮件顶部就是这么一条
       '.mb-info{background:#FFF4CE;border-bottom:1px solid #F0DFA0;padding:7px 24px;font-size:11.5px;color:#6B5A20}' +
       '.mb-info.vd{background:#DFF6E4;border-bottom-color:#B4E0BE;color:#2F6B3C}' +
-      '.mb-body{padding:16px 24px;font-size:13.5px;line-height:2.05;color:var(--ink,#222);font-family:var(--serif)}' +
-      '.mb-vote{display:flex;flex-direction:column;gap:8px;padding:2px 24px 10px}' +
+      '.mb-body{padding:14px 24px;font-size:13.5px;line-height:2.05;color:var(--ink,#222);font-family:var(--serif)}' +
+      // 四个选项要一屏塞得下，行距比两个选项时紧一档
+      '.mb-vote{display:flex;flex-direction:column;gap:6px;padding:2px 24px 10px}' +
       '.mb-op{display:block;width:100%;text-align:left;font-size:13px;line-height:1.6;cursor:pointer;' +
-      '  padding:10px 13px;border-radius:3px;font-family:var(--ui,inherit);color:var(--ink,#222);' +
+      '  padding:8px 13px;border-radius:3px;font-family:var(--ui,inherit);color:var(--ink,#222);' +
       '  background:#fff;border:1px solid #C9CDD4;position:relative;overflow:hidden}' +
       '.mb-op:hover{border-color:#0F6CBD;background:#F3F8FD}' +
       '.mb-op.pick{border-color:#0F6CBD;background:#E1EDF9;color:#0F6CBD;font-weight:600}' +
@@ -9931,13 +11041,26 @@ const BAR_PREV = {
       '.mb-op .pc{float:right;font-family:var(--mono,monospace);font-size:11.5px;color:#0F6CBD;opacity:0;' +
       '  transition:opacity .3s}' +
       '.mb-op.rev .pc{opacity:1}' +
-      '.mb-stat{padding:0 24px 14px;font-size:11px;color:var(--ink-3,#8A8A8A);min-height:16px}' +
+      '.mb-stat{padding:0 24px 10px;font-size:11px;color:var(--ink-3,#8A8A8A);min-height:16px}' +
       '.mb-stat b{color:#0F6CBD;font-weight:600}' +
 
       // 跟踪：投票统计条，中线锚定，左右两极
-      '.mb-track{margin-top:auto;border-top:1px solid var(--rule,#EDEBE9);background:#FAFAFA;padding:9px 24px 11px}' +
-      '.mb-track .tt{font-size:10.5px;color:var(--ink-3,#8A8A8A);letter-spacing:1px;margin-bottom:6px}' +
-      '.mb-tk{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-3,#8A8A8A);margin-bottom:5px}' +
+      // 四选项把正文撑高了，四根条改成两列两行，底部这块占的高度直接减半
+      '.mb-track{margin-top:auto;border-top:1px solid var(--rule,#EDEBE9);background:#FAFAFA;padding:7px 24px 8px;' +
+      '  display:grid;grid-template-columns:1fr 1fr;column-gap:20px}' +
+      '.mb-track .tt{grid-column:1/-1}' +
+      '.mb-track .tt{font-size:10.5px;color:var(--ink-3,#8A8A8A);letter-spacing:1px;margin-bottom:6px;' +
+      '  display:flex;align-items:center}' +
+      '.mb-track .tt button{margin-left:auto;font-family:var(--ui,inherit);font-size:10.5px;letter-spacing:0;' +
+      '  color:var(--ink-3,#8A8A8A);background:none;border:0;padding:2px 5px;border-radius:2px;cursor:pointer}' +
+      '.mb-track .tt button:hover{color:#0F6CBD;background:#EDF4FB}' +
+      // 收起后只剩标题那一行，正文区顺势变高
+      '.mb-track.off{padding-bottom:9px}' +
+      '.mb-track.off .tt{margin-bottom:0}' +
+      '.mb-track.off .mb-tk,.mb-track.off .mb-tx{display:none}' +
+      '.mb-track .mb-to{display:none}' +
+      '.mb-track.off .mb-to{display:block}' +
+      '.mb-tk{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-3,#8A8A8A);margin-bottom:3px}' +
       '.mb-tk u{text-decoration:none;width:34px;text-align:right;flex:none}' +
       '.mb-tk s{text-decoration:none;width:34px;flex:none}' +
       '.mb-tk .tb{flex:1;position:relative;height:7px;border-radius:4px;background:#E6E6E6;overflow:hidden}' +
@@ -9957,6 +11080,18 @@ const BAR_PREV = {
       '.mb-row{display:flex;gap:18px;align-items:flex-start;margin:6px 0 14px}' +
       '.mb-kv{flex:1;min-width:0;font-size:12.5px;line-height:2.1;color:var(--ink-2,#555)}' +
       '.mb-kv span{color:var(--ink-3,#8A8A8A);display:inline-block;width:74px}' +
+
+      // 人格标签：三个小签，SBTI 那种一眼扫完的标签条
+      '.mb-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}' +
+      '.mb-tags em{font-style:normal;font-size:11px;line-height:1;padding:5px 9px;border-radius:10px;' +
+      '  background:#EAF3FB;color:#0F6CBD;border:1px solid #CFE3F5}' +
+      // 超能力 / 致命 bug / 口头禅：报告里最好玩的三行，左边一个小色块分正负
+      '.mb-spec{border-left:3px solid #EDEBE9;padding:2px 0 2px 12px;margin:2px 0 14px}' +
+      '.mb-spec>div{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;line-height:1.95;color:var(--ink,#222)}' +
+      '.mb-spec span{color:var(--ink-3,#8A8A8A);flex:none;width:60px}' +
+      '.mb-spec q{quotes:none;color:#0F6CBD;font-family:var(--serif)}' +
+      '.mb-spec i{width:6px;height:6px;border-radius:50%;flex:none;margin-top:8px}' +
+      '.mb-spec i.up{background:#3C8C4E}.mb-spec i.dn{background:#C77D2E}.mb-spec i.sy{background:#0F6CBD}' +
 
       // 附件「你的人格画像.png」= CSS 画的证件照，零图片
       '.mb-att{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--rule,#EDEBE9);' +
@@ -9991,6 +11126,10 @@ const BAR_PREV = {
       '.mb-photo .cd{position:absolute;left:0;right:0;bottom:0;background:rgba(15,108,189,.94);color:#fff;' +
       '  font-family:var(--mono,monospace);font-size:13px;letter-spacing:4px;text-align:center;padding:4px 0;z-index:6}' +
       '.mb-photo .pp{position:absolute;z-index:5}' +
+      // 纸雕画像到位就整张换掉，CSS 剪影和道具全部让位
+      '.mb-photo.pic{background-size:contain;background-position:center top;background-repeat:no-repeat}' +
+      '.mb-photo.pic .fig,.mb-photo.pic .col,.mb-photo.pic .bdg,.mb-photo.pic .pp{display:none}' +
+      '.mb-photo.pic::before{display:none}' +
 
       // 话·拍：说话气泡，里面三个点在动
       '.mb-photo .p-P{right:8px;top:26px;background:#fff;border:1px solid #C3CBD5;border-radius:9px;' +
@@ -10044,39 +11183,65 @@ const BAR_PREV = {
       '@keyframes mb-dangle{0%,100%{transform:rotate(-11deg)}50%{transform:rotate(11deg)}}' +
 
       '.mb-cap{font-size:11px;color:var(--ink-3,#8A8A8A);line-height:1.8;margin-top:7px;width:150px}' +
+      // 立绘有男女两版，让用户自己挑；挑完站内画像和四张分享卡一起换
+      '.mb-sex{display:flex;width:150px;margin-top:7px;border:1px solid #C9CDD4;border-radius:3px;overflow:hidden}' +
+      '.mb-sex button{flex:1;font-family:var(--ui,inherit);font-size:11.5px;padding:4px 0;cursor:pointer;' +
+      '  background:#fff;border:0;border-left:1px solid #C9CDD4;color:var(--ink-2,#555)}' +
+      '.mb-sex button:first-child{border-left:0}' +
+      '.mb-sex button:hover{background:#F3F8FD;color:#0F6CBD}' +
+      '.mb-sex button.on{background:#E1EDF9;color:#0F6CBD;font-weight:600}' +
       '.mb-act{display:flex;gap:8px;align-items:center;padding-top:6px}' +
       '.mb-act .hint{font-size:11.5px;color:var(--ink-3,#8A8A8A)}'
     );
 
     // ---------- 计分 ----------
+    // ans[i] 存的是选项下标，0 也是合法答案，所以「答没答」一律走 has()，不能用真假判断
+    function has(i) { return ans[i] != null; }
     function axVal(a) {
       var v = 0;
       for (var i = 0; i < Q.length; i++) {
-        if (Q[i].ax === a && ans[i]) v += ans[i] === 'a' ? 1 : -1;
+        if (Q[i].ax === a && has(i)) v += Q[i].op[ans[i]].w;
       }
       return v;
     }
     function axDone(a) {
       var n = 0;
-      for (var i = 0; i < Q.length; i++) if (Q[i].ax === a && ans[i]) n++;
+      for (var i = 0; i < Q.length; i++) if (Q[i].ax === a && has(i)) n++;
+      return n;
+    }
+    // 每维几道题由题库决定，别的地方一律问它，改题量不用改别处
+    function axTotal(a) {
+      var n = 0;
+      for (var i = 0; i < Q.length; i++) if (Q[i].ax === a) n++;
+      return n;
+    }
+    // 满分：一题最重压 2 分，所以强度的分母是题数的两倍，不是题数
+    function axMax(a) {
+      var n = 0;
+      for (var i = 0; i < Q.length; i++) {
+        if (Q[i].ax !== a) continue;
+        var top = 0;
+        for (var k = 0; k < Q[i].op.length; k++) top = Math.max(top, Math.abs(Q[i].op[k].w));
+        n += top;
+      }
       return n;
     }
     function answered() {
       var n = 0;
-      for (var i = 0; i < Q.length; i++) if (ans[i]) n++;
+      for (var i = 0; i < Q.length; i++) if (has(i)) n++;
       return n;
     }
     // 未答满的维度用 ? 占位 —— 状态栏能看着型号一位位定下来
     function code(partial) {
       return AX.map(function (x, a) {
-        if (partial && axDone(a) < 4) return '?';
+        if (partial && axDone(a) < axTotal(a)) return '?';
         return axVal(a) > 0 ? x.pos : x.neg;
       }).join('');
     }
 
     // ---------- HUD ----------
     function paintTool() {
-      if (st === 'intro') return hud.tool('<button class="rbtn gold mb-start">开始填写</button>', '共 16 项 · 约两分钟');
+      if (st === 'intro') return hud.tool('<button class="rbtn gold mb-start">开始填写</button>', '共 ' + Q.length + ' 项 · 两分钟填完');
       if (st === 'over') return hud.tool(
         '<button class="rbtn gold mb-bub">转成泡泡</button>' +
         '<button class="rbtn mb-again">重新盘点</button>' +
@@ -10113,21 +11278,30 @@ const BAR_PREV = {
       AX.forEach(function (x, a) {
         var b = box.querySelector('[data-tk="' + a + '"] b');
         if (!b) return;
-        var v = axVal(a), w = Math.abs(v) / 4 * 50;
+        var v = axVal(a), w = Math.abs(v) / axMax(a) * 50;
         b.style.left = (v >= 0 ? 50 : 50 - w) + '%';
         b.style.width = w + '%';
       });
     }
+    // 统计条收起来的状态跟着存档走，翻下一封不会又弹出来
+    function toggleTrack() {
+      trkOff = !trkOff;
+      sv.set('trk', trkOff ? 1 : 0);
+      var box = h.states.play.querySelector('.mb-track');
+      if (box) box.classList.toggle('off', trkOff);
+      sfx.play('click');
+    }
+
     function paintFold() {
       var box = h.states.play.querySelector('.mb-fold');
       if (!box) return;
       AX.forEach(function (x, a) {
         var b = box.querySelector('[data-ax="' + a + '"]');
         if (!b) return;
-        var n = axDone(a);
+        var n = axDone(a), tt = axTotal(a);
         b.classList.toggle('on', Q[idx].ax === a);
-        b.classList.toggle('done', n === 4);
-        b.querySelector('i').textContent = n + '/4';
+        b.classList.toggle('done', n === tt);
+        b.querySelector('i').textContent = n + '/' + tt;
       });
     }
 
@@ -10137,7 +11311,7 @@ const BAR_PREV = {
         '<div class="mb-grid">' +
         '<div class="mb-fold"><div class="gp">人才盘点 2026Q3</div>' +
         AX.map(function (x, a) {
-          return '<b data-ax="' + a + '">' + K.esc(x.fold) + '<i>0/4</i></b>';
+          return '<b data-ax="' + a + '">' + K.esc(x.fold) + '<i>0/' + axTotal(a) + '</i></b>';
         }).join('') +
         '<div class="gp">说明</div><b style="color:#8A8A8A">未投票的不归档</b></div>' +
         '<div class="mb-read">' +
@@ -10146,7 +11320,10 @@ const BAR_PREV = {
         '<div class="mb-body"></div>' +
         '<div class="mb-vote"></div>' +
         '<div class="mb-stat"></div>' +
-        '<div class="mb-track"><div class="tt">跟踪 · 投票统计</div>' +
+        '<div class="mb-track' + (trkOff ? ' off' : '') + '">' +
+        '<div class="tt">跟踪 · 投票统计' +
+        '<button class="mb-tx" title="收起统计条">关闭</button>' +
+        '<button class="mb-to" title="展开统计条">展开</button></div>' +
         AX.map(function (x, a) {
           return '<div class="mb-tk" data-tk="' + a + '"><u>' + K.esc(x.nn) + '</u>' +
             '<i class="tb"><b></b></i><s>' + K.esc(x.pn) + '</s></div>';
@@ -10156,10 +11333,10 @@ const BAR_PREV = {
 
     function ask(silent) {
       var q = Q[idx], read = h.states.play.querySelector('.mb-read');
-      var picked = ans[idx];
-      h.states.play.querySelector('.mb-info').className = 'mb-info' + (picked ? ' vd' : '');
-      h.states.play.querySelector('.mb-info').textContent = picked
-        ? '你在 ' + stamp() + ' 投了「' + (picked === 'a' ? q.a : q.b) + '」票。可以重新选择。'
+      var picked = has(idx) ? ans[idx] : -1;
+      h.states.play.querySelector('.mb-info').className = 'mb-info' + (picked >= 0 ? ' vd' : '');
+      h.states.play.querySelector('.mb-info').textContent = picked >= 0
+        ? '你在 ' + stamp() + ' 投了「' + q.op[picked].t + '」票。可以重新选择。'
         : '请单击下面的一项进行投票。你的答复将计入本维度统计。';
       var av = h.states.play.querySelector('.mb-hd .av');
       av.style.background = AVA[q.fr] || '#6E7B87';
@@ -10169,11 +11346,12 @@ const BAR_PREV = {
         '<b>' + K.esc(q.fr) + '</b>　发送时间：2026/8/10（周一） 9:' + (12 + idx) + '<br>' +
         '收件人：<b>庄周</b>　　维度：' + K.esc(AX[q.ax].fold) + '　　重要性：高';
       h.states.play.querySelector('.mb-body').textContent = q.bd;
-      h.states.play.querySelector('.mb-vote').innerHTML =
-        '<button class="mb-op" data-o="a"><i></i><em>投票 A</em><span>' + K.esc(q.a) + '</span><span class="pc"></span></button>' +
-        '<button class="mb-op" data-o="b"><i></i><em>投票 B</em><span>' + K.esc(q.b) + '</span><span class="pc"></span></button>';
+      h.states.play.querySelector('.mb-vote').innerHTML = q.op.map(function (o, i) {
+        return '<button class="mb-op" data-o="' + i + '"><i></i><em>投票 ' + 'ABCD'.charAt(i) + '</em>' +
+          '<span>' + K.esc(o.t) + '</span><span class="pc"></span></button>';
+      }).join('');
       if (read) read.scrollTop = 0;
-      if (picked) reveal(picked, true);
+      if (picked >= 0) reveal(picked, true);
       else h.states.play.querySelector('.mb-stat').textContent = '';
       paintFold(); paintTrack(); paintAll();
       if (!silent) {
@@ -10186,18 +11364,21 @@ const BAR_PREV = {
     function reveal(o, silent) {
       var q = Q[idx];
       K.qa('.mb-op', h.states.play).forEach(function (b) {
-        var isA = b.dataset.o === 'a', pct = isA ? q.pa : 100 - q.pa;
-        b.classList.toggle('pick', b.dataset.o === o);
+        var i = +b.dataset.o, pct = q.op[i].p;
+        b.classList.toggle('pick', i === o);
         b.classList.add('rev');
         b.querySelector('.pc').textContent = pct + '%';
         if (silent) b.querySelector('i').style.transition = 'none';
         b.querySelector('i').style.width = pct + '%';
         if (silent) void b.offsetWidth, b.querySelector('i').style.transition = '';
       });
-      var mine = o === 'a' ? q.pa : 100 - q.pa;
+      // 四选一没有「过半」可言，就按名次说话：你选的这项在四项里排第几
+      var mine = q.op[o].p, rank = 0;
+      for (var k = 0; k < q.op.length; k++) if (q.op[k].p > mine) rank++;
       h.states.play.querySelector('.mb-stat').innerHTML =
         '共 ' + q.n + ' 人已投票。和你投了同一项的有 <b>' + mine + '%</b>。' +
-        (mine >= 55 ? '（你和大多数人一样。）' : mine <= 42 ? '（你是少数派。）' : '（这题全公司都在犹豫。）');
+        (rank === 0 ? '（这是本题得票最高的一项。）' :
+          rank === 3 ? '（四项里最少人选的，就是你这项。）' : '（这题全公司都在犹豫。）');
     }
 
     function stamp() {
@@ -10208,17 +11389,17 @@ const BAR_PREV = {
 
     // ---------- 投票 ----------
     function vote(o) {
-      var q = Q[idx], first = !ans[idx];
+      var q = Q[idx], first = !has(idx);
       ans[idx] = o;
       sv.set('ans', ans);
       sfx.play('click');
       reveal(o);
       h.states.play.querySelector('.mb-info').className = 'mb-info vd';
       h.states.play.querySelector('.mb-info').textContent =
-        '你在 ' + stamp() + ' 投了「' + (o === 'a' ? q.a : q.b) + '」票。可以重新选择。';
+        '你在 ' + stamp() + ' 投了「' + q.op[o].t + '」票。可以重新选择。';
       paintFold(); paintTrack(); paintAll();
 
-      if (first && axDone(q.ax) === 4) {
+      if (first && axDone(q.ax) === axTotal(q.ax)) {
         var r = REMARK[q.ax], up = axVal(q.ax) > 0;
         hud.note(up ? r[0] : r[2], up ? r[1] : r[3], 'good');
       }
@@ -10228,8 +11409,8 @@ const BAR_PREV = {
       setTimeout(function () {
         if (st !== 'play') return;
         var n = -1, i;
-        for (i = idx + 1; i < Q.length; i++) if (!ans[i]) { n = i; break; }
-        if (n < 0) for (i = 0; i < Q.length; i++) if (!ans[i]) { n = i; break; }
+        for (i = idx + 1; i < Q.length; i++) if (!has(i)) { n = i; break; }
+        if (n < 0) for (i = 0; i < Q.length; i++) if (!has(i)) { n = i; break; }
         if (n < 0) return;
         idx = n;
         ask();
@@ -10245,12 +11426,52 @@ const BAR_PREV = {
     }
 
     // ---------- 人格画像：四维各挂一件道具，16 型 16 张脸，零图片 ----------
+    // 性别版本一次测试里只掷一次骰子：站内画像和下载的分享卡必须是同一个人。
+    var picSex = null;
+    function sexOf() {
+      if (!picSex) picSex = sv.get('sex') || (Math.random() < .5 ? 'm' : 'f');
+      sv.set('sex', picSex);
+      return picSex;
+    }
+    var picSeq = 0;
     function photo(c) {
       var props = c.split('').map(function (ch) { return '<div class="pp p-' + ch + '">' + (ch === 'P' ? '<s></s><s></s><s></s>' : ch === 'T' ? 'Z<em>z</em>' : '') + '</div>'; }).join('');
-      return '<div class="mb-photo">' + props +
+      var box = '<div class="mb-photo">' + props +
         '<div class="fig"></div><div class="col"></div><div class="bdg"></div>' +
         '<div class="cd">' + c + '</div></div>';
+      // 纸雕画像探到就换装，探不到保持 CSS 剪影（单机版 file:// 走这条兜底）
+      // 认领用自增序号而不是型号：intro 的示例图和 over 的结论图会同时在 DOM 里，
+      // 按型号认领会让先画的那张被后完成的探测刷成别人的脸。
+      var key = c + '-' + sexOf(), tag = 'p' + (++picSeq);
+      var probe = new Image();
+      probe.onload = function () {
+        K.qa('.mb-photo[data-c="' + tag + '"]').forEach(function (el) {
+          el.classList.add('pic');
+          el.style.backgroundImage = 'url(assets/mbti/paper/' + key + '.png)';
+        });
+      };
+      probe.src = 'assets/mbti/paper/' + key + '.png';
+      return box.replace('class="mb-photo"', 'class="mb-photo" data-c="' + tag + '"');
     }
+    // 性别开关：改的是同一个 picSex，所以画像和四张分享卡一起跟着换
+    function sexPick() {
+      var s = sexOf();
+      return '<div class="mb-sex">' +
+        '<button class="mb-sx' + (s === 'm' ? ' on' : '') + '" data-sx="m">男版</button>' +
+        '<button class="mb-sx' + (s === 'f' ? ' on' : '') + '" data-sx="f">女版</button></div>';
+    }
+    function setSex(s) {
+      if (sexOf() === s) return;
+      picSex = s;
+      sv.set('sex', s);
+      // 场上所有画像都重画：代号写在 .cd 里，照它原来的型号换人
+      K.qa('.mb-photo', h.win).forEach(function (el) {
+        el.parentNode.innerHTML = photo(el.querySelector('.cd').textContent);
+      });
+      K.qa('.mb-sx', h.win).forEach(function (b) { b.classList.toggle('on', b.dataset.sx === s); });
+      sfx.play('click');
+    }
+
     // 画像说明：把四件道具翻译成人话，评委一眼看懂这张图为什么长这样
     function caption(c) {
       return c.split('').map(function (ch, a) {
@@ -10263,25 +11484,39 @@ const BAR_PREV = {
       st = 'over';
       var c = code(false), t = TYPES[c];
       var rows = AX.map(function (x, a) {
-        var v = axVal(a), up = v > 0;
+        var v = axVal(a), up = v > 0, mx = axMax(a);
         return '<div><span>' + K.esc(x.fold) + '</span>倾向 <b>' + (up ? x.pn : x.nn) + '</b>（' + (up ? x.pos : x.neg) +
-          '）　强度 ' + Math.abs(v) + '/4</div>';
+          '）' + (mx > 1 ? '　强度 ' + Math.abs(v) + '/' + mx : '') + '</div>';
       }).join('');
       h.states.over.innerHTML =
         '<div class="mb-pane" id="mbOver">' +
         '<div class="h1">Re: 2026 Q3 人才盘点问卷 - 盘点结论</div>' +
         '<div class="mt"><b>人才发展部 · 盘点系统</b>　发送时间：' + stamp() + '<br>' +
         '收件人：<b>庄周</b>　　抄送：直属上级　　附件：1 项</div>' +
-        '<p class="mb-p">16 项投票已全部收到。经四维测算，你的职场型号为：</p>' +
+        '<p class="mb-p">' + Q.length + ' 项投票已全部收到。经四维测算，你的职场型号为：</p>' +
         '<div class="mb-row"><div class="mb-kv"><div class="mb-code">' + c + '</div>' +
-        '<div style="font-size:15px;color:#222;font-weight:700;margin:4px 0 10px">' + K.esc(t.nm) + '</div>' +
+        '<div style="font-size:15px;color:#222;font-weight:700;margin:4px 0 6px">' + K.esc(t.nm) + '</div>' +
+        '<div class="mb-tags">' + t.tg.map(function (g) { return '<em>' + K.esc(g) + '</em>'; }).join('') + '</div>' +
         rows +
         '<div><span>建议工位</span>' + K.esc(t.st) + '</div>' +
+        '<div><span>对照 MBTI</span>约等于 <b>' + toMBTI(c) + '</b>「' + MBNM[toMBTI(c)] + '」</div>' +
+        '<div><span>出场率</span><b>' + t.rt + '%</b>　1000 个同事里有 ' + Math.round(t.rt * 10) + ' 个你（' + rarity(t.rt) + '）</div>' +
         '<div><span>天敌型号</span><b>' + t.fo + '</b>「' + K.esc(TYPES[t.fo].nm) + '」，不建议与其组成二人小组</div>' +
+        '<div><span>最佳搭子</span><b>' + t.bd + '</b>「' + K.esc(TYPES[t.bd].nm) + '」，两个人凑一起活能干完</div>' +
         '</div>' +
-        '<div><div id="mbPic">' + photo(c) + '</div><div class="mb-cap">' + K.esc(caption(c)) + '</div></div></div>' +
+        '<div><div id="mbPic">' + photo(c) + '</div>' + sexPick() +
+        '<div class="mb-cap">' + K.esc(caption(c)) + '</div></div></div>' +
+        // 超能力 / bug / 口头禅：报告最好玩的三行，单拎出来排，不埋在正文里
+        '<div class="mb-spec">' +
+        '<div><i class="up"></i><span>超能力</span>' + K.esc(t.sk) + '</div>' +
+        '<div><i class="dn"></i><span>致命 bug</span>' + K.esc(t.bg) + '</div>' +
+        '<div><i class="sy"></i><span>口头禅</span><q>「' + K.esc(t.sy) + '」</q></div>' +
+        '</div>' +
         '<p class="mb-p">' + K.esc(t.cm) + '</p>' +
-        '<div style="padding:6px 0 12px"><span class="mb-att" id="mbAtt"><i></i>你的人格画像.png（48 KB）</span></div>' +
+        '<div style="padding:6px 0 12px;display:flex;flex-wrap:wrap;gap:6px">' +
+        '<span class="mb-att mb-dl"><i></i>职场名片_正反面.png（1160×1410）</span>' +
+        '<span class="mb-cap" style="width:auto;align-self:center">正面是你的画像，反面是人格报告，一张图发出去。</span>' +
+        '</div>' +
         '<div class="mb-act"><button class="rbtn gold mb-bub">转成泡泡，发到水面</button>' +
         '<button class="rbtn mb-again">重新盘点</button>' +
         '<span class="hint">同型号的人会来戳你。</span></div>' +
@@ -10303,7 +11538,7 @@ const BAR_PREV = {
         '<div class="mt"><b>HR 李姐</b>　发送时间：2026/8/10（周一） 9:05<br>' +
         '收件人：<b>全体员工</b>　　重要性：高　　需要答复：是</div>' +
         '<p class="mb-p">各位同事：</p>' +
-        '<p class="mb-p">附上本季度人才盘点问卷，共 <b>16 项</b>，每项两个选项，' +
+        '<p class="mb-p">附上本季度人才盘点问卷，共 <b>' + Q.length + ' 项</b>，每项四个选项，' +
         '直接点邮件里的投票按钮即可，投完自动跳下一封。全部完成后系统会自动出结论。</p>' +
         '<p class="mb-p">本次盘点覆盖四个维度：<b>话</b>（说不说）、<b>卷</b>（拼不拼）、' +
         '<b>锅</b>（背不背）、<b>饼</b>（信不信），组合为 16 种职场型号。</p>' +
@@ -10330,7 +11565,7 @@ const BAR_PREV = {
       st = 'play';
       if (!keep) { ans = []; sv.set('ans', ans); hud.clearNotes(); }
       idx = 0;
-      for (var i = 0; i < Q.length; i++) if (!ans[i]) { idx = i; break; }
+      for (var i = 0; i < Q.length; i++) if (!has(i)) { idx = i; break; }
       hud.note('盘点系统', '共 ' + Q.length + ' 项，投完自动跳下一封。左侧四个文件夹是四个维度，右下角跟踪条会跟着你的选择滑动。', '');
       shellPlay();
       h.go('play');
@@ -10347,16 +11582,34 @@ const BAR_PREV = {
       if (t.classList.contains('mb-prev')) return nav(-1);
       if (t.classList.contains('mb-next')) return nav(1);
       if (t.classList.contains('mb-fin')) { sfx.play('click'); return end(); }
-      if (t.classList.contains('mb-op')) return vote(t.dataset.o);
-      if (t.id === 'mbAtt') {
+      if (t.classList.contains('mb-op')) return vote(+t.dataset.o);
+      if (t.classList.contains('mb-sx')) return setSex(t.dataset.sx);
+      if (t.classList.contains('mb-tx') || t.classList.contains('mb-to')) return toggleTrack();
+      if (t.classList.contains('mb-dl')) {
         sfx.play('stamp');
         fx.pop(h.states.over.querySelector('.mb-photo'));
-        hud.toast('人格画像.png 已保存到「图片」', 'mbti');
+        var pc = code(false), pt = TYPES[pc];
+        if (typeof personaCard === 'function') {
+          personaCard({
+            code: pc, nm: pt.nm, fo: pt.fo, foNm: TYPES[pt.fo].nm, sex: sexOf(),
+            bd: pt.bd, bdNm: TYPES[pt.bd].nm, rt: pt.rt, rr: rarity(pt.rt),
+            tg: pt.tg, sk: pt.sk, bg: pt.bg, sy: pt.sy,
+            mb: toMBTI(pc) + '「' + MBNM[toMBTI(pc)] + '」', st: pt.st,
+            // 名片上用产品自己的四维叫法（话卷锅饼），不用左边文件夹那套 HR 黑话；
+            // 「造饼/信饼」在「饼」后面再带个饼字是重复的，只留头一个字
+            ax: AX.map(function (x, a) {
+              var v = axVal(a), d = '话卷锅饼'.charAt(a), p = v > 0 ? x.pn : x.nn;
+              return { d: d, p: p.length > 1 && p.charAt(p.length - 1) === d ? p.charAt(0) : p, v: Math.abs(v), mx: axMax(a) };
+            })
+          }, function () { hud.toast('名片已存下来了，正反两面加二维码，发得出去。', 'mbti'); });
+        } else {
+          hud.toast('职场名片.png 已保存到「图片」', 'mbti');
+        }
         return;
       }      if (t.classList.contains('mb-bub')) {
         var c = code(false), ty = TYPES[c];
         if (typeof mk === 'function') {
-          mk('测出来我的职场型号是 ' + c + '「' + ty.nm + '」：' + ty.cm.slice(0, 24) + '…', 'fun', 12, 'user', '职场MBTI');
+          mk('测出来我的职场型号是 ' + c + '「' + ty.nm + '」：' + ty.cm.slice(0, 24) + '…', 'fun', 12, 'user', '话卷锅饼测试');
           if (typeof sync === 'function') sync();
         }
         sfx.play('coin');
@@ -10376,7 +11629,818 @@ const BAR_PREV = {
     };
 
     var saved = sv.get('ans', null);
-    if (saved && saved.length) ans = saved.slice(0, Q.length);
+    // 老存档存的是 'a'/'b'，选项改成四个之后对不上号，宁可让人重测也不能算错分
+    if (saved && saved.length && saved.every(function (v) { return v == null || (typeof v === 'number' && v >= 0 && v < 4); })) {
+      ans = saved.slice(0, Q.length);
+    } else if (saved) {
+      sv.set('ans', []);
+    }
+    trkOff = !!sv.get('trk', 0);
+    intro();
+  });
+})();
+
+</script>
+<script>
+// 对齐会 · 一场四个人的线上会（Teams / 企鹅会议 两套皮）
+// 伪装选会议软件不是随便挑的：一场四个人的会、2×2 的画面宫格、底下一条控制栏，
+// 语音输入在这里是原生控件，不是硬塞的炫技。
+// 皮肤两套是因为「跨公司」是这产品的地基——你司用哪家会议软件，这扇窗就该长成哪家。
+//
+// 和「梦蝶局」的分工：那边是一局有输赢的牌——AI 的信誉考场，战绩会攒下来。
+// 这边不是游戏，是工具：你把想不通的事摆上桌，雇 AI 去演那几个当事人，看他们各自在意什么。
+// 两个各走各的门，互不套壳。
+//
+// 一条红线：每个座位一次独立 askAI，system 互不包含别人的设定；
+// 谁调通了谁挂「真」，调不通挂「脚」，逐座位标，不整局一刀切。
+(function () {
+  'use strict';
+  var K = window.BPKit;
+  if (!K) return;
+
+  var MAXR = 4;              // 除「你」之外最多四个人：开局调用数 = 人数 + 1，封住成本
+  var HIRE = '¥29';
+
+  // 默认这一局：判决权最模糊、每个人的利害最不一样的那类事
+  var DEMO = {
+    q: '我带的项目跑赢目标 30%。上周复盘会，组长一句「团队协作的结果」就带过去了，我的名字一次没出现。\n我要不要争？争了会怎样？',
+    roles: [
+      { nm: '组长', rel: '我的直属上级，这个项目挂在他名下', care: '他要的是稳，不想组里出头的人太扎眼' },
+      { nm: '小李', rel: '同组，项目里跟我配合的人', care: '' },
+      { nm: 'HRBP 李姐', rel: '管我们组绩效的 HR', care: '' }
+    ]
+  };
+
+  var SEATS = [
+    { v: '', nm: '平台 AI', tip: '社区自带' },
+    { v: 'mine', nm: '我的机器人', tip: '用你在工坊填的人格' },
+    { v: 'hire', nm: '雇来的分身', tip: HIRE + ' · 演示计价' }
+  ];
+
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  function micWhy() {
+    if (location.protocol === 'file:') return '单机版打不开语音，直接打字';
+    if (!SR) return '这个浏览器不支持语音，直接打字';
+    return '';
+  }
+
+  // ---- 三行定式：模型和脚本走同一个结构，界面不用分两套 ----
+  // 「你」那一座换一套标题：同一个结构，但第三行问的是他在等谁，不是他被谁踩到
+  var FIELD = [
+    { k: 'open', nm: '他明面上要的', me: '你自己以为你要的' },
+    { k: 'fear', nm: '他底下真正怕的', me: '你不肯承认自己怕的' },
+    { k: 'line', nm: '你踩到他哪根线', me: '你其实在等谁开这个口' }
+  ];
+
+  function parse4(txt) {
+    var o = { open: '', fear: '', line: '', say: '' };
+    String(txt || '').split(/\r?\n/).forEach(function (raw) {
+      var s = clean(raw);
+      if (/^明面/.test(s)) o.open = tail(s);
+      else if (/^底下/.test(s)) o.fear = tail(s);
+      else if (/^那根线/.test(s)) o.line = tail(s);
+      else if (/^原话/.test(s)) o.say = tail(s);
+    });
+    return o;
+  }
+  function parse2(txt) {
+    var o = { re: '', in_: '' };
+    String(txt || '').split(/\r?\n/).forEach(function (raw) {
+      var s = clean(raw);
+      if (/^反应/.test(s)) o.re = tail(s);
+      else if (/^心里/.test(s)) o.in_ = tail(s);
+    });
+    return o;
+  }
+  // 模型爱加编号、加粗、加引号，一律先剥干净再认前缀（"1. 反应：…" 只剥掉数字是认不出来的）
+  function clean(s) { return String(s).replace(/[*#`]/g, '').replace(/^[\s\d.、)）\-]+/, '').trim(); }
+  function tail(s) {
+    return s.replace(/^[^：:]*[：:]\s*/, '')
+      .replace(/^[（("'「『“]+|[）)"'」』”]+$/g, '').trim();
+  }
+  function full(o) { return o.open && o.fear && o.line; }
+
+  // ---- 脚本兜底：调不通时也得是一局像样的戏，但必须挂「脚」 ----
+  // 三张卡吐一模一样的话，读起来像坏了。按关系里的关键词分几路，认不出来的按序号轮，
+  // 至少每个人不一样；用户自己填的「在意什么」也搬进来——这不是分析，是把他的话还给他。
+  var FB = [
+    { re: /领导|上级|老板|总监|组长|经理|主管|老大/, o: {
+      open: '我要的是这事有个说得过去的结论。',
+      fear: '怕上面觉得我压不住组里的人。',
+      line: '你把它摆上桌，就等于逼我当场表态。',
+      say: '这事我们会后单独聊，别在会上说。' } },
+    { re: /HR|人事|HRBP|李姐/i, o: {
+      open: '我要流程上挑不出毛病。',
+      fear: '怕这事闹到我这儿变成一桩投诉。',
+      line: '你越过流程直接讲情绪，我接不住。',
+      say: '你的诉求我记下来，走正常渠道我们看看。' } },
+    { re: /同事|同组|同学|搭档|队友|小李|小王/, o: {
+      open: '我要的是别把我卷进去。',
+      fear: '怕站了你这边，回头没人替我说话。',
+      line: '你一提这事，我就得选一边站。',
+      say: '我懂你的意思，但我说了也不算。' } },
+    { re: /客户|甲方|乙方|供应商/, o: {
+      open: '我要的是东西按时交到我手上。',
+      fear: '怕你们内部的账最后算到我头上。',
+      line: '你把内部的事摆到我面前来了。',
+      say: '你们内部怎么分我不管，交付别耽误。' } }
+  ];
+  var FB_ANY = [
+    { open: '我要的是这页翻过去，别再提。', fear: '怕这事翻出来牵到我身上。',
+      line: '你旧事重提，就是不肯让它过去。', say: '这都过去多久了，还提它干嘛。' },
+    { open: '我要一个明确的说法，别含糊。', fear: '怕自己成了那个被推出去的人。',
+      line: '你让所有人都得重新表一次态。', say: '要不咱们先把话说清楚。' },
+    { open: '我要的是少一事不如多一事。', fear: '怕这口气一开，后面收不住。',
+      line: '你动的是大家默认不动的那块。', say: '这事真要掰扯，谁都不好看。' },
+    { open: '我要的是自己那份别被算错。', fear: '怕轮到分的时候没我。',
+      line: '你先开口，就把顺序改了。', say: '你说的这个，我也得算算我的。' }
+  ];
+  function fbRole(r, i) {
+    var key = (r.nm || '') + ' ' + (r.rel || '');
+    var hit = null;
+    for (var k = 0; k < FB.length; k++) if (FB[k].re.test(key)) { hit = FB[k].o; break; }
+    var o = hit || FB_ANY[i % FB_ANY.length];
+    o = { open: o.open, fear: o.fear, line: o.line, say: o.say };
+    // 用户猜他在意什么，就先按他猜的说——猜错了也是他自己的猜，这张卡挂着「脚」
+    if (r.care) o.open = String(r.care).slice(0, 22);
+    return o;
+  }
+  function fbMe() {
+    return {
+      open: '我要一句公道话，把我的名字说出来。',
+      fear: '怕开了这个口，被看成计较的人。',
+      line: '你其实在等有人替你说，而不是自己说。',
+      say: '算了，也没那么重要。'
+    };
+  }
+  var FB_RE = [
+    { re: '你这话我听见了，我回头想想。', in_: '他这是有备而来。' },
+    { re: '行，那你先说说你想怎么办。', in_: '别把我先绕进去。' },
+    { re: '这个我得再确认一下才好答你。', in_: '现在接了就是我的事了。' },
+    { re: '我理解，但这不是我一个人能定的。', in_: '这话得让别人先说。' },
+    { re: '你要真这么想，那我们摊开讲。', in_: '他今天不打算算了。' }
+  ];
+  function fbReact(r, i) { return FB_RE[i % FB_RE.length]; }
+
+  // ================================================================
+  // 两套皮肤：同一个会议，换一家厂商的壳
+  // 不是换配色玩——「跨公司」是这个产品的地基，用哪家会议软件本来就是各公司自己的事。
+  // 你司用企鹅会议，那这扇窗就该长成企鹅会议。皮肤记在 localStorage，下次打开还是它。
+  //
+  // 排布照着真会中界面来：上面一格一个人的画面（2×2 宫格），下面一条控制栏，
+  // 分析出来之后自动"开始共享"——画面收成顶部一条，内容占主区。真开会就是这个顺序。
+  // ================================================================
+  var SKIN = {
+    teams: {
+      nm: 'Teams', vendor: 'Microsoft Teams',
+      title: '项目复盘 · 对齐会（4 人）- Microsoft Teams',
+      c: '#6264A7', c2: '#464775',
+      joinN: '与会 %n 人', tag: '会议',
+      // 控制栏：真 Teams 是居中一排圆角按钮，挂断在最右边红的
+      ctl: [['🎤', '静音'], ['📹', '摄像头'], ['🖥', '共享'], ['💬', '聊天'], ['👥', '参与者'], ['⋯', '更多']],
+      leave: '离开',
+      meta: function (n) { return '会议进行中 · ' + n + ' 位参与者'; }
+    },
+    tm: {
+      nm: '企鹅会议', vendor: '企鹅会议',
+      title: '项目复盘对齐会 - 企鹅会议',
+      c: '#2B7FFF', c2: '#1A6BE8',
+      joinN: '%n 人在会议中', tag: '会议中',
+      // 企鹅会议的底栏按钮更多、文案更长，最右是「结束会议」
+      ctl: [['🎤', '静音'], ['📹', '停止视频'], ['🖥', '共享屏幕'], ['👥', '成员'], ['💬', '聊天'], ['✉', '邀请'], ['⋯', '更多']],
+      leave: '结束会议',
+      meta: function (n) { return '会议 ID：872 145 339 · ' + n + ' 人'; }
+    }
+  };
+  var SKIN_ORDER = ['teams', 'tm'];
+
+  K.ready(function () {
+    if (typeof registerGame !== 'function') return;
+
+    registerGame({
+      id: 'winDreamRoom', app: 'chat', go: 'dreamroom',
+      title: '项目复盘 · 对齐会（4 人）- Microsoft Teams',
+      style: 'left:150px;top:64px;width:940px;height:598px',
+      hall: { nm: '对齐会', by: '官方', tip: 88 }
+    });
+
+    // 桌面 C 位就是它唯一的入口，不再进趣味游戏文件夹——正门只留一扇
+    // 名字继续伪装成一场会——老板瞟一眼是在开会，不是在玩
+    (function deskEntry() {
+      if (document.querySelector('#deskRoom')) return;
+      var d = document.createElement('div');
+      d.id = 'deskRoom';
+      d.className = 'dski';
+      d.innerHTML = '<span class="ic page" data-x="TM" style="--tag:#6264A7"></span><em>项目复盘对齐会_周四.lnk</em>';
+      document.body.appendChild(d);
+      var st = document.createElement('style');
+      st.textContent =
+        '#deskRoom{position:fixed;left:46%;top:26%;transform:translate(-50%,-50%);z-index:2;width:130px}' +
+        'body:not(.os) #deskRoom{display:none}' +
+        '#deskRoom .ic.page::after{font-size:8px;letter-spacing:0}';
+      document.head.appendChild(st);
+      d.addEventListener('click', function () { if (typeof goFeature === 'function') goFeature('dreamroom'); });
+      // 生成图标就位即换装，没图就用 CSS 画的那张纸
+      var im = new Image();
+      im.onload = function () {
+        var e = d.querySelector('.ic');
+        if (e) { e.className = 'ic pic'; e.removeAttribute('data-x'); e.style.backgroundImage = 'url(assets/icons/it-room.png)'; }
+      };
+      im.src = 'assets/icons/it-room.png';
+    })();
+
+    var h = K.shell({
+      win: 'winDreamRoom',
+      title: '项目复盘 · 对齐会（4 人）- Microsoft Teams',
+      side: true, crumb: false, save: 'dreamroom'
+    });
+    if (!h) return;
+    var hud = h.hud, fx = h.fx, sfx = h.sfx, sv = h.save;
+
+    // 皮肤全走 CSS 变量：换皮只改窗口上的 data-skin，一条规则都不用重写
+    // 会中区是深色的——两家的会中界面都是深底，浅色只出现在「立案」那一步（还没进会）
+    h.css(
+      // Teams 紫：#6264A7 是功能主色，#464775 是更深的那档
+      '&{--c:#6264A7;--c2:#464775;--bg:#F5F5F5;--sd:#EDEBE9;--rl:#E1DFDD;--dm:#605E5C;--rd:5px;--fa:50%;' +
+      '  --st:#1F1F23;--tile:#2A2A31;--tl2:#33333C;--tx:#EAEAEE;--tx2:#9A9AA2;--tr:#3D3D42}' +
+      '&[data-skin=teams] .dwh{background:#464775}' +
+      // 企鹅会议蓝：会中界面比 Teams 更黑一点，圆角更大，按钮是方的
+      '&[data-skin=tm]{--c:#2B7FFF;--c2:#1A6BE8;--bg:#F2F3F5;--sd:#F7F8FA;--rl:#E5E6EB;--dm:#4E5969;--rd:6px;--fa:6px;' +
+      '  --st:#17181C;--tile:#232529;--tl2:#2B2E33;--tx:#F2F3F5;--tx2:#86909C;--tr:#2E3238}' +
+      '&[data-skin=tm] .dwh{background:#1D2129}' +
+      // kit 给文档窗配的工具条在这儿是多余的一层壳——会议客户端没有这条，整条不要
+      '.k-tool{display:none}' +
+      '.dwb{background:var(--st)}' +
+      '.k-side{width:222px;background:var(--sd);border-left:1px solid var(--rl)}' +
+      // ---- 加入会议前那一屏 ----
+      // 真客户端进会前是一张深色预览页：左边摄像头画面，右边选设备，底下一个蓝色「加入」。
+      // 这场会没有摄像头，那块黑框就放你要摆上桌的那件事——加入之前你看见的本来就该是你自己。
+      '&[data-st=intro] .k-stage{padding:0;background:var(--st);overflow:hidden}' +
+      '&[data-st=intro] .k-side{display:none}' +          // 会前没有聊天面板，进了会才有
+      '&[data-st=intro] .k-st[data-k=intro]{height:100%;box-sizing:border-box;padding:13px 15px}' +
+      '.dr-pre{display:flex;gap:15px;height:100%;box-sizing:border-box;color:var(--tx)}' +
+      '.dr-pvw{width:330px;flex:none;display:flex;flex-direction:column;min-height:0}' +
+      '.dr-pv{flex:1;min-height:0;display:flex;flex-direction:column;background:#0C0C0F;' +
+      '  border:1px solid var(--tr);border-radius:8px;padding:11px 12px}' +
+      '.dr-pvh{font-size:10.5px;color:var(--tx2);letter-spacing:.3px;margin-bottom:7px}' +
+      '.dr-q{flex:1;min-height:0;width:100%;box-sizing:border-box;padding:0;border:0;background:none;' +
+      '  color:var(--tx);font:13px/1.75 inherit;resize:none}' +
+      '.dr-q:focus{outline:0}' +
+      '.dr-q::placeholder{color:#63636B}' +
+      '.dr-pvc{display:flex;align-items:center;gap:9px;margin-top:11px;flex-wrap:wrap}' +
+      '.dr-mic{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border:1px solid var(--tr);' +
+      '  background:var(--tile);color:var(--tx);border-radius:16px;cursor:pointer;font:12px inherit}' +
+      '.dr-mic:hover{background:var(--tl2)}' +
+      '.dr-mic i{width:8px;height:8px;border-radius:50%;background:var(--tx2);display:inline-block}' +
+      '.dr-mic[disabled]{opacity:.45;cursor:not-allowed}' +
+      '.dr-mic.rec{border-color:#D74F4F;color:#F2A0A0}' +
+      '.dr-mic.rec i{background:#D74F4F;animation:k-glow 1.2s infinite}' +
+      '.dr-ex{font-size:12px;color:#9AA6E0;cursor:pointer;text-decoration:underline dotted}' +
+      '.dr-why{font-size:11px;color:var(--tx2)}' +
+      // 右半边＝真客户端的「加入前设置」。那儿选的是麦克风和摄像头，这儿选的是这场会有谁
+      '.dr-pj{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0}' +
+      '.dr-pj h4{margin:0 0 3px;font-size:13px;color:var(--tx);font-weight:600}' +
+      '.dr-h{font-size:11.5px;color:var(--tx2);margin:0 0 8px;line-height:1.65}' +
+      '.dr-h b{color:var(--tx);font-weight:400}' +
+      '.dr-tbw{flex:1;min-height:0;overflow:auto}' +
+      '.dr-tb{width:100%;border-collapse:collapse;font-size:12px}' +
+      '.dr-tb th{font-weight:400;color:var(--tx2);text-align:left;padding:0 6px 5px 0;font-size:10.5px}' +
+      '.dr-tb td{padding:3px 6px 3px 0;vertical-align:middle}' +
+      '.dr-tb input,.dr-tb select{width:100%;box-sizing:border-box;padding:5px 7px;border:1px solid var(--tr);' +
+      '  border-radius:4px;background:var(--tile);color:var(--tx);font:12px inherit}' +
+      '.dr-tb input:focus,.dr-tb select:focus{outline:0;border-color:var(--c)}' +
+      '.dr-tb input::placeholder{color:#63636B}' +
+      '.dr-tb tr.me td{color:var(--tx2);font-size:11.5px;padding-top:6px}' +
+      '.dr-tb tr.me b{color:var(--tx);font-weight:400}' +
+      '.dr-x{border:0;background:none;color:var(--tx2);cursor:pointer;font-size:15px;line-height:1}' +
+      '.dr-x:hover{color:#F2A0A0}' +
+      '.dr-warn{font-size:11px;color:var(--tx2);line-height:1.7;margin-top:8px}' +
+      '.dr-warn b{color:var(--tx);font-weight:400}' +
+      // 加入那一排：选哪家客户端 + 蓝色大按钮，位置跟真客户端一样在右下
+      '.dr-join{flex:0 0 auto;display:flex;align-items:center;gap:9px;margin-top:11px;' +
+      '  padding-top:11px;border-top:1px solid var(--tr)}' +
+      '.dr-cl{font-size:11px;color:var(--tx2)}' +
+      '.dr-sk{display:flex;border:1px solid var(--tr);border-radius:13px;overflow:hidden;background:var(--tile)}' +
+      '.dr-sk b{font-weight:400;font-size:11px;padding:3px 10px;cursor:pointer;color:var(--tx2)}' +
+      '.dr-sk b.on{background:var(--c);color:#fff}' +
+      '.dr-bar{display:flex;align-items:center;gap:6px;margin:7px 0 0;flex-wrap:wrap}' +
+      // .dr-b 基准色给共享出来的那份白底内容用；预览页是深色的，单独压一层
+      '.dr-b{padding:5px 14px;border:1px solid var(--rl);background:#fff;border-radius:var(--rd);cursor:pointer;font:12px inherit}' +
+      '.dr-b:hover{background:var(--sd)}' +
+      '.dr-b.pri{background:var(--c);border-color:var(--c);color:#fff}' +
+      '.dr-b.pri:hover{background:var(--c2)}' +
+      '.dr-b[disabled]{opacity:.5;cursor:not-allowed}' +
+      '.dr-pre .dr-b{background:var(--tile);border-color:var(--tr);color:var(--tx)}' +
+      '.dr-pre .dr-b:hover{background:var(--tl2)}' +
+      '.dr-pre .dr-b.pri{margin-left:auto;padding:7px 22px;font-size:13px;background:var(--c);border-color:var(--c);color:#fff}' +
+      '.dr-pre .dr-b.pri:hover{background:var(--c2)}' +
+      // ---- 会中：整块深色，上面宫格下面控制栏 ----
+      // kit 的 .k-stage 默认是白底带内边距的文档区，进会后整个让位给会议界面
+      '&[data-st=play] .k-stage{padding:0;background:var(--st);display:flex;flex-direction:column;overflow:hidden}' +
+      '&[data-st=play] .k-st[data-k=play]{flex:1;min-height:0;display:flex;flex-direction:column}' +
+      '&[data-st=play] .k-side{background:var(--st);border-left-color:var(--tr);color:var(--tx)}' +
+      '&[data-st=play] .k-side .cmt{background:var(--tile);border-radius:6px;padding:7px 9px;color:var(--tx)}' +
+      '&[data-st=play] .k-side .cmt .who b{color:var(--tx)}' +
+      '&[data-st=play] .k-side .dr-note .in{color:var(--tx2)}' +
+      '.dr-meta{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:7px 12px;color:var(--tx2);font-size:11px}' +
+      '.dr-meta .rec{color:#F2A0A0}' +
+      '.dr-meta .rec:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;' +
+      '  background:#D74F4F;margin-right:5px;vertical-align:middle;animation:k-glow 1.8s infinite}' +
+      // 宫格：4 人是 2×2，真会议软件的默认画廊就是这个
+      '.dr-grid{flex:1;min-height:0;overflow:auto;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 8px}' +
+      // 共享开始后画面收成顶部一条：内容占主区，这是真开会共享屏幕时的样子
+      '.dr-share .dr-grid{flex:0 0 auto;grid-template-columns:repeat(4,1fr);gap:6px;overflow:visible}' +
+      '.dr-share .dr-c{min-height:56px;padding:7px 9px;justify-content:center}' +
+      '.dr-share .dr-f,.dr-share .dr-say,.dr-share .dr-c .rel{display:none}' +
+      '.dr-c{background:var(--tile);border-radius:var(--rd);padding:9px 11px;position:relative;' +
+      '  min-height:132px;display:flex;flex-direction:column;overflow:hidden}' +
+      // 「你」那一格描边：真会议里正在发言的人就是这么被框住的
+      '.dr-c.me{box-shadow:inset 0 0 0 2px var(--c)}' +
+      '.dr-c h4{margin:0;font-size:12.5px;color:var(--tx);display:flex;align-items:center;gap:7px;font-weight:400}' +
+      // 与会人头像：Teams 是圆的，企鹅会议是圆角方的——就靠 --fa 一个变量分开
+      '.dr-av{width:26px;height:26px;border-radius:var(--fa);flex:none;color:#fff;font-size:12px;' +
+      '  display:inline-flex;align-items:center;justify-content:center;background:var(--c)}' +
+      '.dr-share .dr-av{width:20px;height:20px;font-size:10px}' +
+      '.dr-c .rel{font-size:10.5px;color:var(--tx2);margin:3px 0 8px 33px}' +
+      '.dr-f{margin-bottom:6px}' +
+      '.dr-f b{display:block;font-size:9.5px;color:var(--tx2);font-weight:400;letter-spacing:.4px}' +
+      '.dr-f span{font-size:12px;line-height:1.55;color:var(--tx)}' +
+      '.dr-f.fear span{color:#F2A0A0}' +
+      '.dr-say{margin-top:auto;padding:6px 9px;background:var(--tl2);border-radius:4px;' +
+      '  font-size:11.5px;line-height:1.55;color:#D6D6DC}' +
+      '.dr-bg{position:absolute;right:8px;top:8px;font-size:9.5px;padding:0 6px;border-radius:8px;line-height:16px}' +
+      '.dr-bg.real{background:#2F6B4A;color:#CDF0DB}' +
+      '.dr-bg.scr{background:#6B3A3A;color:#F3D3D3}' +
+      '.dr-bg.wait{background:var(--tl2);color:var(--tx2)}' +
+      // 共享出来的「内容」：分析结论在真会议里就该是被共享的那份东西
+      '.dr-share2{flex:1;min-height:0;overflow:auto;margin:0 12px 8px;background:#fff;' +
+      '  border-radius:var(--rd);padding:11px 13px}' +
+      '.dr-share2:empty{display:none}' +
+      '.dr-share2 .shh{font-size:10px;color:var(--dm);margin-bottom:8px;letter-spacing:.3px}' +
+      '.dr-share2 .shh b{color:var(--c2);font-weight:600}' +
+      '.dr-share2 .dr-h{color:var(--dm)}' +          // 共享出来的是白底那份，说明文字得跟着变深
+      // 控制栏：两家都是居中一排，挂断在最右边且是红的
+      '.dr-ctl{position:relative;flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:4px;' +
+      '  padding:7px 12px;border-top:1px solid var(--tr);background:var(--st)}' +
+      '.dr-ctl u{text-decoration:none;display:inline-flex;flex-direction:column;align-items:center;gap:3px;' +
+      '  padding:4px 10px;border-radius:var(--rd);color:var(--tx2);font-size:9.5px;cursor:default;line-height:1.2}' +
+      '.dr-ctl u i{font-style:normal;font-size:14px;line-height:1;filter:grayscale(1) brightness(1.7)}' +
+      '.dr-ctl u:hover{background:var(--tl2)}' +
+      '.dr-ctl u.more{cursor:pointer}' +
+      '.dr-ctl u.more.on{background:var(--tl2);color:var(--tx)}' +
+      '.dr-ctl .end{background:#C0503F;color:#fff;padding:7px 15px;border-radius:var(--rd);font-size:11px;' +
+      '  cursor:pointer;border:0;margin-left:12px}' +
+      '.dr-ctl .end:hover{background:#D4604E}' +
+      // 「更多」是真能点开的：换会议客户端本来就该藏在这儿，而不是另起一条工具条
+      // 左右位置在 JS 里按按钮算，写死 right 会飘到别处——两家的按钮数不一样，「更多」不在同一个 x 上
+      '.dr-menu{position:absolute;left:0;bottom:52px;min-width:176px;background:var(--tile);' +
+      '  border:1px solid var(--tr);border-radius:var(--rd);padding:5px;box-shadow:0 10px 28px rgba(0,0,0,.55);z-index:6}' +
+      '.dr-menu .mh{font-size:10px;color:var(--tx2);padding:4px 8px 6px}' +
+      '.dr-menu b{display:block;font-weight:400;font-size:12px;color:var(--tx);padding:6px 8px;' +
+      '  border-radius:4px;cursor:pointer}' +
+      '.dr-menu b:hover{background:var(--tl2)}' +
+      '.dr-menu b.on:after{content:"　✓";color:var(--c)}' +
+      '.dr-cmp h4{margin:0 0 2px;font-size:12px}' +
+      '.dr-cmp .dr-h{margin-bottom:7px}' +
+      '.dr-cmp li{font-size:12px;line-height:1.75;list-style:none}' +
+      '.dr-cmp li b{color:#C43E1C;font-weight:600}' +
+      '.dr-cmp li em{font-style:normal;color:var(--dm)}' +
+      '.dr-say2{display:flex;gap:6px;margin-top:11px}' +
+      '.dr-say2 input{flex:1;padding:6px 9px;border:1px solid var(--rl);border-radius:var(--rd);font:13px inherit}' +
+      '.dr-say2 input:focus{outline:0;border-color:var(--c)}' +
+      '.dr-note{font-size:12px}' +
+      '.dr-note .re{line-height:1.6}' +
+      '.dr-note .in{color:#8A8886;margin-top:3px;line-height:1.5}' +
+      '.dr-note .in:before{content:"（心里）"}'
+    );
+
+    // ---------------- 状态 ----------------
+    var G = { q: '', roles: [], out: {}, src: {}, calls: 0, real: 0, turns: 0 };
+    var rec = null, recOn = false;
+    var skin = SKIN[sv.get('skin', 'teams')] ? sv.get('skin', 'teams') : 'teams';
+
+    function sk() { return SKIN[skin]; }
+    function setSkin(k, quiet) {
+      if (!SKIN[k]) return;
+      skin = k;
+      sv.set('skin', k);
+      h.win.setAttribute('data-skin', k);
+      if (!quiet) { sfx.play('click'); hud.toast('已换成' + SKIN[k].nm + '的皮'); }
+      var b = h.win.querySelector('.dr-sk');
+      if (b) b.querySelectorAll('b').forEach(function (x) { x.classList.toggle('on', x.dataset.sk === k); });
+      // 会中那一屏得跟着换：两家的控制栏按钮不一样，会议信息那行也不一样
+      var ctl = h.states.play.querySelector('.dr-ctl');
+      if (ctl) ctl.outerHTML = ctlBar();
+      var meta = h.states.play.querySelector('.dr-meta span:last-child');
+      if (meta) meta.textContent = sk().meta(seats().length);
+      title();
+      foot();
+    }
+    function skBar() {
+      return '<span class="dr-sk">' + SKIN_ORDER.map(function (k) {
+        return '<b data-sk="' + k + '"' + (k === skin ? ' class="on"' : '') + '>' + SKIN[k].nm + '</b>';
+      }).join('') + '</span>';
+    }
+
+    function seats() {
+      // 「你」永远是最后一位：AI 也演一个你，这样这一局才不是你自己的回声
+      return G.roles.concat([{ nm: '「你」', rel: '当事人本人，由 AI 扮演', care: '', from: '', me: true }]);
+    }
+
+    // 标题栏归我自己写：kit 的 baseTitle 在建窗时就定死了，换皮换不动它
+    var step = '';
+    function title(sub) {
+      if (typeof sub === 'string') step = sub;
+      var head = h.win.querySelector('.dwh');
+      if (!head) return;
+      var wb = head.querySelector('.wb');
+      head.textContent = sk().title + (step ? ' — ' + step : '');
+      if (wb) head.appendChild(wb);
+    }
+
+    function foot() {
+      hud.foot([sk().joinN.replace('%n', seats().length), '独立调用 ' + G.calls + ' 次'],
+        G.calls ? ('真 ' + G.real + ' · 脚 ' + (G.calls - G.real)) : '尚未调用');
+    }
+
+    // ---------------- 加入会议前 ----------------
+    function intro() {
+      G.roles = DEMO.roles.map(function (r) { return { nm: r.nm, rel: r.rel, care: r.care, from: '' }; });
+      G.out = {}; G.src = {}; G.calls = 0; G.real = 0; G.turns = 0;
+      title('');
+      hud.clearNotes();
+
+      var s = h.states.intro;
+      s.innerHTML =
+        '<div class="dr-pre">' +
+        '<div class="dr-pvw">' +
+        '  <div class="dr-pv">' +
+        '    <div class="dr-pvh">摄像头已关闭 · 这场会你要摆上桌的那件事</div>' +
+        '    <textarea class="dr-q" id="drQ" placeholder="讲得越具体，等会儿这几个人越像人。&#10;比如：我做的项目跑赢目标 30%，复盘会上功劳被组长一句话带过……"></textarea>' +
+        '  </div>' +
+        '  <div class="dr-pvc">' +
+        '    <button class="dr-mic" data-dr="mic"><i></i><span>点一下说话</span></button>' +
+        '    <span class="dr-ex" data-dr="demo">用这个例子填上</span>' +
+        '    <span class="dr-why" id="drMicWhy"></span>' +
+        '  </div>' +
+        '</div>' +
+        '<div class="dr-pj">' +
+        '  <h4>这场会里有谁</h4>' +
+        '  <p class="dr-h">「你猜他在意什么」可以留空——留空就让他自己说，你猜的那一栏他有权推翻。' +
+        '  最后一位固定是「你」，也由 AI 来演：<b>让 AI 也演一个你，这一局才不是你自己的回声。</b></p>' +
+        '  <div class="dr-tbw"><table class="dr-tb"><thead><tr>' +
+        '    <th style="width:92px">谁</th><th style="width:31%">和你什么关系</th>' +
+        '    <th>你猜他在意什么</th><th style="width:98px">谁来演</th><th style="width:18px"></th>' +
+        '  </tr></thead><tbody id="drRows"></tbody></table>' +
+        '  <div class="dr-bar"><button class="dr-b" data-dr="add">＋ 再加一个人</button></div>' +
+        '  <div class="dr-warn" id="drWarn"></div></div>' +
+        '  <div class="dr-join"><span class="dr-cl">用哪家客户端加入</span>' + skBar() +
+        '    <button class="dr-b pri" data-dr="go">加入会议</button></div>' +
+        '</div></div>';
+
+      var w = micWhy();
+      var mic = s.querySelector('[data-dr="mic"]');
+      if (w) { mic.setAttribute('disabled', ''); s.querySelector('#drMicWhy').textContent = w; }
+      s.querySelector('#drQ').value = DEMO.q;
+      G.q = DEMO.q;
+      rows();
+      warn();
+      goStep('intro');
+      foot();
+    }
+
+    function rows() {
+      var tb = h.states.intro.querySelector('#drRows');
+      if (!tb) return;
+      var opt = function (from) {
+        return SEATS.map(function (o) {
+          return '<option value="' + o.v + '"' + (o.v === from ? ' selected' : '') + '>' + o.nm + '</option>';
+        }).join('');
+      };
+      tb.innerHTML = G.roles.map(function (r, i) {
+        return '<tr><td><input data-f="nm" data-i="' + i + '" value="' + K.esc(r.nm) + '" placeholder="组长"></td>' +
+          '<td><input data-f="rel" data-i="' + i + '" value="' + K.esc(r.rel) + '" placeholder="我的直属上级"></td>' +
+          '<td><input data-f="care" data-i="' + i + '" value="' + K.esc(r.care) + '" placeholder="（可留空）"></td>' +
+          '<td><select data-f="from" data-i="' + i + '">' + opt(r.from) + '</select></td>' +
+          '<td><button class="dr-x" data-dr="del" data-i="' + i + '" title="去掉这个人">×</button></td></tr>';
+      }).join('') +
+        '<tr class="me"><td><b>「你」</b></td><td colspan="2">当事人本人 · 由 AI 扮演，它不替你说话</td>' +
+        '<td>平台 AI</td><td></td></tr>';
+    }
+
+    function warn() {
+      var n = seats().length;
+      var el = h.states.intro.querySelector('#drWarn');
+      if (!el) return;
+      var hire = G.roles.filter(function (r) { return r.from === 'hire'; }).length;
+      el.innerHTML = '开局会发出 <b>' + n + ' 次互相独立的调用</b>——每个人只拿到这件事和他自己那一栏，' +
+        '看不到别人的设定，也不知道别人怎么想。<br>' +
+        '谁调通了谁的卡片上挂「真」，调不通挂「脚」，逐个标，不整局一刀切。' +
+        (hire ? '<br>雇了 ' + hire + ' 个分身 · 合计 ¥' + (hire * 29) + '（演示计价，未接入真实支付）' : '');
+    }
+
+    // ---------------- 每个座位一次独立调用 ----------------
+    function sysRole(r, me) {
+      var p;
+      if (me) {
+        p = '你在一场四个人的职场议事里，扮演当事人本人。你不是他的同盟，也不是他的辩护人。'
+          + '他把事情讲成这样：' + G.q + '。'
+          + '这是他自己的说法，里面一定有他没说出口的部分——你的任务就是把那部分说出来。'
+          + '不要安慰他，不要顺着他，不要复述他的委屈。';
+      } else {
+        p = '你在一场四个人的职场议事里，扮演一个真实的人：' + r.nm + '。'
+          + '你和当事人的关系：' + (r.rel || '同事') + '。'
+          + (r.care ? '当事人猜你在意的是「' + r.care + '」——这只是他的猜测，你可以推翻它。' : '')
+          + '当事人把事情讲成这样，这是他的一面之词：' + G.q + '。'
+          + '你只知道自己的处境，看不见这件事里其他人的设定，也不知道他们各自怎么想。'
+          + '你不替当事人说话，也不刻意站他的对立面，你只按自己的利害说话。';
+      }
+      if (r.from === 'mine') {
+        var b = (typeof botProfile === 'function') ? botProfile() : null;
+        if (b) p += '你的说话方式：' + String(b.dna).replace(/\n/g, '；').slice(0, 60) + '。';
+      } else if (r.from === 'hire') {
+        p += '你是别人训练出来的分身，语气比在场所有人都更像老手，句子短、带判断。';
+      }
+      p += '严格输出 4 行，每行一句，用下面的前缀开头，不要编号、不要引号、不要多余的话：'
+        + (me
+          ? '明面：（他自己以为他要的，≤22 字）底下：（他不肯承认自己怕的，≤22 字）'
+          + '那根线：（他其实在等谁的一句话，≤22 字）原话：（这场对话里他嘴上会说的一句，≤24 字）'
+          : '明面：（你会公开承认自己想要什么，≤22 字）底下：（你真正怕的，这句你绝不当面说，≤22 字）'
+          + '那根线：（当事人这次的做法踩到你哪一处，≤22 字）原话：（这场对话里你会当面说的一句，≤24 字）');
+      return p.slice(0, 1900);
+    }
+
+    function sysReact(r, me, line) {
+      var p = sysRole(r, me).replace(/严格输出 4 行[\s\S]*$/, '');
+      p += '当事人当着你的面说了这句话：「' + line + '」。'
+        + '严格输出 2 行，用下面的前缀开头，不要编号、不要引号：'
+        + '反应：（你当场会说出口的一句，≤24 字）心里：（你同时心里闪过的一句，≤20 字）';
+      return p.slice(0, 1900);
+    }
+
+    // 调通了但格式没对上，一样算脚本兜底——「真」只挂给真正拿到可用内容的那一次
+    async function callSeat(r, sys, parse, need) {
+      G.calls++;
+      var j;
+      try {
+        j = (typeof askAI === 'function')
+          ? await askAI('对齐会 · ' + r.nm, sys, '开始。')
+          : { ok: false };
+      } catch (e) { j = { ok: false }; }
+      var o = (j && j.ok) ? parse(j.text) : null;
+      var ok = !!(o && need(o));
+      if (ok) G.real++;
+      return { ok: ok, out: o };
+    }
+
+    // ---------------- 定位分析 ----------------
+    async function start() {
+      var t = h.states.intro.querySelector('#drQ');
+      G.q = (t ? t.value : '').trim();
+      if (G.q.length < 8) { hud.toast('先把事情说清楚，至少说一句完整的'); fx.shake(t); return; }
+      G.roles = G.roles.filter(function (r) { return r.nm.trim(); });
+      if (!G.roles.length) { hud.toast('至少写一个人进来'); return; }
+      G.calls = 0; G.real = 0; G.turns = 0; G.out = {}; G.src = {};
+
+      var list = seats();
+      title('');
+      hud.clearNotes();
+      h.hud.note(sk().tag, '开局：' + list.length + ' 个座位同时发言，各说各的。', 'k-note');
+
+      var s = h.states.play;
+      // 会中界面的三层：上面一行会议信息，中间宫格，底下控制栏。
+      // 共享出来的内容先空着——分析没出来之前没什么可共享的，这跟真开会一个顺序。
+      s.innerHTML =
+        '<div class="dr-meta"><span class="rec">录制中</span><span>' + K.esc(sk().meta(list.length)) + '</span></div>' +
+        '<div class="dr-grid" id="drGrid">' + list.map(function (r, i) {
+          return '<div class="dr-c' + (r.me ? ' me' : '') + '" data-c="' + i + '">' +
+            '<span class="dr-bg wait">…</span><h4>' + av(r) + K.esc(r.nm) + '</h4>' +
+            '<div class="rel">' + K.esc(r.rel || '同事') + '</div>' +
+            '<div style="color:var(--tx2);font-size:12px">' + fx.dots() + ' 正在想</div></div>';
+        }).join('') + '</div>' +
+        '<div class="dr-share2" id="drAfter"></div>' + ctlBar();
+      s.classList.remove('dr-share');
+      goStep('play');
+      foot();
+
+      fx.deal(s.querySelectorAll('.dr-c'), { step: 0.06 });
+
+      // 四次调用并发发出，谁先回来谁先落卡——快的不用等慢的
+      await Promise.all(list.map(function (r, i) {
+        return callSeat(r, sysRole(r, r.me), parse4, full).then(function (res) {
+          var o = res.ok ? res.out : (r.me ? fbMe() : fbRole(r, i));
+          G.out[i] = o; G.src[i] = res.ok;
+          paint(i, r, o, res.ok);
+          foot();
+        });
+      }));
+
+      after();
+      sfx.play('ok');
+    }
+
+    // 与会人头像：真会议软件就是取名字第一个字。「你」那一座取「你」
+    function av(r) {
+      var ch = r.me ? '你' : (String(r.nm).replace(/[「」\s]/g, '').charAt(0) || '人');
+      return '<span class="dr-av">' + K.esc(ch) + '</span>';
+    }
+
+    // 控制栏按哪家的来：两家的按钮不是同一排，Teams 六个，企鹅会议七个还多一个「邀请」。
+    // 这排按钮只有最右两个是真的——「更多」能点开，「离开会议」回到加入前那一屏。
+    // 别的按钮点了什么都不该发生，因为这场会本来也没有麦克风和摄像头。
+    function ctlBar() {
+      var c = sk().ctl;
+      return '<div class="dr-ctl">' + c.map(function (b, i) {
+        var more = i === c.length - 1;
+        return '<u' + (more ? ' class="more" data-dr="more"' : '') + '><i>' + b[0] + '</i>' + K.esc(b[1]) + '</u>';
+      }).join('') + '<button class="end" data-dr="back">' + K.esc(sk().leave) + '</button></div>';
+    }
+
+    // 换会议客户端藏在「更多」里：真客户端的设置就在这个位置，不该另起一条工具条
+    function more() {
+      var ctl = h.states.play.querySelector('.dr-ctl');
+      if (!ctl) return;
+      var old = ctl.querySelector('.dr-menu');
+      var btn = ctl.querySelector('u.more');
+      if (old) { old.remove(); if (btn) btn.classList.remove('on'); return; }
+      var m = document.createElement('div');
+      m.className = 'dr-menu';
+      m.innerHTML = '<div class="mh">切换会议客户端</div>' + SKIN_ORDER.map(function (k) {
+        return '<b data-sk="' + k + '"' + (k === skin ? ' class="on"' : '') + '>' + SKIN[k].nm + '</b>';
+      }).join('');
+      ctl.appendChild(m);
+      // 弹在「更多」正上方，再夹回控制栏里边——真客户端的菜单就是从这个按钮长出来的
+      var x = btn ? (btn.offsetLeft + btn.offsetWidth / 2 - m.offsetWidth / 2) : 0;
+      m.style.left = Math.max(8, Math.min(x, ctl.clientWidth - m.offsetWidth - 8)) + 'px';
+      if (btn) btn.classList.add('on');
+    }
+
+    // 状态切换顺带把 data-st 写到窗口上：会中那一屏要整块变深色，
+    // 而 kit 的 .k-stage 是白底文档区，只能靠窗口上的属性把它整个改掉
+    function goStep(k) {
+      h.win.setAttribute('data-st', k);
+      h.go(k);
+    }
+
+    function paint(i, r, o, ok) {
+      var c = h.states.play.querySelector('[data-c="' + i + '"]');
+      if (!c) return;
+      c.innerHTML = '<span class="dr-bg ' + (ok ? 'real">真' : 'scr">脚') + '</span>' +
+        '<h4>' + av(r) + K.esc(r.nm) + '</h4><div class="rel">' + K.esc(r.rel || '同事') + '</div>' +
+        FIELD.map(function (f) {
+          return '<div class="dr-f ' + f.k + '"><b>' + ((r.me && f.me) ? f.me : f.nm) + '</b><span>' + K.esc(o[f.k]) + '</span></div>';
+        }).join('') +
+        (o.say ? '<div class="dr-say">「' + K.esc(o.say) + '」</div>' : '');
+      fx.rise(c);
+    }
+
+    // ---------------- 横向对照 + 推演 ----------------
+    // 四个人都说完了，才有东西可共享——所以这一步做的是「开始共享屏幕」：
+    // 上面的画面收成顶部一条，结论占住主区。真开会共享的那一刻，界面就是这么变的。
+    function after() {
+      var list = seats();
+      var box = h.states.play.querySelector('#drAfter');
+      if (!box) return;
+      box.innerHTML =
+        '<div class="shh"><b>「你」正在共享屏幕</b> · 定位分析.txt</div>' +
+        '<div class="dr-cmp"><h4>把四个人怕的东西并排放</h4>' +
+        '<p class="dr-h">这一栏是上面每张卡的第二行，原样搬下来，没有另做一次分析。' +
+        '真正卡住你的，一般不是他们要的东西不一样，是他们怕的东西不一样。</p><ul>' +
+        list.map(function (r, i) {
+          var o = G.out[i] || {};
+          return '<li>' + K.esc(r.nm) + '　怕 <b>' + K.esc(o.fear || '—') + '</b>' +
+            (o.line ? '　<em>· ' + (r.me ? '你在等的是：' : '你踩的是：') + K.esc(o.line) + '</em>' : '') + '</li>';
+        }).join('') + '</ul></div>' +
+        '<div class="dr-say2"><input id="drLine" placeholder="你打算当面说的那一句，写在这儿，看他们各自怎么接">' +
+        '<button class="dr-b pri" data-dr="react">推演这一句</button></div>' +
+        '<div class="dr-bar" style="margin-top:11px">' +
+        '<button class="dr-b" data-dr="file">把这一局存进资讯库</button>' +
+        '<span style="font-size:11px;color:#8A8886;margin-left:auto">本局至此 ' + G.calls + ' 次独立调用</span></div>';
+      h.states.play.classList.add('dr-share');
+    }
+
+    async function react() {
+      var inp = h.states.play.querySelector('#drLine');
+      var line = (inp ? inp.value : '').trim();
+      if (line.length < 2) { fx.shake(inp); hud.toast('写一句你真会说出口的话'); return; }
+      var btn = h.states.play.querySelector('[data-dr="react"]');
+      if (btn) btn.setAttribute('disabled', '');
+      G.turns++;
+      hud.note('你', line, '');
+
+      var list = seats();
+      await Promise.all(list.map(function (r, i) {
+        return callSeat(r, sysReact(r, r.me, line), parse2, function (o) { return !!o.re; }).then(function (res) {
+          var o = res.ok ? res.out : fbReact(r, i + G.turns);
+          var n = hud.note(r.nm, '', '');
+          if (n) {
+            n.innerHTML = '<div class="who"><b>' + K.esc(r.nm) + '</b> ' +
+              '<span class="dr-bg ' + (res.ok ? 'real">真' : 'scr">脚') + '</span></div>' +
+              '<div class="dr-note"><div class="re">' + K.esc(o.re) + '</div>' +
+              (o.in_ ? '<div class="in">' + K.esc(o.in_) + '</div>' : '') + '</div>';
+            n.style.position = 'relative';
+          }
+          foot();
+        });
+      }));
+
+      if (btn) btn.removeAttribute('disabled');
+      if (inp) inp.value = '';
+      var tail = h.states.play.querySelector('[data-dr="react"]');
+      if (tail && tail.parentNode.nextElementSibling) {
+        var sp = tail.parentNode.nextElementSibling.querySelector('span');
+        if (sp) sp.textContent = '本局至此 ' + G.calls + ' 次独立调用';
+      }
+      sfx.play('mail');
+    }
+
+    // ---------------- 存卷：这一局本身就是一颗泡泡 ----------------
+    function file() {
+      var list = seats();
+      var worst = null;
+      list.forEach(function (r, i) { if (!worst && !r.me && G.out[i]) worst = { r: r, o: G.out[i] }; });
+      var txt = '【对齐会】' + G.q.replace(/\s+/g, ' ').slice(0, 34) +
+        '　→ 摆上桌才看清：' + (worst ? worst.r.nm + '怕的是「' + worst.o.fear + '」' : '每个人怕的都不是同一件事');
+      if (typeof mk === 'function') {
+        mk(txt, 'boss', 9, 'news', '对齐会', '互联网');
+        if (typeof sync === 'function') sync();
+        hud.toast('已存进水面 · 能被吹大也能沉底', 'home');
+        sfx.play('coin');
+      } else {
+        hud.toast('资讯库没就绪，这一局没存上');
+      }
+    }
+
+    // ---------------- 语音：只在点了才要麦克风，不支持就照实说 ----------------
+    function mic(btn) {
+      if (recOn) { try { rec.stop(); } catch (e) {} return; }
+      if (micWhy()) return;
+      var t = h.states.intro.querySelector('#drQ');
+      try { rec = new SR(); } catch (e) { fail('这台机器起不来语音，直接打字'); return; }
+      rec.lang = 'zh-CN'; rec.interimResults = true; rec.continuous = false;
+      var base = t.value;
+      rec.onstart = function () {
+        recOn = true;
+        btn.classList.add('rec');
+        btn.querySelector('span').textContent = '在听 · 再点一下停';
+      };
+      rec.onresult = function (e) {
+        var s = '';
+        for (var i = 0; i < e.results.length; i++) s += e.results[i][0].transcript;
+        t.value = (base ? base + (/\s$/.test(base) ? '' : '\n') : '') + s;
+      };
+      rec.onerror = function (e) {
+        fail(e && e.error === 'not-allowed' ? '麦克风没授权，直接打字' : '语音没接上，直接打字');
+      };
+      rec.onend = function () { recOn = false; btn.classList.remove('rec'); btn.querySelector('span').textContent = '点一下说话'; };
+      try { rec.start(); } catch (e) { fail('语音没起来，直接打字'); }
+
+      function fail(why) {
+        recOn = false;
+        btn.classList.remove('rec');
+        btn.querySelector('span').textContent = '点一下说话';
+        var w = h.states.intro.querySelector('#drMicWhy');
+        if (w) w.textContent = why;
+      }
+    }
+
+    // ---------------- 事件：一个窗口一个监听器 ----------------
+    h.on('[data-dr]', function (t) {
+      var k = t.dataset.dr;
+      if (k === 'mic') mic(t);
+      else if (k === 'demo') {
+        h.states.intro.querySelector('#drQ').value = DEMO.q;
+        G.roles = DEMO.roles.map(function (r) { return { nm: r.nm, rel: r.rel, care: r.care, from: '' }; });
+        rows(); warn();
+      } else if (k === 'add') {
+        if (G.roles.length >= MAXR) { hud.toast('最多四个人——再多，调用数和你的耐心都撑不住'); return; }
+        G.roles.push({ nm: '', rel: '', care: '', from: '' });
+        rows(); warn(); foot();
+      } else if (k === 'del') {
+        G.roles.splice(+t.dataset.i, 1);
+        rows(); warn(); foot();
+      } else if (k === 'go') { t.setAttribute('disabled', ''); start(); }
+      else if (k === 'react') react();
+      else if (k === 'file') file();
+      else if (k === 'more') more();
+      else if (k === 'back') intro();
+    });
+
+    // 皮肤开关有两处：加入前那一屏的一排，和会中「更多」里的一项，都是 [data-sk]
+    h.on('[data-sk]', function (t) { setSkin(t.dataset.sk); });
+
+    h.on('[data-f]', function (t) {
+      var r = G.roles[+t.dataset.i];
+      if (!r) return;
+      r[t.dataset.f] = t.value;
+      if (t.dataset.f === 'from') warn();
+    }, 'change');
+    h.on('[data-f]', function (t) {
+      var r = G.roles[+t.dataset.i];
+      if (r) r[t.dataset.f] = t.value;
+    }, 'input');
+
+    setSkin(skin, true);
     intro();
   });
 })();

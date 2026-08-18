@@ -69,16 +69,40 @@ require('fs').mkdirSync(OUT, { recursive: true });
   await pg.keyboard.press('Control+Space');
   await pg.waitForTimeout(600);
 
-  // S6 社区一屏：泡泡广场 + 吹泡泡 + 手机
+  // S6 社区一屏：泡泡广场 + 吹泡泡 + 手机投屏，银幕里定格一帧宣传片（别停在黑场）
   await pg.evaluate(() => {
-    ['winExcel', 'winMe'].forEach(id => { const w = document.getElementById(id); if (w) w.classList.remove('on'); });
+    ['winExcel', 'winMe', 'winWord', 'winMail', 'winPPT', 'winChat'].forEach(id => {
+      const w = document.getElementById(id); if (w) w.classList.remove('on');
+    });
+    const v = document.querySelector('#tvScr video');
+    if (v) { v.pause(); v.currentTime = 7.5; }
   });
+  await pg.waitForTimeout(800);
   await pg.evaluate(() => { goFeature('home'); });
   await pg.waitForTimeout(500);
   await pg.evaluate(() => { goFeature('insert'); });
   await pg.waitForTimeout(500);
   await pg.evaluate(() => { goFeature('phone'); });
-  await pg.waitForTimeout(1800);
+  await pg.waitForTimeout(1200);
+  // 捡手机文学是「点一下出下一条」，连点几次把聊天记录铺出来
+  for (let i = 0; i < 7; i++) {
+    await pg.evaluate(() => { const b = document.querySelector('#phoneNext'); if (b) b.click(); });
+    await pg.waitForTimeout(450);
+  }
+  // 摆位：广场靠左、投稿居中、手机贴右，三扇窗互不压字
+  await pg.evaluate(() => {
+    const put = (id, l, t, w, h) => {
+      const el = document.getElementById(id); if (!el) return;
+      el.style.right = 'auto'; el.style.bottom = 'auto';
+      el.style.left = l + 'px'; el.style.top = t + 'px';
+      if (w) el.style.width = w + 'px';
+      if (h) el.style.height = h + 'px';
+    };
+    put('winSquare', 40, 60, 620, 580);
+    put('winPost', 690, 120, 560, 520);
+    put('winPhone', 1320, 70, 0, 0);
+  });
+  await pg.waitForTimeout(4500);   // 等手机里的聊天逐条播完
   await pg.screenshot({ path: OUT + '/s6-square.png' });
 
   await br.close();
